@@ -1,23 +1,35 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { StyleSheet, View } from "react-native";
+
 import AppText from "../components/AppText";
 import AppButton from "../components/AppButton";
 import AuthContext from "../context/authContext";
 import authStorage from "../components/utils/authStorage";
 import AddPetButton from "../components/AddPetButton";
+import LoadingIndicator from "../components/LoadingIndicator";
+
+import petsApi from "../api/pets";
 
 const HomeScreen = ({ navigation, route }) => {
-  console.log(route);
   const { user, setUser } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
   const [pets, setPets] = useState([]);
 
-  useEffect(() => {
-    if (route.params && route.params.pet) {
-      setPets([route.params.pet, ...pets]);
-      route.params.pet = undefined;
+  const getAllPets = async () => {
+    setLoading(true);
+    const res = await petsApi.getPets();
+    if (!res.ok) {
+      setLoading(false);
+      console.log(res);
     }
-  }, [route.params?.pet]);
+    setLoading(false);
+    setPets(res.data.pets);
+  };
+
+  useEffect(() => {
+    getAllPets();
+  }, [route]);
 
   const handleLogout = () => {
     setUser();
@@ -35,21 +47,25 @@ const HomeScreen = ({ navigation, route }) => {
         </AppText>
 
         <View style={styles.addPetContainer}>
-          <ScrollView horizontal={true}>
-            {pets.length > 0 &&
-              pets.map((pet) => (
-                <AddPetButton
-                  key={pet.name}
-                  title='+'
-                  name={pet.name}
-                  // onPress={() => navigation.navigate("AddPet")}
-                />
-              ))}
-            <AddPetButton
-              title='+'
-              onPress={() => navigation.navigate("AddPet")}
-            />
-          </ScrollView>
+          {loading ? (
+            <LoadingIndicator visible={loading} />
+          ) : (
+            <ScrollView horizontal={true}>
+              {pets.length > 0 &&
+                pets.map((pet) => (
+                  <AddPetButton
+                    key={pet.name}
+                    name={pet.name}
+                    img={pet.photo}
+                    // onPress={() => navigation.navigate("AddPet")}
+                  />
+                ))}
+              <AddPetButton
+                title='+'
+                onPress={() => navigation.navigate("AddPet")}
+              />
+            </ScrollView>
+          )}
         </View>
 
         <AppText style={{ fontWeight: "500", fontSize: 22 }}>

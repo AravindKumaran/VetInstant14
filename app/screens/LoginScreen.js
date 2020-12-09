@@ -7,6 +7,7 @@ import AppText from "../components/AppText";
 import AppFormField from "../components/forms/AppFormField";
 import SubmitButton from "../components/forms/SubmitButton";
 import ErrorMessage from "../components/forms/ErrorMessage";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 import authApi from "../api/auth";
 import AuthContext from "../context/authContext";
@@ -28,8 +29,8 @@ const LoginScreen = () => {
   const handleSubmit = async ({ email, password }) => {
     setLoading(true);
     const res = await authApi.login(email, password);
-    setLoading(false);
     if (!res.ok) {
+      setLoading(false);
       setError(res.data.msg);
       return;
     }
@@ -37,45 +38,49 @@ const LoginScreen = () => {
     authStorage.storeToken(res.data.token);
     const userRes = await usersApi.getLoggedInUser();
     setUser(userRes.data.user);
+    setLoading(false);
   };
 
   return (
-    <View style={styles.container}>
-      <AppText>Login</AppText>
+    <>
+      <LoadingIndicator visible={loading} />
+      <View style={styles.container}>
+        <AppText>Login</AppText>
 
-      {error && <ErrorMessage error={error} visible={!loading} />}
+        {error && <ErrorMessage error={error} visible={!loading} />}
 
-      <Formik
-        initialValues={{ email: "", password: "" }}
-        onSubmit={handleSubmit}
-        validationSchema={validationSchema}
-      >
-        {() => (
-          <>
-            <AppFormField
-              icon='email'
-              autoCapitalize='none'
-              autoCorrect={false}
-              keyboardType='email-address'
-              name='email'
-              placeholder='Enter your email id'
-            />
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          onSubmit={handleSubmit}
+          validationSchema={validationSchema}
+        >
+          {() => (
+            <>
+              <AppFormField
+                icon='email'
+                autoCapitalize='none'
+                autoCorrect={false}
+                keyboardType='email-address'
+                name='email'
+                placeholder='Enter your email id'
+              />
 
-            <AppFormField
-              autoCapitalize='none'
-              autoCorrect={false}
-              icon='lock'
-              name='password'
-              placeholder='Password'
-              secureTextEntry
-              placeholder='Enter your password'
-            />
+              <AppFormField
+                autoCapitalize='none'
+                autoCorrect={false}
+                icon='lock'
+                name='password'
+                placeholder='Password'
+                secureTextEntry
+                placeholder='Enter your password'
+              />
 
-            <SubmitButton title='Login' />
-          </>
-        )}
-      </Formik>
-    </View>
+              <SubmitButton title='Login' />
+            </>
+          )}
+        </Formik>
+      </View>
+    </>
   );
 };
 

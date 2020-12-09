@@ -1,15 +1,29 @@
 import React from "react";
 
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import AppText from "./AppText";
 
-const AddPetButton = ({ title, onPress, name }) => {
+const AddPetButton = ({ title, onPress, name, img }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text style={styles.text}>+</Text>
-        <Text style={styles.text}>Add a Pet</Text>
+        {title ? (
+          <>
+            <Text style={styles.text}>+</Text>
+            <Text style={styles.text}>Add a Pet</Text>
+          </>
+        ) : (
+          <Image
+            source={{
+              uri: `http://192.168.43.242:8000/${img}`,
+            }}
+            style={{ width: 150, height: 150, borderRadius: 75 }}
+          />
+        )}
       </TouchableOpacity>
+      {/* {img && (
+
+      )} */}
       {name && <AppText>{name}</AppText>}
     </View>
   );
