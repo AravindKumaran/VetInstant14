@@ -45,7 +45,16 @@ const LoginScreen = () => {
     <>
       <LoadingIndicator visible={loading} />
       <View style={styles.container}>
-        <AppText>Login</AppText>
+        <AppText
+          style={{
+            textAlign: "center",
+            marginBottom: 30,
+            fontSize: 22,
+            fontWeight: "500",
+          }}
+        >
+          Login
+        </AppText>
 
         {error && <ErrorMessage error={error} visible={!loading} />}
 

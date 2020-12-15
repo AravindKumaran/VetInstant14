@@ -54,7 +54,7 @@ const HomeScreen = ({ navigation, route }) => {
               {pets.length > 0 &&
                 pets.map((pet) => (
                   <AddPetButton
-                    key={pet.name}
+                    key={pet._id}
                     name={pet.name}
                     img={pet.photo}
                     // onPress={() => navigation.navigate("AddPet")}

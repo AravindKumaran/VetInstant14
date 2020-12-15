@@ -1,22 +1,13 @@
 import "react-native-gesture-handler";
 import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-
-import WelcomeScreen from "./app/screens/WelcomeScreen";
-import AuthScreen from "./app/screens/AuthScreen";
-import LoginScreen from "./app/screens/LoginScreen";
-import RegisterScreen from "./app/screens/RegisterScreen";
-import HomeScreen from "./app/screens/HomeScreen";
-import AddPetScreen from "./app/screens/AddPetScreen";
 
 import AuthContext from "./app/context/authContext";
 import authStorage from "./app/components/utils/authStorage";
-
 import usersApi from "./app/api/users";
-import { getGoggleLoggedInUser } from "./app/api/googleAuth";
 
-const Stack = createStackNavigator();
+import AuthNavigator from "./app/navigation/AuthNavigator";
+import DrawerNavigator from "./app/navigation/DrawerNavigator";
 
 const App = () => {
   const [user, setUser] = useState();
@@ -24,13 +15,8 @@ const App = () => {
   const restoreToken = async () => {
     const token = await authStorage.getToken();
     if (!token) return;
-    if (token.length === 171) {
-      const userRes = await usersApi.getLoggedInUser();
-      setUser(userRes.data.user);
-    } else if (token.length === 178) {
-      const userRes = await getGoggleLoggedInUser(token);
-      setUser(userRes.data);
-    }
+    const userRes = await usersApi.getLoggedInUser();
+    setUser(userRes.data.user);
   };
 
   useEffect(() => {
@@ -38,28 +24,9 @@ const App = () => {
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        setUser,
-      }}
-    >
+    <AuthContext.Provider value={{ user, setUser }}>
       <NavigationContainer>
-        <Stack.Navigator>
-          {user ? (
-            <>
-              <Stack.Screen name='Home' component={HomeScreen} />
-              <Stack.Screen name='AddPet' component={AddPetScreen} />
-            </>
-          ) : (
-            <>
-              <Stack.Screen name='Welcome' component={WelcomeScreen} />
-              <Stack.Screen name='Auth' component={AuthScreen} />
-              <Stack.Screen name='Login' component={LoginScreen} />
-              <Stack.Screen name='Register' component={RegisterScreen} />
-            </>
-          )}
-        </Stack.Navigator>
+        {user && user.role === "user" ? <DrawerNavigator /> : <AuthNavigator />}
       </NavigationContainer>
     </AuthContext.Provider>
   );

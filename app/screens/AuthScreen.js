@@ -1,63 +1,84 @@
-import React, { useContext } from "react";
-import * as Google from "expo-google-app-auth";
-import { StyleSheet, View, Text } from "react-native";
+import React, { useState, useContext } from 'react'
+import * as Google from 'expo-google-app-auth'
+import { StyleSheet, View, Text } from 'react-native'
 
-import AppButton from "../components/AppButton";
+import AppButton from '../components/AppButton'
 
-import authStorage from "../components/utils/authStorage";
-import AuthContext from "../context/authContext";
+import authStorage from '../components/utils/authStorage'
+import AuthContext from '../context/authContext'
+import LoadingIndicator from '../components/LoadingIndicator'
 
-import authApi from "../api/auth";
+import authApi from '../api/auth'
+import usersApi from '../api/users'
 
 const config = {
   // iosClientId: `<YOUR_IOS_CLIENT_ID>`,
   androidClientId:
-    "320113619885-drs735a38tcvfq000k0psg7t60c8nfff.apps.googleusercontent.com",
-  scopes: ["profile", "email"],
-};
+    '320113619885-drs735a38tcvfq000k0psg7t60c8nfff.apps.googleusercontent.com',
+  scopes: ['profile', 'email'],
+}
 
 const AuthScreen = ({ route, navigation }) => {
-  const { title } = route.params;
+  const [loading, setLoading] = useState()
 
-  const { setUser } = useContext(AuthContext);
+  const { title } = route.params
+
+  const { setUser } = useContext(AuthContext)
 
   const handlePress = () => {
-    navigation.navigate(`${title}`);
-  };
+    navigation.navigate(`${title}`)
+  }
 
   const signInWithGoogle = async () => {
     try {
-      const result = await Google.logInAsync(config);
-      if (result.type === "success") {
-        const password = result.user.email + result.user.id;
-        await authApi.saveGoogleUser(result.user.email, password);
-        authStorage.storeToken(result.accessToken);
-        setUser(result.user);
+      setLoading(true)
+      const result = await Google.logInAsync(config)
+      if (result.type === 'success') {
+        const password = result.user.id + Date.now()
+        const res = await authApi.saveGoogleUser(
+          result.user.name,
+          result.user.email,
+          password
+        )
+        if (!res.ok) {
+          setLoading(false)
+          // setError(res.data.msg);
+          console.log(res)
+          return
+        }
+        authStorage.storeToken(res.data.token)
+        const userRes = await usersApi.getLoggedInUser()
+        setUser(userRes.data.user)
       }
+      setLoading(false)
     } catch (err) {
-      console.log(err);
+      setLoading(false)
+      console.log(err)
     }
-  };
+  }
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Text style={styles.text}>VetInstant</Text>
-        <Text style={styles.title}>{title}</Text>
+    <>
+      <LoadingIndicator visible={loading} />
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.text}>VetInstant</Text>
+          <Text style={styles.title}>{title}</Text>
+        </View>
+
+        <AppButton title='Continue with Email ID' onPress={handlePress} />
+
+        <AppButton title='Continue with Google' onPress={signInWithGoogle} />
       </View>
-
-      <AppButton title='Continue with Email ID' onPress={handlePress} />
-
-      <AppButton title='Continue with Google' onPress={signInWithGoogle} />
-    </View>
-  );
-};
+    </>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 15,
   },
   text: {
@@ -65,8 +86,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
-});
+})
 
-export default AuthScreen;
+export default AuthScreen
