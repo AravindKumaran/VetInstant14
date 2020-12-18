@@ -5,7 +5,7 @@ const endPoint = '/users'
 const getUsers = () => client.get(endPoint)
 
 const getLoggedInUser = () => {
-  return client.get(`${endPoint}/me`)
+  return client.patch(`${endPoint}/me`)
 }
 
 const saveVet = (hospitalId, doctorId) => {

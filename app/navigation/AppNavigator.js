@@ -4,7 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import HomeScreen from '../screens/HomeScreen'
 import AddPetScreen from '../screens/AddPetScreen'
-import SaveVetScreen from '../screens/SaveVetScreen'
+import ChooseVetScreen from '../screens/ChooseVetScreen'
+import CallVetScreen from '../screens/CallVetScreen'
+import OnlineVetScreen from '../screens/OnlineVetScreen'
 
 import { Feather } from '@expo/vector-icons'
 
@@ -45,7 +47,9 @@ const AppNavigator = ({ navigation }) => {
         }}
       />
       <Stack.Screen name='AddPet' component={AddPetScreen} />
-      <Stack.Screen name='SaveVet' component={SaveVetScreen} />
+      <Stack.Screen name='ChooseVet' component={ChooseVetScreen} />
+      <Stack.Screen name='CallVet' component={CallVetScreen} />
+      <Stack.Screen name='OnlineVet' component={OnlineVetScreen} />
     </Stack.Navigator>
   )
 }
