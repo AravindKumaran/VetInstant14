@@ -7,6 +7,8 @@ import AddPetScreen from '../screens/AddPetScreen'
 import ChooseVetScreen from '../screens/ChooseVetScreen'
 import CallVetScreen from '../screens/CallVetScreen'
 import OnlineVetScreen from '../screens/OnlineVetScreen'
+import ReminderScreen from '../screens/ReminderScreen'
+import AddReminderScreen from '../screens/AddReminderScreen'
 
 import { Feather } from '@expo/vector-icons'
 
@@ -48,6 +50,8 @@ const AppNavigator = ({ navigation }) => {
       />
       <Stack.Screen name='AddPet' component={AddPetScreen} />
       <Stack.Screen name='ChooseVet' component={ChooseVetScreen} />
+      <Stack.Screen name='Reminder' component={ReminderScreen} />
+      <Stack.Screen name='AddReminder' component={AddReminderScreen} />
       <Stack.Screen name='CallVet' component={CallVetScreen} />
       <Stack.Screen name='OnlineVet' component={OnlineVetScreen} />
     </Stack.Navigator>

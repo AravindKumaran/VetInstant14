@@ -83,6 +83,12 @@ const ChooseVetScreen = ({ navigation }) => {
           txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
           onPress={() => navigation.navigate('OnlineVet')}
         />
+        <AppButton
+          title='See Your Reminders'
+          btnStyle={{ padding: 16 }}
+          txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
+          onPress={() => navigation.navigate('Reminder')}
+        />
       </View>
     </>
   )

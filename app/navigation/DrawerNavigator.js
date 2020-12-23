@@ -42,6 +42,7 @@ const DrawerNavigator = () => (
         drawerIcon: ({ color, size }) => (
           <Feather name='home' size={size} color={color} />
         ),
+        unmountOnBlur: true,
       }}
     />
     <Drawer.Screen

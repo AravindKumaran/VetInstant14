@@ -23,8 +23,6 @@ const App = () => {
     restoreToken()
   }, [])
 
-  console.log(user)
-
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       <NavigationContainer>
