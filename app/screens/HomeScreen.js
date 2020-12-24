@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { ScrollView, TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { useIsFocused } from '@react-navigation/native'
@@ -26,12 +26,8 @@ const HomeScreen = ({ navigation, route }) => {
   const [rmr, setRmr] = useState([])
   const [todayReminders, setTodayReminders] = useState([])
   const [upcomingReminders, setUpcomingReminders] = useState([])
-  const [rmrLoading, setRmrLoading] = useState(false)
 
   const isFocused = useIsFocused()
-  console.log(isFocused)
-
-  let tr = []
 
   const getAllPets = async () => {
     setLoading(true)
@@ -49,8 +45,6 @@ const HomeScreen = ({ navigation, route }) => {
   }, [route])
 
   useEffect(() => {
-    setTodayReminders([])
-    setUpcomingReminders([])
     const getAllRmr = async () => {
       const data = await getAllKeys()
       console.log(data)
@@ -58,13 +52,15 @@ const HomeScreen = ({ navigation, route }) => {
     }
 
     getAllRmr()
-  }, [])
+  }, [isFocused])
 
   const removePreviousAndGetReminders = async () => {
     // const ga = await Notifications.getAllScheduledNotificationsAsync()
     // console.log(ga)
 
     if (rmr.length > 0) {
+      const tr = []
+      const upr = []
       rmr.forEach(async (dateTime) => {
         const date = dateTime.split('-')[0]
         const prevDate = new Date(date).getDate()
@@ -78,26 +74,26 @@ const HomeScreen = ({ navigation, route }) => {
           await Notifications.cancelScheduledNotificationAsync(rmr.identifier)
           await removeValue(dateTime)
         } else if (date === new Date().toLocaleDateString()) {
-          todayReminders.push(rmr)
+          // todayReminders.push(rmr)
           tr.push(rmr)
-          console.log(rmr)
+          console.log(tr.length)
         } else {
-          upcomingReminders.push(rmr)
+          // upcomingReminders.push(rmr)
+          upr.push(rmr)
         }
+        setTodayReminders(tr)
+        setUpcomingReminders(upr)
 
-        setTodayReminders([...new Set(todayReminders)])
-        setUpcomingReminders([...new Set(upcomingReminders)])
+        // setTodayReminders([...new Set(todayReminders)])
+        // setUpcomingReminders([...new Set(upcomingReminders)])
       })
     }
   }
 
   useEffect(() => {
-    setRmrLoading(true)
     removePreviousAndGetReminders()
-    setRmrLoading(false)
-  }, [])
+  }, [rmr.length])
 
-  console.log(tr.length)
   const handleLogout = () => {
     setUser()
     authStorage.removeToken()
@@ -138,43 +134,54 @@ const HomeScreen = ({ navigation, route }) => {
           )}
         </View>
         <View style={styles.rmdText}>
-          <AppText>Your Reminders</AppText>
+          <AppText style={{ fontSize: 25 }}>Your Reminders</AppText>
           <TouchableOpacity
             style={styles.editWrapper}
-            onPress={() => console.log('Edit')}
+            onPress={() => navigation.navigate('Reminder')}
           >
-            <AppText style={{ fontSize: 16 }}>EDIT</AppText>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <Feather name='edit' size={24} color='#000' />
+              <AppText style={{ fontSize: 16 }}>EDIT</AppText>
+            </View>
           </TouchableOpacity>
         </View>
-        <ScrollView>
-          <View></View>
-        </ScrollView>
-        {rmrLoading && <AppText>Loading</AppText>}
-        {!rmrLoading && <AppText>{todayReminders.length}</AppText>}
-        {/*
-        <AppText style={{ fontWeight: '500', fontSize: 22 }}>
-          Recent Activity
-        </AppText>
-        <AppText style={{ fontWeight: '100', fontSize: 13 }}>
-          In order to start a call please add your pet below
-        </AppText>
 
-        <View style={styles.bottomCard}>
-          <AppText style={{ fontWeight: '500', fontSize: 25, color: '#fff' }}>
-            Health tip: Feed your pet a nutritious diet.
-          </AppText>
-          <AppText
-            style={{
-              fontWeight: '100',
-              fontSize: 13,
-              color: '#fff',
-              lineHeight: 20,
-            }}
-          >
-            In addition to healthy ingredients,select a food that is appropriate
-            for your pet's age,health and activity level.
-          </AppText>
-        </View> */}
+        {upcomingReminders.length === 0 && todayReminders.length === 0 && (
+          <AppText style={{ textAlign: 'center' }}>No Reminders Found</AppText>
+        )}
+        {todayReminders.length > 0 && (
+          <>
+            <View style={styles.rmrCard}>
+              <AppText style={{ fontSize: 20, color: '#606770' }}>
+                Today's Reminders
+              </AppText>
+              {todayReminders.map((rmr, i) => (
+                <AppText key={rmr.identifier} style={styles.rmrText}>
+                  {i + 1}).{rmr.reminder}
+                </AppText>
+              ))}
+            </View>
+          </>
+        )}
+        {upcomingReminders.length > 0 && (
+          <>
+            <View style={styles.rmrCard}>
+              <AppText style={{ fontSize: 20, color: '#606770' }}>
+                Upcoming Reminders
+              </AppText>
+              {upcomingReminders.map((rmr, i) => (
+                <AppText key={rmr.identifier} style={styles.rmrText}>
+                  {i + 1}).{rmr.reminder}
+                </AppText>
+              ))}
+            </View>
+          </>
+        )}
 
         <AppText>{user ? user.emailID || user.email : ''}</AppText>
         <AppButton title='Logout' onPress={handleLogout} />
@@ -203,10 +210,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 20,
-    marginHorizontal: 5,
+    marginHorizontal: 3,
   },
   editWrapper: {
+    backgroundColor: '#f3f3f3',
+    justifyContent: 'center',
+    borderRadius: 10,
+    paddingLeft: 10,
+    elevation: 5,
+  },
+  rmrCard: {
     backgroundColor: '#fff',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 6,
+    marginVertical: 15,
+    elevation: 0.5,
+  },
+  rmrText: {
+    fontSize: 16,
+    paddingBottom: 5,
+    paddingLeft: 15,
   },
 })
 

@@ -62,7 +62,6 @@ const AddReminderScreen = ({ navigation, route }) => {
   }
 
   const scheduleNotification = async (rmr) => {
-    // await Notifications.cancelAllScheduledNotificationsAsync()
     const identifier = await Notifications.scheduleNotificationAsync({
       content: {
         title: 'Your Today Reminders Are Pending!',
@@ -70,10 +69,8 @@ const AddReminderScreen = ({ navigation, route }) => {
       },
       trigger: {
         date: date,
-        // repeats: true,
       },
     })
-    // console.log(identifier)
     return identifier
   }
 
@@ -88,9 +85,7 @@ const AddReminderScreen = ({ navigation, route }) => {
       `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`,
       rmr
     )
-    navigation.navigate('Reminder', { data: 'changed' })
-
-    // alert('Reminder Added')
+    navigation.navigate('Home')
   }
 
   return (

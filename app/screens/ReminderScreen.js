@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { StyleSheet, ScrollView, View } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native'
 import AppButton from '../components/AppButton'
 import AppText from '../components/AppText'
 import { Feather } from '@expo/vector-icons'
@@ -18,18 +17,15 @@ const ReminderScreen = ({ navigation }) => {
   const [todayReminders, setTodayReminders] = useState([])
   const [upcomingReminders, setUpcomingReminders] = useState([])
 
-  const [dl, setDl] = useState([])
-
   const getReminders = async () => {
     const data = await getAllKeys()
     console.log(data)
-    // setDl(data.length)
+
     if (data.length > 0) {
       data.forEach(async (dateTime) => {
         const date = dateTime.split('-')[0]
         if (date === new Date().toLocaleDateString()) {
           const rmr = await getObjectData(dateTime)
-          console.log('Today', rmr)
           todayReminders.push(rmr)
         } else {
           const rmr = await getObjectData(dateTime)
