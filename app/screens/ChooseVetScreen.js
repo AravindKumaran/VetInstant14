@@ -9,7 +9,7 @@ import LoadingIndicator from '../components/LoadingIndicator'
 import doctorsApi from '../api/doctors'
 import hospitalsApi from '../api/hospitals'
 
-const ChooseVetScreen = ({ navigation }) => {
+const ChooseVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
   const [loading, setLoading] = useState(false)
 
@@ -23,7 +23,10 @@ const ChooseVetScreen = ({ navigation }) => {
     }
     if (res.data.doctor.user?.isOnline) {
       setLoading(false)
-      navigation.navigate('CallVet')
+      navigation.navigate('CallVet', {
+        doc: res.data.doctor,
+        pet: route.params.pet,
+      })
     } else {
       const hosRes = await hospitalsApi.getHospitalsDoctors(user.hospitalId)
       if (!hosRes.ok) {
@@ -45,7 +48,11 @@ const ChooseVetScreen = ({ navigation }) => {
             },
             {
               text: 'Yes',
-              onPress: () => navigation.navigate('CallVet'),
+              onPress: () =>
+                navigation.navigate('CallVet', {
+                  doc: dc,
+                  pet: route.params.pet,
+                }),
             },
           ])
         } else {

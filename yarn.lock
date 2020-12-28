@@ -2526,16 +2526,6 @@ expo-asset@~8.2.0:
     path-browserify "^1.0.0"
     url-parse "^1.4.4"
 
-expo-calendar-helper@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/expo-calendar-helper/-/expo-calendar-helper-0.2.1.tgz#be3e6d4dd4aa7ac36686609921008fb7e254e3d7"
-  integrity sha512-K1+oTarDnIMvogIXGVxI6aRQ17+/cmImpX+2yCZbpb687Wxo5Jx/l7Oa6mumODS0A6bu13NwqNl5QgCq1OLRqA==
-
-expo-calendar@~8.5.0:
-  version "8.5.0"
-  resolved "https://registry.yarnpkg.com/expo-calendar/-/expo-calendar-8.5.0.tgz#0edf57628adb56b7825ee7b78d54f376775686fb"
-  integrity sha512-c8EfiWn57ygH+NTYjltYGHeIlB3mNQM7yW8U0q/718qkm6vuBW4avxVL722msQ6b5ZhHw1jRDTBPbkto/qsMcA==
-
 expo-constants@9.2.0, expo-constants@~9.2.0:
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-9.2.0.tgz#e86a38793deaff9018878afac65bce2543c80a4c"
@@ -2599,13 +2589,6 @@ expo-linking@~1.0.4:
     expo-constants "~9.2.0"
     qs "^6.5.0"
     url-parse "^1.4.4"
-
-expo-localization@~9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/expo-localization/-/expo-localization-9.0.0.tgz#1a61582f9ffb3cd28879a917dec347c444bff54e"
-  integrity sha512-jG84LA9yyQpLcSOKvR/WoIm0IHZ4tZQma//AJ9/DgBZC5zSB/aDbcjmCStQvqCePz8EMy1CKxRd+UlKYPLEiVw==
-  dependencies:
-    rtl-detect "^1.0.2"
 
 expo-location@~9.0.0:
   version "9.0.1"
@@ -4814,11 +4797,6 @@ react-native-picker-select@^8.0.3:
     "@react-native-community/picker" "1.6.0"
     lodash.isequal "^4.5.0"
 
-react-native-razorpay-expo@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-razorpay-expo/-/react-native-razorpay-expo-2.0.1.tgz#cadf5ab2ba852577af2fb22fde15390b84ec9548"
-  integrity sha512-Cvyz19I43aARimGszxdu55vN5Q6dA7azBK/FeGxZ1WzHN6QE/tR7kFuJDrzLeYe1uvTUxCO6njtejjkNU9TkrQ==
-
 react-native-reanimated@~1.13.0:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.2.tgz#1ae5457b24b4913d173a5a064bb28eae7783d293"
@@ -5087,11 +5065,6 @@ rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
   integrity sha512-nfMOlASu9OnRJo1mbEk2cz0D56a1MBNrJ7orjRZQG10XDyuvwksKbuXNp6qa+kbn839HwjwhBzhFmdsaEAfauA==
-
-rtl-detect@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/rtl-detect/-/rtl-detect-1.0.2.tgz#8eca316f5c6563d54df4e406171dd7819adda67f"
-  integrity sha512-5X1422hvphzg2a/bo4tIDbjFjbJUOaPZwqE6dnyyxqwFqfR+tBcvfqapJr0o0VygATVCGKiODEewhZtKF+90AA==
 
 run-async@^2.2.0:
   version "2.4.1"

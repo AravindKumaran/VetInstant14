@@ -47,7 +47,7 @@ const HomeScreen = ({ navigation, route }) => {
   useEffect(() => {
     const getAllRmr = async () => {
       const data = await getAllKeys()
-      console.log(data)
+      // console.log(data)
       setRmr(data)
     }
 
@@ -55,9 +55,6 @@ const HomeScreen = ({ navigation, route }) => {
   }, [isFocused])
 
   const removePreviousAndGetReminders = async () => {
-    // const ga = await Notifications.getAllScheduledNotificationsAsync()
-    // console.log(ga)
-
     if (rmr.length > 0) {
       const tr = []
       const upr = []
@@ -74,18 +71,12 @@ const HomeScreen = ({ navigation, route }) => {
           await Notifications.cancelScheduledNotificationAsync(rmr.identifier)
           await removeValue(dateTime)
         } else if (date === new Date().toLocaleDateString()) {
-          // todayReminders.push(rmr)
           tr.push(rmr)
-          console.log(tr.length)
         } else {
-          // upcomingReminders.push(rmr)
           upr.push(rmr)
         }
         setTodayReminders(tr)
         setUpcomingReminders(upr)
-
-        // setTodayReminders([...new Set(todayReminders)])
-        // setUpcomingReminders([...new Set(upcomingReminders)])
       })
     }
   }
@@ -123,7 +114,7 @@ const HomeScreen = ({ navigation, route }) => {
                     key={pet._id}
                     name={pet.name}
                     img={pet.photo}
-                    onPress={() => navigation.navigate('ChooseVet')}
+                    onPress={() => navigation.navigate('ChooseVet', { pet })}
                   />
                 ))}
               <AddPetButton

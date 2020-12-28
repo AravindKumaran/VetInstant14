@@ -56,7 +56,7 @@ const AddPetScreen = ({ navigation }) => {
     const res = await petsApi.savePet(form)
     if (!res.ok) {
       setLoading(false)
-      // setError(res.data.msg);
+      setError(res.data.msg)
       console.log(res)
       return
     }

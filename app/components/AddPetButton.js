@@ -1,7 +1,7 @@
-import React from "react";
-
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import AppText from "./AppText";
+import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+import AppText from './AppText'
 
 const AddPetButton = ({ title, onPress, name, img }) => {
   return (
@@ -9,7 +9,12 @@ const AddPetButton = ({ title, onPress, name, img }) => {
       <TouchableOpacity style={styles.button} onPress={onPress}>
         {title ? (
           <>
-            <Text style={styles.text}>+</Text>
+            <Feather
+              style={styles.icon}
+              name='plus-square'
+              size={28}
+              color='#fff'
+            />
             <Text style={styles.text}>Add a Pet</Text>
           </>
         ) : (
@@ -21,20 +26,18 @@ const AddPetButton = ({ title, onPress, name, img }) => {
           />
         )}
       </TouchableOpacity>
-      {/* {img && (
 
-      )} */}
       {name && <AppText>{name}</AppText>}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#000",
+    backgroundColor: '#000',
     borderRadius: 75,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 10,
     width: 150,
     height: 150,
@@ -42,13 +45,16 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 30,
     marginRight: 15,
-    alignItems: "center",
+    alignItems: 'center',
+  },
+  icon: {
+    padding: 10,
   },
   text: {
-    color: "#fff",
-    fontSize: 12,
-    fontWeight: "600",
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
-});
+})
 
-export default AddPetButton;
+export default AddPetButton

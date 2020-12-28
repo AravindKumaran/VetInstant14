@@ -19,7 +19,7 @@ const ReminderScreen = ({ navigation }) => {
 
   const getReminders = async () => {
     const data = await getAllKeys()
-    console.log(data)
+    // console.log(data)
 
     if (data.length > 0) {
       data.forEach(async (dateTime) => {
