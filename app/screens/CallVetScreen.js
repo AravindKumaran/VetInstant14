@@ -26,6 +26,11 @@ const CallVetScreen = ({ navigation, route }) => {
   const [error, setError] = useState()
 
   const handleSubmit = async (values) => {
+    if (!values.videoCall) {
+      navigation.navigate('Chat')
+      return
+    }
+
     const patientData = {
       name: user.name,
       problem: values.problems,

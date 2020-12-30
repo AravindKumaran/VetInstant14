@@ -2,14 +2,16 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import HomeScreen from '../screens/HomeScreen'
 import AddPetScreen from '../screens/AddPetScreen'
-import ChooseVetScreen from '../screens/ChooseVetScreen'
-import CallVetScreen from '../screens/CallVetScreen'
-import OnlineVetScreen from '../screens/OnlineVetScreen'
-import ReminderScreen from '../screens/ReminderScreen'
 import AddReminderScreen from '../screens/AddReminderScreen'
+import CallVetScreen from '../screens/CallVetScreen'
+import ChatScreen from '../screens/ChatScreen'
+import ChooseVetScreen from '../screens/ChooseVetScreen'
+
+import HomeScreen from '../screens/HomeScreen'
+import OnlineVetScreen from '../screens/OnlineVetScreen'
 import PetProblemScreen from '../screens/PetProblemsScreen'
+import ReminderScreen from '../screens/ReminderScreen'
 
 import { Feather } from '@expo/vector-icons'
 
@@ -56,6 +58,7 @@ const AppNavigator = ({ navigation }) => {
       <Stack.Screen name='CallVet' component={CallVetScreen} />
       <Stack.Screen name='PetProblems' component={PetProblemScreen} />
       <Stack.Screen name='OnlineVet' component={OnlineVetScreen} />
+      <Stack.Screen name='Chat' component={ChatScreen} />
     </Stack.Navigator>
   )
 }
