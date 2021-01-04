@@ -12,6 +12,7 @@ import hospitalsApi from '../api/hospitals'
 const ChooseVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
   const [loading, setLoading] = useState(false)
+  const [doctor, setDoctor] = useState()
 
   const checkMyVetPresence = async () => {
     setLoading(true)
@@ -63,6 +64,24 @@ const ChooseVetScreen = ({ navigation, route }) => {
     }
   }
 
+  const getOnlineAvailableDoctors = async () => {
+    setLoading(true)
+    const res = await doctorsApi.getOnlineDoctors()
+    if (!res.ok) {
+      console.log(res)
+      setLoading(false)
+      return
+    }
+    const dc = res.data.doctors.filter(
+      (doc) => doc.user?.isOnline === true && doc.user._id !== user.doctorId
+    )
+    if (dc.length > 0) {
+      setDoctor(dc[0])
+    }
+    setLoading(false)
+    navigation.navigate('CallVet', { doc: doctor })
+  }
+
   return (
     <>
       <LoadingIndicator visible={loading} />
@@ -88,7 +107,7 @@ const ChooseVetScreen = ({ navigation, route }) => {
           title='First Available Vet Online (Waiting Time - max. 15 mins)'
           btnStyle={{ padding: 16 }}
           txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
-          onPress={() => navigation.navigate('OnlineVet')}
+          onPress={getOnlineAvailableDoctors}
         />
         <AppButton
           title='See Your Reminders'

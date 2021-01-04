@@ -24,7 +24,7 @@ const SaveVetScreen = ({ navigation, route }) => {
     hospname: route.params?.hosp._id || null,
     docname: route.params?.doc._id || null,
   }
-  const { setUser } = useContext(AuthContext)
+  const { user, setUser } = useContext(AuthContext)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const [hospitals, setHospitals] = useState([])
@@ -65,10 +65,11 @@ const SaveVetScreen = ({ navigation, route }) => {
       return
     }
     let allDoctors = res.data.doctors
+    // console.log(allDoctors)
     let newDoctors = allDoctors.reduce((acc, item) => {
       acc.push({
         label: item.user.name.charAt(0).toUpperCase() + item.user.name.slice(1),
-        value: item._id,
+        value: item.user._id,
       })
       return acc
     }, [])
@@ -113,7 +114,7 @@ const SaveVetScreen = ({ navigation, route }) => {
             validationSchema={validationSchema}
           >
             {({ values }) => {
-              console.log('Hr', values)
+              // console.log('Hr', values)
               useEffect(() => {
                 getAllHospitals()
                 if (values.hospname) {

@@ -21,58 +21,58 @@ const validationSchema = Yup.object().shape({
 
 const CallVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
-
+  console.log('Route', route)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
 
   const handleSubmit = async (values) => {
     if (!values.videoCall) {
-      navigation.navigate('Chat')
+      navigation.navigate('Chat', { doc: route?.params?.doc })
       return
     }
 
-    const patientData = {
-      name: user.name,
-      problem: values.problems,
-      petname: route?.params?.pet.name,
-    }
+    // const patientData = {
+    //   name: user.name,
+    //   problem: values.problems,
+    //   petname: route?.params?.pet.name,
+    // }
 
-    const form = new FormData()
-    if (values.photo) {
-      form.append('photo', {
-        name: 'photo',
-        type: 'image/jpeg',
-        uri: values.photo,
-      })
-    }
+    // const form = new FormData()
+    // if (values.photo) {
+    //   form.append('photo', {
+    //     name: 'photo',
+    //     type: 'image/jpeg',
+    //     uri: values.photo,
+    //   })
+    // }
 
-    form.append('docname', route?.params?.doc.user.name)
-    form.append('problem', values.problems)
-    setLoading(true)
-    const res = await petsApi.savePetProblems(form, route?.params?.pet._id)
+    // form.append('docname', route?.params?.doc.user.name)
+    // form.append('problem', values.problems)
+    // setLoading(true)
+    // const res = await petsApi.savePetProblems(form, route?.params?.pet._id)
 
-    if (!res.ok) {
-      setError(res.data?.msg)
-      setLoading(false)
-      // console.log(res)
-      return
-    }
+    // if (!res.ok) {
+    //   setError(res.data?.msg)
+    //   setLoading(false)
+    //   // console.log(res)
+    //   return
+    // }
 
-    const docRes = await doctorsApi.savePatientDetails(
-      patientData,
-      route?.params?.doc._id
-    )
+    // const docRes = await doctorsApi.savePatientDetails(
+    //   patientData,
+    //   route?.params?.doc._id
+    // )
 
-    if (!docRes.ok) {
-      setLoading(false)
-      console.log(res)
-      return
-    }
+    // if (!docRes.ok) {
+    //   setLoading(false)
+    //   console.log(res)
+    //   return
+    // }
 
-    setError(null)
-    console.log('Pet Res', res.data)
-    console.log('Doc', docRes.data)
-    setLoading(false)
+    // setError(null)
+    // console.log('Pet Res', res.data)
+    // console.log('Doc', docRes.data)
+    // setLoading(false)
   }
 
   return (
