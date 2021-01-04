@@ -42,7 +42,7 @@ const HomeScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     getAllPets()
-  }, [route])
+  }, [])
 
   useEffect(() => {
     const getAllRmr = async () => {
@@ -94,7 +94,7 @@ const HomeScreen = ({ navigation, route }) => {
     <ScrollView vertical={true}>
       <View style={styles.container}>
         <AppText style={{ fontWeight: '500', fontSize: 30 }}>
-          Hi, Avinash!
+          Hi, {user.name}
         </AppText>
         <AppText style={{ fontWeight: '100', fontSize: 13 }}>
           In order to start a call please add your pet below
