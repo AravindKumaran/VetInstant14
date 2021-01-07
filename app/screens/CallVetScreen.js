@@ -26,7 +26,10 @@ const CallVetScreen = ({ navigation, route }) => {
   const [error, setError] = useState()
 
   const handleSubmit = async (values) => {
-    if (!values.videoCall) {
+    if (values.videoCall) {
+      navigation.navigate('VideoCall')
+      return
+    } else if (!values.videoCall) {
       navigation.navigate('Chat', { doc: route?.params?.doc })
       return
     }
