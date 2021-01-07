@@ -21,6 +21,7 @@ const validationSchema = Yup.object().shape({
 
 const CallVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
+  console.log(user)
   console.log('Route', route)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
