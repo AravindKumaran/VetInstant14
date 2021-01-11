@@ -12,7 +12,6 @@ import hospitalsApi from '../api/hospitals'
 const ChooseVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
   const [loading, setLoading] = useState(false)
-  const [doctor, setDoctor] = useState()
 
   const checkMyVetPresence = async () => {
     setLoading(true)
@@ -76,10 +75,12 @@ const ChooseVetScreen = ({ navigation, route }) => {
       (doc) => doc.user?.isOnline === true && doc.user._id !== user.doctorId
     )
     if (dc.length > 0) {
-      setDoctor(dc[0])
+      setLoading(false)
+      navigation.navigate('CallVet', { doc: dc[0] })
+    } else {
+      setLoading(false)
+      alert('No Vet is currently available.Please try after few minutes!')
     }
-    setLoading(false)
-    navigation.navigate('CallVet', { doc: doctor })
   }
 
   return (

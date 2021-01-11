@@ -20,13 +20,15 @@ const dimensions = {
   height: Dimensions.get('window').height,
 }
 
+let engine = RtcEngine
+
 const VideoCallScreen = () => {
   const [permissonAllowed, setPermissionAllowed] = useState(false)
-  const [eng, setEng] = useState()
   const [values, setValues] = useState({
     appId: 'e49c5871a45144318804948b860e8228',
     channelName: 'local',
-    token: 'dgfdfhfkpojri3432543megghfgh',
+    token:
+      '006e49c5871a45144318804948b860e8228IACZ/f+DDdFQIuBuwLn7kfzbM+FgAV3XBCRN90HUYAqi5OiI1osAAAAAEACpE93Ihiv4XwEAAQCHK/hf',
     joinSucceed: false,
     audioMtd: false,
     videoMtd: false,
@@ -73,12 +75,10 @@ const VideoCallScreen = () => {
 
   useEffect(() => {
     const initEngine = async () => {
-      const engine = await RtcEngine.create(appId)
-      setEng(engine)
-      console.log(engine)
+      engine = await RtcEngine.create(appId)
+      // setEng(engine)
+      // console.log(engine)
       await engine.enableVideo()
-
-      // await engine?.joinChannel(token, channelName, null, 0)
 
       engine.addListener('UserJoined', (uid, elapsed) => {
         console.log('UserJoined', uid, elapsed)
@@ -105,6 +105,7 @@ const VideoCallScreen = () => {
           joinSucceed: true,
         })
       })
+      // await engine?.joinChannel(token, channelName, null, 0)
 
       console.log('Done')
     }
@@ -112,8 +113,8 @@ const VideoCallScreen = () => {
   }, [])
 
   const startCall = async () => {
-    console.log('Call', eng)
-    await eng?.joinChannel(token, channelName, null, 0)
+    console.log('Call', token)
+    await engine?.joinChannel(token, channelName, null, 0)
   }
 
   const endCall = async () => {
@@ -160,7 +161,7 @@ const VideoCallScreen = () => {
                     style={styles.remote}
                     uid={value}
                     channelId={channelName}
-                    renderMode={VideoRenderMode.Hidden}
+                    renderMode={VideoRenderMode.FILL}
                     zOrderMediaOverlay={true}
                   />
                 )

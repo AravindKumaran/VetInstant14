@@ -12,8 +12,18 @@ const saveVet = (hospitalId, doctorId) => {
   return client.patch(`${endPoint}/updateVet`, { hospitalId, doctorId })
 }
 
+const payDoctor = (data) => {
+  return client.post(`${endPoint}/paydoctor`, data)
+}
+
+const verifyPayment = (data) => {
+  return client.post(`${endPoint}/verifyPayment`, data)
+}
+
 export default {
   getUsers,
   getLoggedInUser,
   saveVet,
+  payDoctor,
+  verifyPayment,
 }
