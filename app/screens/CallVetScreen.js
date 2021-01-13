@@ -29,45 +29,57 @@ const CallVetScreen = ({ navigation, route }) => {
 
   const handleSubmit = async (values) => {
     if (values.videoCall) {
+      // setLoading(true)
+      // const res = await usersApi.payDoctor({
+      //   amt: route?.params?.doc.fee * 1 + 100,
+      // })
+      // if (!res.ok) {
+      //   setLoading(false)
+      //   console.log('Error', res)
+      // }
+      // setLoading(false)
+      // const options = {
+      //   description: 'Payment For Doctor Consultation',
+      //   currency: 'INR',
+      //   key: 'rzp_test_GbpjxWePHidlJt',
+      //   amount: res.data.result.amount,
+      //   name: `${route?.params?.doc.user.name}`,
+      //   order_id: res.data.result.id,
+      // }
+      // RazorpayCheckout.open(options)
+      //   .then(async (data) => {
+      //     setLoading(true)
+      //     const verifyRes = await usersApi.verifyPayment({
+      //       id: res.data.result.id,
+      //       paid_id: data.razorpay_payment_id,
+      //       sign: data.razorpay_signature,
+      //     })
+      //     if (!verifyRes.ok) {
+      //       setLoading(false)
+      //       console.log(verifyRes)
+      //       return
+      //     }
+      //     setLoading(false)
+      //     alert(`Success: ${verifyRes.data.verify}`)
+      //   })
+      //   .catch((error) => {
+      //     // handle failure
+      //     console.log(error)
+      //     alert(`Error: ${error.code} | ${error.description}`)
+      //   })
       setLoading(true)
-      const res = await usersApi.payDoctor({
-        amt: route?.params?.doc.fee * 1 + 100,
-      })
+      const res = await usersApi.getVideoToken(user.name)
+      // console.log('Video Token', res)
       if (!res.ok) {
         setLoading(false)
         console.log('Error', res)
       }
       setLoading(false)
-      const options = {
-        description: 'Payment For Doctor Consultation',
-        currency: 'INR',
-        key: 'rzp_test_GbpjxWePHidlJt',
-        amount: res.data.result.amount,
-        name: `${route?.params?.doc.user.name}`,
-        order_id: res.data.result.id,
-      }
-      RazorpayCheckout.open(options)
-        .then(async (data) => {
-          setLoading(true)
-          const verifyRes = await usersApi.verifyPayment({
-            id: res.data.result.id,
-            paid_id: data.razorpay_payment_id,
-            sign: data.razorpay_signature,
-          })
-          if (!verifyRes.ok) {
-            setLoading(false)
-            console.log(verifyRes)
-            return
-          }
-          setLoading(false)
-          alert(`Success: ${verifyRes.data.verify}`)
-        })
-        .catch((error) => {
-          // handle failure
-          console.log(error)
-          alert(`Error: ${error.code} | ${error.description}`)
-        })
-      // navigation.navigate('VideoCall')
+      // console.log(res.data)
+      navigation.navigate('VideoCall', {
+        name: user.name,
+        token: res.data,
+      })
       return
     } else if (!values.videoCall) {
       navigation.navigate('Chat', { doc: route?.params?.doc })

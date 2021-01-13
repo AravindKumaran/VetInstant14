@@ -9,4 +9,7 @@ applyNativeModulesSettingsGradle(settings)
 include ':react-native-razorpay'
 project(':react-native-razorpay').projectDir = new File(rootProject.projectDir,   '../node_modules/react-native-razorpay/android')
 
+include ':react-native-twilio-video-webrtc'
+project(':react-native-twilio-video-webrtc').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-twilio-video-webrtc/android')
+
 include ':app'

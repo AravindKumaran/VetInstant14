@@ -1,175 +1,240 @@
-import React, { useState, useEffect } from 'react'
-
+import React, { useEffect, useState, useRef } from 'react'
 import {
-  ScrollView,
   StyleSheet,
+  Text,
+  TextInput,
   View,
+  Button,
   PermissionsAndroid,
-  Dimensions,
+  Platform,
   TouchableOpacity,
 } from 'react-native'
-import RtcEngine, {
-  RtcLocalView,
-  RtcRemoteView,
-  VideoRenderMode,
-} from 'react-native-agora'
-import AppText from '../components/AppText'
 
-const dimensions = {
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
-}
+import { MaterialIcons, Feather } from '@expo/vector-icons'
 
-let engine = RtcEngine
+import {
+  TwilioVideoLocalView,
+  TwilioVideoParticipantView,
+  TwilioVideo,
+} from 'react-native-twilio-video-webrtc'
 
-const VideoCallScreen = () => {
-  const [permissonAllowed, setPermissionAllowed] = useState(false)
-  const [values, setValues] = useState({
-    appId: 'e49c5871a45144318804948b860e8228',
-    channelName: 'local',
-    token:
-      '006e49c5871a45144318804948b860e8228IACZ/f+DDdFQIuBuwLn7kfzbM+FgAV3XBCRN90HUYAqi5OiI1osAAAAAEACpE93Ihiv4XwEAAQCHK/hf',
-    joinSucceed: false,
-    audioMtd: false,
-    videoMtd: false,
-    peerIds: [],
-  })
-
-  const {
-    appId,
-    channelName,
-    token,
-    joinSucceed,
-    audioMtd,
-    videoMtd,
-    peerIds,
-  } = values
+const VideoCallScreen = ({ navigation, route }) => {
+  const [isAudioEnabled, setIsAudioEnabled] = useState(true)
+  const [isVideoEnabled, setIsVideoEnabled] = useState(true)
+  const [status, setStatus] = useState('disconnected')
+  const [participants, setParticipants] = useState(new Map())
+  const [videoTracks, setVideoTracks] = useState(new Map())
+  const [token, setToken] = useState(route.params?.token)
+  const twilioVideo = useRef(null)
 
   useEffect(() => {
-    const requestCameraAndAudioPermission = async () => {
-      try {
-        const granted = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        ])
-        if (
-          granted['android.permission.RECORD_AUDIO'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.CAMERA'] ===
-            PermissionsAndroid.RESULTS.GRANTED
-        ) {
-          setPermissionAllowed(true)
-        } else {
-          setPermissionAllowed(false)
-        }
-      } catch (err) {
-        setPermissionAllowed(false)
-        console.warn(err)
+    console.log('Inside Effect')
+    const _onConnectButtonPress = async () => {
+      // console.log(token)
+      if (Platform.OS === 'android') {
+        await _requestAudioPermission()
+        await _requestCameraPermission()
       }
+      twilioVideo.current.connect({
+        accessToken: token,
+        enableNetworkQualityReporting: true,
+      })
+      setStatus('connecting')
+      console.log('Connecting')
     }
+    _onConnectButtonPress()
 
-    requestCameraAndAudioPermission()
+    return () => {
+      console.log('Outside Effect')
+      twilioVideo.current.disconnect()
+    }
   }, [])
 
-  // let engine
-
-  useEffect(() => {
-    const initEngine = async () => {
-      engine = await RtcEngine.create(appId)
-      // setEng(engine)
-      // console.log(engine)
-      await engine.enableVideo()
-
-      engine.addListener('UserJoined', (uid, elapsed) => {
-        console.log('UserJoined', uid, elapsed)
-        if (peerIds.indexOf(uid) === -1) {
-          setValues({
-            ...values,
-            peerIds: [...peerIds, uid],
-          })
-        }
-      })
-
-      engine.addListener('UserOffline', (uid, reason) => {
-        console.log('UserOffline', uid, reason)
-        setValues({
-          ...values,
-          peerIds: peerIds.filter((id) => id !== uid),
-        })
-      })
-
-      engine.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
-        console.log('JoinChannelSuccess', channel, uid, elapsed)
-        setValues({
-          ...values,
-          joinSucceed: true,
-        })
-      })
-      // await engine?.joinChannel(token, channelName, null, 0)
-
-      console.log('Done')
-    }
-    initEngine()
-  }, [])
-
-  const startCall = async () => {
-    console.log('Call', token)
-    await engine?.joinChannel(token, channelName, null, 0)
+  const _onEndButtonPress = () => {
+    twilioVideo.current.disconnect()
+    navigation.goBack()
   }
 
-  const endCall = async () => {
-    await engine?.leaveChannel()
-    setValues({ ...values, peerIds: [], joinSucceed: false })
+  const _onMuteButtonPress = () => {
+    twilioVideo.current
+      .setLocalAudioEnabled(!isAudioEnabled)
+      .then((isEnabled) => setIsAudioEnabled(isEnabled))
   }
 
-  if (!permissonAllowed) {
-    return (
-      <AppText style={{ fontSize: 25, textAlign: 'center', margin: 20 }}>
-        Please give the permission to access the call
-      </AppText>
+  const _onVideoButtonPress = () => {
+    twilioVideo.current
+      .setLocalVideoEnabled(!isVideoEnabled)
+      .then((isEnabled) => setIsVideoEnabled(isEnabled))
+  }
+
+  const _onFlipButtonPress = () => {
+    twilioVideo.current.flipCamera()
+  }
+
+  const _onRoomDidConnect = (events) => {
+    console.log(events)
+    console.log('Room')
+    setStatus('connected')
+  }
+
+  const _onRoomDidDisconnect = ({ error }) => {
+    console.log('ERROR: ', error)
+
+    setStatus('disconnected')
+  }
+
+  const _onRoomDidFailToConnect = (error) => {
+    console.log('ERROR: ', error)
+
+    setStatus('disconnected')
+  }
+
+  const _onParticipantAddedVideoTrack = ({ participant, track }) => {
+    console.log('onParticipantAddedVideoTrack: ', participant, track)
+
+    setVideoTracks(
+      new Map([
+        ...videoTracks,
+        [
+          track.trackSid,
+          { participantSid: participant.sid, videoTrackSid: track.trackSid },
+        ],
+      ])
     )
   }
 
-  console.log(values)
+  const _onParticipantRemovedVideoTrack = ({ participant, track }) => {
+    console.log('onParticipantRemovedVideoTrack: ', participant, track)
+
+    const videoTracks = new Map(videoTracks)
+    videoTracks.delete(track.trackSid)
+
+    setVideoTracks(videoTracks)
+  }
+
+  const _onNetworkLevelChanged = ({ participant, isLocalUser, quality }) => {
+    console.log(
+      'Participant',
+      participant,
+      'isLocalUser',
+      isLocalUser,
+      'quality',
+      quality
+    )
+  }
+
+  const _requestAudioPermission = () => {
+    return PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      {
+        title: 'Need permission to access microphone',
+        message:
+          'To run this demo we need permission to access your microphone',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      }
+    )
+  }
+
+  const _requestCameraPermission = () => {
+    return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
+      title: 'Need permission to access camera',
+      message: 'To run this demo we need permission to access your camera',
+      buttonNegative: 'Cancel',
+      buttonPositive: 'OK',
+    })
+  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.container}>
-        <View style={styles.buttonHolder}>
-          <TouchableOpacity onPress={startCall} style={styles.button}>
-            <AppText style={styles.buttonText}> Start Call </AppText>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={endCall} style={styles.button}>
-            <AppText style={styles.buttonText}> End Call </AppText>
-          </TouchableOpacity>
+      {/* {status === 'disconnected' && (
+        <View>
+          <Text style={styles.welcome}>React Native Twilio Video</Text>
+
+          <Button
+            title='Connect'
+            style={styles.button}
+            onPress={_onConnectButtonPress}
+          ></Button>
         </View>
-        {joinSucceed ? (
-          <View style={styles.fullView}>
-            <RtcLocalView.SurfaceView
-              style={styles.max}
-              channelId={channelName}
-              renderMode={VideoRenderMode.Hidden}
-            />
-            <ScrollView
-              style={styles.remoteContainer}
-              contentContainerStyle={{ paddingHorizontal: 2.5 }}
-              horizontal={true}
-            >
-              {peerIds.map((value, index, array) => {
+      )} */}
+
+      {(status === 'connected' || status === 'connecting') && (
+        <View style={styles.callContainer}>
+          {status === 'connected' && (
+            <View style={styles.remoteGrid}>
+              {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
                 return (
-                  <RtcRemoteView.SurfaceView
-                    style={styles.remote}
-                    uid={value}
-                    channelId={channelName}
-                    renderMode={VideoRenderMode.FILL}
-                    zOrderMediaOverlay={true}
+                  <TwilioVideoParticipantView
+                    style={styles.remoteVideo}
+                    key={trackSid}
+                    trackIdentifier={trackIdentifier}
                   />
                 )
               })}
-            </ScrollView>
+            </View>
+          )}
+          <View style={styles.optionsContainer}>
+            <MaterialIcons
+              name='call-end'
+              size={56}
+              color='#fff'
+              onPress={_onEndButtonPress}
+              style={{
+                backgroundColor: '#ff0055',
+                width: 80,
+                height: 80,
+                borderRadius: 40,
+                textAlign: 'center',
+                paddingTop: 12,
+                paddingHorizontal: 10,
+              }}
+            />
+
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={_onMuteButtonPress}
+            >
+              {isAudioEnabled ? (
+                <Feather name='volume-2' size={30} color='black' />
+              ) : (
+                <Feather name='volume-x' size={30} color='black' />
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={_onVideoButtonPress}
+            >
+              {isVideoEnabled ? (
+                <Feather name='video' size={30} color='black' />
+              ) : (
+                <Feather name='video-off' size={30} color='black' />
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={_onFlipButtonPress}
+            >
+              <MaterialIcons name='crop-rotate' size={24} color='black' />
+            </TouchableOpacity>
           </View>
-        ) : null}
-      </View>
+
+          <View style={styles.localVideoContainer}>
+            <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
+          </View>
+        </View>
+      )}
+
+      <TwilioVideo
+        ref={twilioVideo}
+        onRoomDidConnect={_onRoomDidConnect}
+        onRoomDidDisconnect={_onRoomDidDisconnect}
+        onRoomDidFailToConnect={_onRoomDidFailToConnect}
+        onParticipantAddedVideoTrack={_onParticipantAddedVideoTrack}
+        onParticipantRemovedVideoTrack={_onParticipantRemovedVideoTrack}
+        onNetworkQualityLevelsChanged={_onNetworkLevelChanged}
+      />
     </View>
   )
 }
@@ -177,43 +242,88 @@ const VideoCallScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 30,
+    backgroundColor: '#f2f3f3',
   },
-  buttonHolder: {
-    height: 100,
-    alignItems: 'center',
+  callContainer: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    position: 'absolute',
+    bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  welcome: {
+    fontSize: 30,
+    textAlign: 'center',
+    paddingTop: 40,
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    marginRight: 70,
+    marginLeft: 70,
+    marginTop: 50,
+    textAlign: 'center',
+    backgroundColor: 'white',
   },
   button: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#0093E9',
-    borderRadius: 25,
+    marginTop: 100,
   },
-  buttonText: {
-    color: '#fff',
-  },
-  fullView: {
-    width: dimensions.width,
-    height: dimensions.height - 100,
-  },
-  remoteContainer: {
-    width: '100%',
-    height: 150,
+  localVideoContainer: {
+    width: 220,
+    height: 180,
+    backgroundColor: 'white',
     position: 'absolute',
-    top: 5,
+    right: 5,
+    bottom: 100,
+    borderRadius: 5,
+    padding: 3,
   },
-  remote: {
-    width: 150,
-    height: 150,
-    marginHorizontal: 2.5,
+  localVideo: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'white',
+    padding: 10,
   },
-  noUserText: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    color: '#0093E9',
+  remoteGrid: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  remoteVideo: {
+    width: '100%',
+    height: '100%',
+  },
+  optionsContainer: {
+    position: 'absolute',
+    left: 0,
+    bottom: 10,
+    right: 0,
+    height: 100,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  optionButton: {
+    width: 60,
+    height: 60,
+    marginLeft: 10,
+    marginRight: 10,
+    borderRadius: 100 / 2,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flipButton: {
+    position: 'absolute',
+    bottom: 80,
+    right: 50,
+    width: 60,
+    height: 60,
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 30,
+    zIndex: 1,
   },
 })
 

@@ -20,10 +20,15 @@ const verifyPayment = (data) => {
   return client.post(`${endPoint}/verifyPayment`, data)
 }
 
+const getVideoToken = (username) => {
+  return client.get(`${endPoint}/getToken/?userName=${username}`)
+}
+
 export default {
   getUsers,
   getLoggedInUser,
   saveVet,
   payDoctor,
   verifyPayment,
+  getVideoToken,
 }
