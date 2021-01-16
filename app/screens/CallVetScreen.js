@@ -37,7 +37,6 @@ const CallVetScreen = ({ navigation, route }) => {
         setLoading(false)
         console.log('Error', res)
       }
-      console.log('Resss', res)
       setLoading(false)
       const options = {
         description: 'Payment For Doctor Consultation',
@@ -55,7 +54,6 @@ const CallVetScreen = ({ navigation, route }) => {
             paid_id: data.razorpay_payment_id,
             sign: data.razorpay_signature,
           })
-          console.log('Verify ', res)
           if (!verifyRes.ok) {
             setLoading(false)
             console.log(verifyRes)
@@ -71,7 +69,7 @@ const CallVetScreen = ({ navigation, route }) => {
           // console.log(tokenRes)
           navigation.navigate('VideoCall', {
             name: user.name,
-            token: tokenRes.data,
+            token: tokenRes.data.jwt,
           })
           // setLoading(false)
           // alert(`Success: ${verifyRes.data.verify}`)
@@ -86,7 +84,10 @@ const CallVetScreen = ({ navigation, route }) => {
 
       // return
     } else if (!values.videoCall) {
-      navigation.navigate('Chat', { doc: route?.params?.doc })
+      navigation.navigate('Chat', {
+        doc: route?.params?.doc,
+        pet: route?.params?.pet,
+      })
       return
     }
 
@@ -137,13 +138,25 @@ const CallVetScreen = ({ navigation, route }) => {
   return (
     <ScrollView>
       <LoadingIndicator visible={loading} />
-      <AppButton
-        title='Pet History'
-        btnStyle={{ marginLeft: 30, marginTop: 30, width: '80%' }}
-        onPress={() =>
-          navigation.navigate('PetProblems', { id: route?.params?.pet._id })
-        }
-      />
+      <View style={styles.btnWrapper}>
+        <AppButton
+          title='Pet History'
+          btnStyle={{ marginTop: 30 }}
+          onPress={() =>
+            navigation.navigate('PetProblems', { id: route?.params?.pet._id })
+          }
+        />
+        <AppButton
+          title='Previous Pet Prescription'
+          btnStyle={{ marginTop: 30 }}
+          onPress={() =>
+            navigation.navigate('PetPrescription', {
+              id: route?.params?.pet._id,
+            })
+          }
+        />
+      </View>
+
       <View style={styles.container}>
         <AppText
           style={{ textAlign: 'center', fontSize: 20, marginVertical: 20 }}
@@ -216,6 +229,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 30,
     alignItems: 'flex-end',
+  },
+  btnWrapper: {
+    paddingHorizontal: 40,
   },
 })
 

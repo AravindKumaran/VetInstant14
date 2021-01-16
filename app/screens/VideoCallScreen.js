@@ -1,16 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react'
 import {
   StyleSheet,
-  Text,
-  TextInput,
   View,
-  Button,
   PermissionsAndroid,
   Platform,
   TouchableOpacity,
 } from 'react-native'
 
 import { MaterialIcons, Feather } from '@expo/vector-icons'
+import socket from '../components/utils/socket'
 
 import {
   TwilioVideoLocalView,
@@ -19,6 +17,7 @@ import {
 } from 'react-native-twilio-video-webrtc'
 
 const VideoCallScreen = ({ navigation, route }) => {
+  const { user } = route.params
   const [isAudioEnabled, setIsAudioEnabled] = useState(true)
   const [isVideoEnabled, setIsVideoEnabled] = useState(true)
   const [status, setStatus] = useState('disconnected')
@@ -28,7 +27,10 @@ const VideoCallScreen = ({ navigation, route }) => {
   const twilioVideo = useRef(null)
 
   useEffect(() => {
-    console.log('Inside Effect')
+    console.log('Inside Effect', token)
+
+    socket.emit('callStart', user)
+
     const _onConnectButtonPress = async () => {
       // console.log(token)
       if (Platform.OS === 'android') {
@@ -46,11 +48,13 @@ const VideoCallScreen = ({ navigation, route }) => {
 
     return () => {
       console.log('Outside Effect')
+      socket.emit('callEnd', user)
       twilioVideo.current.disconnect()
     }
   }, [])
 
   const _onEndButtonPress = () => {
+    socket.emit('callEnd', user)
     twilioVideo.current.disconnect()
     navigation.goBack()
   }
@@ -147,18 +151,6 @@ const VideoCallScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {/* {status === 'disconnected' && (
-        <View>
-          <Text style={styles.welcome}>React Native Twilio Video</Text>
-
-          <Button
-            title='Connect'
-            style={styles.button}
-            onPress={_onConnectButtonPress}
-          ></Button>
-        </View>
-      )} */}
-
       {(status === 'connected' || status === 'connecting') && (
         <View style={styles.callContainer}>
           {status === 'connected' && (

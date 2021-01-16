@@ -11,6 +11,7 @@ import ChooseVetScreen from '../screens/ChooseVetScreen'
 import HomeScreen from '../screens/HomeScreen'
 import OnlineVetScreen from '../screens/OnlineVetScreen'
 import PetProblemScreen from '../screens/PetProblemsScreen'
+import PetPrescriptionScreen from '../screens/PetPrescription'
 import ReminderScreen from '../screens/ReminderScreen'
 import VideoCallScreen from '../screens/VideoCallScreen'
 
@@ -58,6 +59,7 @@ const AppNavigator = ({ navigation }) => {
       <Stack.Screen name='AddReminder' component={AddReminderScreen} />
       <Stack.Screen name='CallVet' component={CallVetScreen} />
       <Stack.Screen name='PetProblems' component={PetProblemScreen} />
+      <Stack.Screen name='PetPrescription' component={PetPrescriptionScreen} />
       <Stack.Screen name='OnlineVet' component={OnlineVetScreen} />
       <Stack.Screen name='Chat' component={ChatScreen} />
       <Stack.Screen

@@ -6,8 +6,8 @@ const createChat = (chat) => {
   return client.post(endPoint, chat)
 }
 
-const getRoomAllChat = (name) => {
-  return client.get(`${endPoint}/room/${name}`)
+const getRoomAllChat = (name, petid) => {
+  return client.get(`${endPoint}/room/${name}/${petid}`)
 }
 
 export default {

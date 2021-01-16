@@ -21,6 +21,7 @@ const ChatScreen = ({ navigation, route }) => {
         name: `${user._id}-${route.params?.doc?.user?._id}`,
         senderName: user.name,
         receiverId: route.params?.doc?.user?._id,
+        petId: route.params?.pet._id,
       })
       if (!res.ok) {
         console.log(res)
@@ -30,7 +31,10 @@ const ChatScreen = ({ navigation, route }) => {
 
       setRoom(res.data.room)
 
-      const chatRes = await chatsApi.getRoomAllChat(res.data.room.name)
+      const chatRes = await chatsApi.getRoomAllChat(
+        res.data.room.name,
+        res.data.room.petId
+      )
       setMessages(chatRes.data.chats)
       setLoading(false)
 
@@ -59,6 +63,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   const onSend = async (newMsg) => {
     newMsg[0].roomName = room.name
+    newMsg[0].petId = route.params?.pet._id
     setLoading(true)
     await chatsApi.createChat(newMsg[0])
     setLoading(false)

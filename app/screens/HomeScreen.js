@@ -54,34 +54,33 @@ const HomeScreen = ({ navigation, route }) => {
     getAllRmr()
   }, [isFocused])
 
-  const removePreviousAndGetReminders = async () => {
-    if (rmr.length > 0) {
-      const tr = []
-      const upr = []
-      rmr.forEach(async (dateTime) => {
-        const date = dateTime.split('-')[0]
-        const prevDate = new Date(date).getDate()
-        const today = new Date().getDate()
-        const rmr = await getObjectData(dateTime)
-        if (
-          prevDate < today ||
-          (today === 1 && prevDate === 31) ||
-          (today === 1 && prevDate === 30)
-        ) {
-          await Notifications.cancelScheduledNotificationAsync(rmr.identifier)
-          await removeValue(dateTime)
-        } else if (date === new Date().toLocaleDateString()) {
-          tr.push(rmr)
-        } else {
-          upr.push(rmr)
-        }
-        setTodayReminders(tr)
-        setUpcomingReminders(upr)
-      })
-    }
-  }
-
   useEffect(() => {
+    const removePreviousAndGetReminders = async () => {
+      if (rmr.length > 0) {
+        const tr = []
+        const upr = []
+        rmr.forEach(async (dateTime) => {
+          const date = dateTime.split('-')[0]
+          const prevDate = new Date(date).getDate()
+          const today = new Date().getDate()
+          const rmr = await getObjectData(dateTime)
+          if (
+            prevDate < today ||
+            (today === 1 && prevDate === 31) ||
+            (today === 1 && prevDate === 30)
+          ) {
+            await Notifications.cancelScheduledNotificationAsync(rmr.identifier)
+            await removeValue(dateTime)
+          } else if (date === new Date().toLocaleDateString()) {
+            tr.push(rmr)
+          } else {
+            upr.push(rmr)
+          }
+          setTodayReminders(tr)
+          setUpcomingReminders(upr)
+        })
+      }
+    }
     removePreviousAndGetReminders()
   }, [rmr.length])
 
@@ -89,6 +88,15 @@ const HomeScreen = ({ navigation, route }) => {
     setUser()
     authStorage.removeToken()
   }
+
+  // const getNotificationToken = async () => {
+  //   try {
+  //     const token = await Notifications.getExpoPushTokenAsync()
+  //     console.log(token)
+  //   } catch (error) {
+  //     console.log('Error', error)
+  //   }
+  // }
 
   return (
     <ScrollView vertical={true}>
@@ -176,6 +184,7 @@ const HomeScreen = ({ navigation, route }) => {
 
         <AppText>{user ? user.emailID || user.email : ''}</AppText>
         <AppButton title='Logout' onPress={handleLogout} />
+        {/* <AppButton title='Token' onPress={getNotificationToken} /> */}
       </View>
     </ScrollView>
   )
