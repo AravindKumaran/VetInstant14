@@ -4,6 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import AppNavigator from './AppNavigator'
 import VetNavigator from './VetNavigator'
+import CallLogScreen from '../screens/CallLogScreen'
 
 import DrawerContent from '../components/DrawerContent'
 
@@ -45,6 +46,7 @@ const DrawerNavigator = () => (
         unmountOnBlur: true,
       }}
     />
+
     <Drawer.Screen
       name='MyVet'
       component={VetNavigator}
@@ -52,6 +54,17 @@ const DrawerNavigator = () => (
         drawerIcon: ({ color, size }) => (
           <Feather name='user-plus' size={size} color={color} />
         ),
+        unmountOnBlur: true,
+      }}
+    />
+    <Drawer.Screen
+      name='CallLog'
+      component={CallLogScreen}
+      options={{
+        drawerIcon: ({ color, size }) => (
+          <Feather name='phone' size={size} color={color} />
+        ),
+        headerShown: true,
         unmountOnBlur: true,
       }}
     />

@@ -8,28 +8,50 @@ import {
 } from 'react-native'
 
 import { MaterialIcons, Feather } from '@expo/vector-icons'
-import socket from '../components/utils/socket'
-
 import {
   TwilioVideoLocalView,
   TwilioVideoParticipantView,
   TwilioVideo,
 } from 'react-native-twilio-video-webrtc'
 
+import AppText from '../components/AppText'
+import callLogsApi from '../api/callLog'
+import LoadingIndicator from '../components/LoadingIndicator'
+
 const VideoCallScreen = ({ navigation, route }) => {
-  const { user } = route.params
+  const { user, docId, userId } = route.params
+  // console.log('Routtt', route)
   const [isAudioEnabled, setIsAudioEnabled] = useState(true)
   const [isVideoEnabled, setIsVideoEnabled] = useState(true)
   const [status, setStatus] = useState('disconnected')
   const [participants, setParticipants] = useState(new Map())
   const [videoTracks, setVideoTracks] = useState(new Map())
   const [token, setToken] = useState(route.params?.token)
+  const [waitingTime, setWaitingTime] = useState(20)
+  const [logId, setLogId] = useState()
+  const [loading, setLoading] = useState(false)
+  const timeRef = useRef(null)
   const twilioVideo = useRef(null)
+
+  const startTimer = () => {
+    timeRef.current = setInterval(() => {
+      setWaitingTime((time) => {
+        if (time >= 1) return time - 1
+
+        resetTimer()
+        return 0
+      })
+    }, 1000)
+  }
+
+  const resetTimer = () => {
+    clearInterval(timeRef.current)
+    timeRef.current = null
+    setWaitingTime(0)
+  }
 
   useEffect(() => {
     console.log('Inside Effect', token)
-
-    socket.emit('callStart', user)
 
     const _onConnectButtonPress = async () => {
       // console.log(token)
@@ -39,22 +61,43 @@ const VideoCallScreen = ({ navigation, route }) => {
       }
       twilioVideo.current.connect({
         accessToken: token,
-        enableNetworkQualityReporting: true,
+        // enableNetworkQualityReporting: true,
       })
       setStatus('connecting')
+      if (videoTracks.size === 0) {
+        startTimer()
+      }
       console.log('Connecting')
     }
     _onConnectButtonPress()
 
     return () => {
       console.log('Outside Effect')
-      socket.emit('callEnd', user)
+      clearInterval(timeRef.current)
       twilioVideo.current.disconnect()
     }
   }, [])
 
+  useEffect(() => {
+    const saveCallLog = async () => {
+      setLoading(true)
+      const res = await callLogsApi.saveCallLog({
+        senderId: userId,
+        receiverId: docId,
+      })
+      if (!res.ok) {
+        setLoading(false)
+        console.log('Log Resss', res)
+        return
+      }
+      setLogId(res.data.log._id)
+      setLoading(false)
+    }
+    saveCallLog()
+  }, [])
+
   const _onEndButtonPress = () => {
-    socket.emit('callEnd', user)
+    clearInterval(timeRef.current)
     twilioVideo.current.disconnect()
     navigation.goBack()
   }
@@ -76,7 +119,7 @@ const VideoCallScreen = ({ navigation, route }) => {
   }
 
   const _onRoomDidConnect = (events) => {
-    console.log(events)
+    // console.log(events)
     console.log('Room')
     setStatus('connected')
   }
@@ -93,9 +136,9 @@ const VideoCallScreen = ({ navigation, route }) => {
     setStatus('disconnected')
   }
 
-  const _onParticipantAddedVideoTrack = ({ participant, track }) => {
+  const _onParticipantAddedVideoTrack = async ({ participant, track }) => {
     console.log('onParticipantAddedVideoTrack: ', participant, track)
-
+    clearInterval(timeRef.current)
     setVideoTracks(
       new Map([
         ...videoTracks,
@@ -105,11 +148,20 @@ const VideoCallScreen = ({ navigation, route }) => {
         ],
       ])
     )
+
+    setLoading(true)
+    const logRes = await callLogsApi.updateCallLog(logId)
+    if (!logRes.ok) {
+      setLoading(false)
+      console.log('Log Resss', res)
+      return
+    }
+    setLoading(false)
   }
 
   const _onParticipantRemovedVideoTrack = ({ participant, track }) => {
     console.log('onParticipantRemovedVideoTrack: ', participant, track)
-
+    resetTimer()
     const videoTracks = new Map(videoTracks)
     videoTracks.delete(track.trackSid)
 
@@ -151,9 +203,10 @@ const VideoCallScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      <LoadingIndicator visible={loading} />
       {(status === 'connected' || status === 'connecting') && (
         <View style={styles.callContainer}>
-          {status === 'connected' && (
+          {status === 'connected' && videoTracks.size > 0 ? (
             <View style={styles.remoteGrid}>
               {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
                 return (
@@ -164,6 +217,22 @@ const VideoCallScreen = ({ navigation, route }) => {
                   />
                 )
               })}
+            </View>
+          ) : (
+            <View>
+              <AppText
+                style={{
+                  fontSize: 25,
+                  marginTop: 50,
+                  marginHorizontal: 30,
+                  textAlign: 'center',
+                  color: '#000',
+                }}
+              >
+                {waitingTime === 0
+                  ? 'Doctor is not responding!Either you wait or Try again after some time!'
+                  : `Waiting for doctor to connect...${waitingTime}`}
+              </AppText>
             </View>
           )}
           <View style={styles.optionsContainer}>

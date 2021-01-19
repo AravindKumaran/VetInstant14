@@ -23,13 +23,12 @@ const validationSchema = Yup.object().shape({
 
 const CallVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
-  // console.log('Route', route?.params?.doc.user.name)
+  console.log('Route', route)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
 
   const handleSubmit = async (values) => {
     if (values.videoCall) {
-      setLoading(true)
       const res = await usersApi.payDoctor({
         amt: route?.params?.doc.fee * 1 + 100,
       })
@@ -60,16 +59,18 @@ const CallVetScreen = ({ navigation, route }) => {
             return
           }
           const tokenRes = await usersApi.getVideoToken(user.name)
-          console.log('Video Token', tokenRes)
+          // console.log('Video Token', tokenRes)
           if (!tokenRes.ok) {
             setLoading(false)
             console.log('Error', tokenRes)
           }
           setLoading(false)
-          // console.log(tokenRes)
           navigation.navigate('VideoCall', {
+            docId: route?.params?.doc.user._id,
+            userId: user._id,
             name: user.name,
-            token: tokenRes.data.jwt,
+            token: tokenRes.data,
+            // token: undefined,
           })
           // setLoading(false)
           // alert(`Success: ${verifyRes.data.verify}`)
