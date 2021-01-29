@@ -42,7 +42,7 @@ const HomeScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     getAllPets()
-  }, [])
+  }, [isFocused])
 
   useEffect(() => {
     const getAllRmr = async () => {

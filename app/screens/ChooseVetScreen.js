@@ -11,6 +11,7 @@ import hospitalsApi from '../api/hospitals'
 
 const ChooseVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
+  // console.log('Choose', route.params.pet)
   const [loading, setLoading] = useState(false)
 
   const checkMyVetPresence = async () => {
@@ -76,7 +77,7 @@ const ChooseVetScreen = ({ navigation, route }) => {
     )
     if (dc.length > 0) {
       setLoading(false)
-      navigation.navigate('CallVet', { doc: dc[0] })
+      navigation.navigate('CallVet', { doc: dc[0], pet: route.params.pet })
     } else {
       setLoading(false)
       alert('No Vet is currently available.Please try after few minutes!')

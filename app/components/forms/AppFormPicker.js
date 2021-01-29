@@ -34,7 +34,7 @@ const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     backgroundColor: '#fff',
     fontSize: 18,
-    padding: 15,
+    padding: 18,
     borderRadius: 10,
     marginVertical: 10,
     color: '#0c0c0c',
@@ -45,7 +45,7 @@ const pickerSelectStyles = StyleSheet.create({
   inputAndroid: {
     backgroundColor: '#fff',
     fontSize: 18,
-    padding: 15,
+    padding: 18,
     borderRadius: 10,
     marginVertical: 10,
     color: '#0c0c0c',

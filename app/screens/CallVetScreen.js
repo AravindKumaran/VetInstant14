@@ -6,7 +6,6 @@ import * as Yup from 'yup'
 import AppText from '../components/AppText'
 import AppButton from '../components/AppButton'
 import AppFormField from '../components/forms/AppFormField'
-import FormImagePicker from '../components/forms/FormImagePicker'
 
 import petsApi from '../api/pets'
 import doctorsApi from '../api/doctors'
@@ -15,82 +14,84 @@ import ErrorMessage from '../components/forms/ErrorMessage'
 import LoadingIndicator from '../components/LoadingIndicator'
 import AuthContext from '../context/authContext'
 import RazorpayCheckout from 'react-native-razorpay'
+import AppImageListPicker from '../components/forms/AppImageListPicker'
 
 const validationSchema = Yup.object().shape({
   problems: Yup.string().max(100).required().label('Problems'),
   photo: Yup.string().nullable(),
+  images: Yup.array().min(1, 'Please select at least one image'),
 })
 
 const CallVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
-  console.log('Route', route)
+  // console.log('Route', route)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
 
   const handleSubmit = async (values) => {
-    if (values.videoCall) {
-      const res = await usersApi.payDoctor({
-        amt: route?.params?.doc.fee * 1 + 100,
-      })
-      if (!res.ok) {
-        setLoading(false)
-        console.log('Error', res)
-      }
-      setLoading(false)
-      const options = {
-        description: 'Payment For Doctor Consultation',
-        currency: 'INR',
-        key: 'rzp_test_GbpjxWePHidlJt',
-        amount: res.data.result.amount,
-        name: `${route?.params?.doc.user.name}`,
-        order_id: res.data.result.id,
-      }
-      RazorpayCheckout.open(options)
-        .then(async (data) => {
-          setLoading(true)
-          const verifyRes = await usersApi.verifyPayment({
-            id: res.data.result.id,
-            paid_id: data.razorpay_payment_id,
-            sign: data.razorpay_signature,
-          })
-          if (!verifyRes.ok) {
-            setLoading(false)
-            console.log(verifyRes)
-            return
-          }
-          const tokenRes = await usersApi.getVideoToken(user.name)
-          // console.log('Video Token', tokenRes)
-          if (!tokenRes.ok) {
-            setLoading(false)
-            console.log('Error', tokenRes)
-          }
-          setLoading(false)
-          navigation.navigate('VideoCall', {
-            docId: route?.params?.doc.user._id,
-            userId: user._id,
-            name: user.name,
-            token: tokenRes.data,
-            // token: undefined,
-          })
-          // setLoading(false)
-          // alert(`Success: ${verifyRes.data.verify}`)
-        })
-        .catch((error) => {
-          // handle failure
-          console.log(error)
-          setLoading(false)
-          // alert(`Error: ${error.code} | ${error.description}`)
-        })
-      // setLoading(true)
+    // if (values.videoCall) {
+    //   const res = await usersApi.payDoctor({
+    //     amt: route?.params?.doc.fee * 1 + 100,
+    //   })
+    //   if (!res.ok) {
+    //     setLoading(false)
+    //     console.log('Error', res)
+    //   }
+    //   setLoading(false)
+    //   const options = {
+    //     description: 'Payment For Doctor Consultation',
+    //     currency: 'INR',
+    //     key: 'rzp_test_GbpjxWePHidlJt',
+    //     amount: res.data.result.amount,
+    //     name: `${route?.params?.doc.user.name}`,
+    //     order_id: res.data.result.id,
+    //   }
+    //   RazorpayCheckout.open(options)
+    //     .then(async (data) => {
+    //       setLoading(true)
+    //       const verifyRes = await usersApi.verifyPayment({
+    //         id: res.data.result.id,
+    //         paid_id: data.razorpay_payment_id,
+    //         sign: data.razorpay_signature,
+    //       })
+    //       if (!verifyRes.ok) {
+    //         setLoading(false)
+    //         console.log(verifyRes)
+    //         return
+    //       }
+    //       const tokenRes = await usersApi.getVideoToken(user.name)
+    //       // console.log('Video Token', tokenRes)
+    //       if (!tokenRes.ok) {
+    //         setLoading(false)
+    //         console.log('Error', tokenRes)
+    //       }
+    //       setLoading(false)
+    //       navigation.navigate('VideoCall', {
+    //         docId: route?.params?.doc.user._id,
+    //         userId: user._id,
+    //         name: user.name,
+    //         token: tokenRes.data,
+    //         // token: undefined,
+    //       })
+    //       // setLoading(false)
+    //       // alert(`Success: ${verifyRes.data.verify}`)
+    //     })
+    //     .catch((error) => {
+    //       // handle failure
+    //       console.log(error)
+    //       setLoading(false)
+    //       // alert(`Error: ${error.code} | ${error.description}`)
+    //     })
+    //   // setLoading(true)
 
-      // return
-    } else if (!values.videoCall) {
-      navigation.navigate('Chat', {
-        doc: route?.params?.doc,
-        pet: route?.params?.pet,
-      })
-      return
-    }
+    //   // return
+    // } else if (!values.videoCall) {
+    //   navigation.navigate('Chat', {
+    //     doc: route?.params?.doc,
+    //     pet: route?.params?.pet,
+    //   })
+    //   return
+    // }
 
     // const patientData = {
     //   name: user.name,
@@ -98,26 +99,35 @@ const CallVetScreen = ({ navigation, route }) => {
     //   petname: route?.params?.pet.name,
     // }
 
-    // const form = new FormData()
-    // if (values.photo) {
-    //   form.append('photo', {
-    //     name: 'photo',
-    //     type: 'image/jpeg',
-    //     uri: values.photo,
-    //   })
-    // }
+    const form = new FormData()
+    if (values.images) {
+      values.images.forEach((image, index) => {
+        form.append('images', {
+          name: 'image' + index,
+          type: 'image/jpeg',
+          uri: image,
+        })
+      })
+    }
 
-    // form.append('docname', route?.params?.doc.user.name)
-    // form.append('problem', values.problems)
-    // setLoading(true)
-    // const res = await petsApi.savePetProblems(form, route?.params?.pet._id)
+    form.append('docname', route?.params?.doc.user.name)
+    form.append('problem', values.problems)
 
-    // if (!res.ok) {
-    //   setError(res.data?.msg)
-    //   setLoading(false)
-    //   // console.log(res)
-    //   return
-    // }
+    console.log('Form', form.images)
+    setLoading(true)
+    const res = await petsApi.savePetProblems(form, route?.params?.pet._id)
+
+    if (!res.ok) {
+      setError(res.data?.msg)
+      setLoading(false)
+      // console.log(res)
+      return
+    }
+
+    setError(null)
+    console.log('Pet Res', res.data)
+    // console.log('Doc', docRes.data)
+    setLoading(false)
 
     // const docRes = await doctorsApi.savePatientDetails(
     //   patientData,
@@ -169,6 +179,7 @@ const CallVetScreen = ({ navigation, route }) => {
             problems: '',
             photo: null,
             videoCall: true,
+            images: [],
           }}
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
@@ -185,9 +196,9 @@ const CallVetScreen = ({ navigation, route }) => {
               />
 
               <AppText style={{ marginVertical: 20 }}>
-                Select Image(optional)
+                Select Images (optional)
               </AppText>
-              <FormImagePicker name='photo' />
+              <AppImageListPicker name='images' />
               {error && <ErrorMessage visible={!loading} error={error} />}
 
               <View style={styles.btnContainer}>

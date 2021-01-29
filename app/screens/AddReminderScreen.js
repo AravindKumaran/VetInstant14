@@ -27,6 +27,7 @@ const reminders = [
 const validationSchema = Yup.object().shape({
   reminder: Yup.string().nullable().required('Please select a reminder'),
   notes: Yup.string().max(50, 'Notes must be less than 50 Characters'),
+  // mdname: Yup.string().required().label('Medicine name'),
 })
 
 const getTom = () => {
@@ -39,6 +40,8 @@ const getTom = () => {
 
 const AddReminderScreen = ({ navigation, route }) => {
   const [date, setDate] = useState(getTom())
+  const [endDate, setEndDate] = useState(getTom())
+  const [isEndDate, setIsEndDate] = useState(false)
   const [mode, setMode] = useState('date')
   const [show, setShow] = useState(false)
 
@@ -46,6 +49,16 @@ const AddReminderScreen = ({ navigation, route }) => {
     const currentDate = selectedDate || date
     setShow(Platform.OS === 'ios')
     setDate(currentDate)
+  }
+
+  const handleEndDate = (event, selectedDate) => {
+    const currentDate = selectedDate || endDate
+    setIsEndDate(Platform.OS === 'ios')
+    setEndDate(currentDate)
+  }
+
+  const showEndDate = () => {
+    setIsEndDate(true)
   }
 
   const showMode = (currentMode) => {
@@ -75,16 +88,38 @@ const AddReminderScreen = ({ navigation, route }) => {
   }
 
   const handleSubmit = async (values) => {
-    const rmr = {
-      date,
-      ...values,
+    if (values.reminder !== 'Medicine') {
+      const rmr1 = {
+        date,
+        ...values,
+      }
+      const idt1 = await scheduleNotification(rmr1)
+      rmr1['identifier'] = idt1
+      storeObjectData(
+        `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`,
+        rmr1
+      )
+
+      const yesterday = new Date()
+      yesterday.setDate(date.getDate() - 1)
+      yesterday.setHours(12)
+      yesterday.setSeconds(0)
+      yesterday.setMinutes(0)
+
+      const rmr2 = {
+        yesterday,
+        ...values,
+      }
+
+      const idt2 = await scheduleNotification(rmr2)
+
+      rmr2['identifier'] = idt2
+      storeObjectData(
+        `${yesterday.toLocaleDateString()}-${yesterday.toLocaleTimeString()}`,
+        rmr2
+      )
     }
-    const idt = await scheduleNotification(rmr)
-    rmr['identifier'] = idt
-    storeObjectData(
-      `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`,
-      rmr
-    )
+
     navigation.navigate('Home')
   }
 
@@ -134,7 +169,7 @@ const AddReminderScreen = ({ navigation, route }) => {
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
         >
-          {() => {
+          {({ values }) => {
             return (
               <>
                 <AppFormPicker
@@ -142,6 +177,45 @@ const AddReminderScreen = ({ navigation, route }) => {
                   label='Type Of Reminder'
                   name='reminder'
                 />
+
+                {values.reminder === 'Medicine' && (
+                  <>
+                    <AppFormField
+                      label='Medicine Name'
+                      autoCapitalize='none'
+                      autoCorrect={false}
+                      name='medicine'
+                      placeholder='Enter medicine name'
+                    />
+                    <AppText>Choose End Date</AppText>
+                    <TouchableOpacity
+                      onPress={showEndDate}
+                      style={styles.dateTime}
+                    >
+                      <Feather
+                        name='calendar'
+                        size={25}
+                        color='#6e6969'
+                        style={styles.icon}
+                      />
+                      <AppText style={styles.text}>
+                        {endDate.toLocaleDateString()}
+                      </AppText>
+                    </TouchableOpacity>
+                    {isEndDate && (
+                      <DateTimePicker
+                        testID='dateTimePicker'
+                        value={endDate}
+                        mode='Date'
+                        is24Hour={true}
+                        display='default'
+                        onChange={handleEndDate}
+                        neutralButtonLabel='clear'
+                        minimumDate={getTom()}
+                      />
+                    )}
+                  </>
+                )}
 
                 <AppFormField
                   label='Notes (optional)'

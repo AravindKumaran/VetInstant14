@@ -23,6 +23,7 @@ const ReminderScreen = ({ navigation }) => {
 
     if (data.length > 0) {
       data.forEach(async (dateTime) => {
+        console.log('Dateime', dateTime)
         const date = dateTime.split('-')[0]
         if (date === new Date().toLocaleDateString()) {
           const rmr = await getObjectData(dateTime)

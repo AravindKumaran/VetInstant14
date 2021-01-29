@@ -1,8 +1,8 @@
-import React from "react";
-import { StyleSheet, TextInput, View } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React from 'react'
+import { StyleSheet, TextInput, View } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-const AppTextInput = ({ icon, numberOfLines = 1, ...rest }) => {
+const AppTextInput = ({ icon, numberOfLines = 1, width, ...rest }) => {
   return (
     <View style={[styles.container]}>
       {icon && (
@@ -19,28 +19,30 @@ const AppTextInput = ({ icon, numberOfLines = 1, ...rest }) => {
         {...rest}
       />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 15,
     marginVertical: 10,
-    overflow: "hidden",
+    marginRight: 5,
+    overflow: 'hidden',
   },
   icon: {
     marginRight: 10,
   },
   textInput: {
     fontSize: 18,
-    color: "#0c0c0c",
+    color: '#0c0c0c',
     flex: 1,
-    textAlignVertical: "top",
+    textAlignVertical: 'top',
+    width: '100%',
   },
-});
+})
 
-export default AppTextInput;
+export default AppTextInput
