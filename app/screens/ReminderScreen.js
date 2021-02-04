@@ -95,7 +95,9 @@ const ReminderScreen = ({ navigation }) => {
             {upcomingReminders.map((rmr, index) => (
               <View key={index} style={styles.card}>
                 <AppText style={{ fontSize: 15 }}>
-                  {rmr.date.split('T')[0]}
+                  {rmr.endDate
+                    ? rmr.endDate.split('T')[0]
+                    : rmr.date.split('T')[0]}
                 </AppText>
                 <View style={styles.innerCard}>
                   <AppText style={{ flex: 1 }}>{rmr.reminder}</AppText>

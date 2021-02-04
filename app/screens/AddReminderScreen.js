@@ -75,14 +75,23 @@ const AddReminderScreen = ({ navigation, route }) => {
   }
 
   const scheduleNotification = async (rmr) => {
+    let trObj = {}
+    if (rmr.reminder === 'Medicine') {
+      trObj = {
+        hour: 10,
+        minute: 0,
+        // seconds: 15,
+        repeats: true,
+      }
+    } else {
+      date
+    }
     const identifier = await Notifications.scheduleNotificationAsync({
       content: {
         title: 'Your Today Reminders Are Pending!',
-        body: rmr.reminder,
+        body: `${rmr.reminder}`,
       },
-      trigger: {
-        date: date,
-      },
+      trigger: trObj,
     })
     return identifier
   }
@@ -117,6 +126,18 @@ const AddReminderScreen = ({ navigation, route }) => {
       storeObjectData(
         `${yesterday.toLocaleDateString()}-${yesterday.toLocaleTimeString()}`,
         rmr2
+      )
+    } else {
+      const rmr1 = {
+        date,
+        endDate,
+        ...values,
+      }
+      const idt1 = await scheduleNotification(rmr1)
+      rmr1['identifier'] = idt1
+      storeObjectData(
+        `${endDate.toLocaleDateString()}-${endDate.toLocaleTimeString()}`,
+        rmr1
       )
     }
 
