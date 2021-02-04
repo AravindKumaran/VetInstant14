@@ -89,15 +89,6 @@ const HomeScreen = ({ navigation, route }) => {
     authStorage.removeToken()
   }
 
-  // const getNotificationToken = async () => {
-  //   try {
-  //     const token = await Notifications.getExpoPushTokenAsync()
-  //     console.log(token)
-  //   } catch (error) {
-  //     console.log('Error', error)
-  //   }
-  // }
-
   return (
     <ScrollView vertical={true}>
       <View style={styles.container}>

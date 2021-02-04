@@ -39,7 +39,7 @@ const ChooseVetScreen = ({ navigation, route }) => {
       if (hosRes.data.count > 0) {
         const dc = hosRes.data.doctors.find((doc) => doc.user.isOnline)
         if (dc) {
-          msg = `But Doctor ${dc.user.name} from the same hospital is currently available.\n\n So, Do you want to continue with Doctor ${dc.user.name}?
+          msg = `But Doctor ${dc.user.name} from the same hospital is currently available with consultation Fees of ₹${dc.fee}.\n\n So, Do you want to continue with Doctor ${dc.user.name}?
           `
 
           Alert.alert('Info', `Your Vet is currently not online\n\n ${msg}`, [
