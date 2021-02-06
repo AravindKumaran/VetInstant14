@@ -7,6 +7,7 @@ import VetNavigator from './VetNavigator'
 import CallLogScreen from '../screens/CallLogScreen'
 
 import DrawerContent from '../components/DrawerContent'
+import ScheduledCallScreen from '../screens/ScheduledCallScreen'
 
 const Drawer = createDrawerNavigator()
 
@@ -69,20 +70,22 @@ const DrawerNavigator = () => (
       }}
     />
     <Drawer.Screen
+      name='ScheduledCall'
+      component={ScheduledCallScreen}
+      options={{
+        drawerIcon: ({ color, size }) => (
+          <Feather name='phone-outgoing' size={size} color={color} />
+        ),
+        headerShown: true,
+        unmountOnBlur: true,
+      }}
+    />
+    <Drawer.Screen
       name='Payments'
       component={AppNavigator}
       options={{
         drawerIcon: ({ color, size }) => (
           <Feather name='dollar-sign' size={size} color={color} />
-        ),
-      }}
-    />
-    <Drawer.Screen
-      name='Help'
-      component={AppNavigator}
-      options={{
-        drawerIcon: ({ color, size }) => (
-          <Feather name='help-circle' size={size} color={color} />
         ),
       }}
     />
