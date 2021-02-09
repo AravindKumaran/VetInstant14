@@ -30,6 +30,7 @@ const ChooseVetScreen = ({ navigation, route }) => {
       })
     } else {
       const hosRes = await hospitalsApi.getHospitalsDoctors(user.hospitalId)
+      console.log('hoSRes', hosRes)
       if (!hosRes.ok) {
         setLoading(false)
         console.log(res)

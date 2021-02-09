@@ -1,5 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { ScrollView, TouchableOpacity, StyleSheet, View } from 'react-native'
+import React, { useContext, useState, useEffect, useRef } from 'react'
+import {
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  View,
+  Platform,
+} from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { useIsFocused } from '@react-navigation/native'
 
@@ -11,13 +17,23 @@ import AddPetButton from '../components/AddPetButton'
 import LoadingIndicator from '../components/LoadingIndicator'
 
 import * as Notifications from 'expo-notifications'
+import * as Permissions from 'expo-permissions'
 import petsApi from '../api/pets'
+import usersApi from '../api/users'
 
 import {
   getAllKeys,
   getObjectData,
   removeValue,
 } from '../components/utils/reminderStorage'
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+})
 
 const HomeScreen = ({ navigation, route }) => {
   const { user, setUser } = useContext(AuthContext)
@@ -26,6 +42,8 @@ const HomeScreen = ({ navigation, route }) => {
   const [rmr, setRmr] = useState([])
   const [todayReminders, setTodayReminders] = useState([])
   const [upcomingReminders, setUpcomingReminders] = useState([])
+  const notificationListener = useRef()
+  const responseListener = useRef()
 
   const isFocused = useIsFocused()
 
@@ -89,8 +107,63 @@ const HomeScreen = ({ navigation, route }) => {
     authStorage.removeToken()
   }
 
+  useEffect(() => {
+    const saveNotificationToken = async () => {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+      if (status !== 'granted') {
+        alert('No notification permissions!')
+        return
+      }
+      try {
+        const token = await Notifications.getExpoPushTokenAsync({
+          experienceId: `@vetinstant/vetInstant`,
+        })
+
+        // console.log(token.data)
+
+        if (user.token && user.token === token.data) {
+          return
+        }
+
+        const res = await usersApi.createPushToken({ token: token.data })
+        if (!res.ok) {
+          console.log('Error', res.data)
+          return
+        }
+
+        setUser(res.data.user)
+      } catch (error) {
+        console.log('Error getting push token', error)
+      }
+    }
+    saveNotificationToken()
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+      })
+    }
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => console.log('REceived', notification)
+    )
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (notification) => {
+        console.log('Response', notification)
+        navigation.navigate('CallVet', { doPayment: true })
+      }
+    )
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener)
+      Notifications.removeNotificationSubscription(responseListener)
+    }
+  }, [])
+
   return (
     <ScrollView vertical={true}>
+      <LoadingIndicator visible={loading} />
       <View style={styles.container}>
         <AppText style={{ fontWeight: '500', fontSize: 30 }}>
           Hi, {user.name}
@@ -175,7 +248,7 @@ const HomeScreen = ({ navigation, route }) => {
 
         <AppText>{user ? user.emailID || user.email : ''}</AppText>
         <AppButton title='Logout' onPress={handleLogout} />
-        {/* <AppButton title='Token' onPress={getNotificationToken} /> */}
+        {/* <AppButton title='Token' onPress={sendPushToken} /> */}
       </View>
     </ScrollView>
   )

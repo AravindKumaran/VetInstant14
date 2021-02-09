@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -15,21 +15,92 @@ import LoadingIndicator from '../components/LoadingIndicator'
 import AuthContext from '../context/authContext'
 import RazorpayCheckout from 'react-native-razorpay'
 import AppImageListPicker from '../components/forms/AppImageListPicker'
+import * as Notifications from 'expo-notifications'
 
 const validationSchema = Yup.object().shape({
   problems: Yup.string().max(100).required().label('Problems'),
   photo: Yup.string().nullable(),
-  images: Yup.array().min(1, 'Please select at least one image'),
+  images: Yup.array().nullable().label('Image'),
 })
 
 const CallVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
-  // console.log('Route', route)
+  // console.log('Route', route.params.doc.user)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
+  // const [startPayment, setStartPayment] = useState(false)
+  const notificationListener = useRef()
+  const startPayment = useRef(null)
+
+  const sendPushToken = async () => {
+    if (route.params.doc.user.token && !startPayment.current) {
+      setLoading(true)
+      // const res = await usersApi.getPushToken(user.doctorId)
+
+      // if (!res.ok) {
+      //   setLoading(false)
+      //   console.log('Error', res)
+      //   return
+      // }
+
+      // if (res.data.token === null) {
+      //   setLoading(false)
+      //   return
+      // }
+
+      const pushRes = await usersApi.sendPushNotification({
+        targetExpoPushToken: route.params.doc.user.token,
+        title: 'Incoming Call Request from PetOwner',
+        message: `Are you available for next 15-30 minutes?\n** Don't close the app from background!!`,
+        datas: { token: user.token || null },
+      })
+
+      if (!pushRes.ok) {
+        setLoading(false)
+        console.log('Error', pushRes)
+        return
+      }
+      setLoading(false)
+    } else {
+      alert('Something Went Wrong! Try again later')
+    }
+  }
+
+  useEffect(() => {
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log('REceived', notification)
+        if (
+          notification.request.content.data.status === 'ok' &&
+          !startPayment.current
+        ) {
+          startPayment.current = true
+          alert(`Yes I'm available. Complete the payment within 5-10 minutes`)
+        } else if (
+          notification.request.content.data.status === 'cancel' &&
+          !startPayment.current
+        ) {
+          startPayment.current = null
+          alert(
+            `Sorry! I'm not available. Please try with other available doctors`
+          )
+        }
+      }
+    )
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener)
+    }
+  }, [])
 
   const handleSubmit = async (values) => {
+    if (values.videoCall) {
+      sendPushToken()
+      return
+    }
+
     // if (values.videoCall) {
+
     //   const res = await usersApi.payDoctor({
     //     amt: route?.params?.doc.fee * 1 + 100,
     //   })

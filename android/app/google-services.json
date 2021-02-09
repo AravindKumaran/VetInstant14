@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "320113619885",
+    "project_id": "vetinstant",
+    "storage_bucket": "vetinstant.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320113619885:android:dab0703c3d737f7d80a724",
+        "android_client_info": {
+          "package_name": "com.petowners.vetinstant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320113619885-gk7d3v66vs3bf4nksn6mf3tj2s6prgcs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnEugLfelnNxRqywH0f0xYH-kP56Sn-uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320113619885-gk7d3v66vs3bf4nksn6mf3tj2s6prgcs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
