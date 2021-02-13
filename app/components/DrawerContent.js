@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
   DrawerContentScrollView,
@@ -9,15 +9,24 @@ import {
 import { Feather } from '@expo/vector-icons'
 
 import AppText from './AppText'
+import AuthContext from '../context/authContext'
+import authStorage from './utils/authStorage'
 
 const DrawerContent = (props) => {
+  const { user, setUser } = useContext(AuthContext)
+
+  const handleLogout = () => {
+    setUser()
+    authStorage.removeToken()
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.rounded}>
           <Feather name='user' size={35} color='blue' />
         </View>
-        <AppText style={{ marginBottom: 20 }}>Avinash</AppText>
+        <AppText style={{ marginBottom: 20 }}>{user.name}</AppText>
       </View>
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
@@ -27,7 +36,7 @@ const DrawerContent = (props) => {
         icon={({ color, size }) => (
           <Feather name='log-out' color={color} size={size} />
         )}
-        onPress={() => console.log('Logout')}
+        onPress={handleLogout}
         style={styles.footer}
       />
     </View>
