@@ -80,7 +80,7 @@ const DrawerNavigator = () => (
         unmountOnBlur: true,
       }}
     />
-    <Drawer.Screen
+    {/* <Drawer.Screen
       name='Payments'
       component={AppNavigator}
       options={{
@@ -88,7 +88,7 @@ const DrawerNavigator = () => (
           <Feather name='dollar-sign' size={size} color={color} />
         ),
       }}
-    />
+    /> */}
   </Drawer.Navigator>
 )
 

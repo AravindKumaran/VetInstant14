@@ -31,6 +31,7 @@ const LoginScreen = () => {
     setLoading(true)
     const res = await authApi.login(email, password)
     if (!res.ok) {
+      console.log('Res', res)
       setLoading(false)
       setError(res.data?.msg ? res.data.msg : 'Something Went Wrong!')
       return
