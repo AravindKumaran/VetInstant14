@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(8).label('Password'),
 })
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -91,6 +91,14 @@ const LoginScreen = () => {
                 secureTextEntry
                 placeholder='Enter your password'
               />
+
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ForgotPassword')}
+              >
+                <AppText style={{ textAlign: 'right', fontSize: 20 }}>
+                  Forgot Password?
+                </AppText>
+              </TouchableOpacity>
 
               <SubmitButton title='Login' />
             </>

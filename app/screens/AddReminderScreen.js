@@ -147,40 +147,6 @@ const AddReminderScreen = ({ navigation, route }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <AppText>Choose Date</AppText>
-        <TouchableOpacity onPress={showDatepicker} style={styles.dateTime}>
-          <Feather
-            name='calendar'
-            size={25}
-            color='#6e6969'
-            style={styles.icon}
-          />
-          <AppText style={styles.text}>{date.toLocaleDateString()}</AppText>
-        </TouchableOpacity>
-
-        <AppText>Choose Time</AppText>
-
-        <TouchableOpacity onPress={showTimepicker} style={styles.dateTime}>
-          <Feather name='clock' size={25} color='#6e6969' style={styles.icon} />
-          <AppText style={styles.text}>{date.toLocaleTimeString()}</AppText>
-        </TouchableOpacity>
-
-        <AppText style={{ fontSize: 15, marginBottom: 15, color: '#DC143C' }}>
-          *Time must be greater than current time for successful reminder
-        </AppText>
-
-        {show && (
-          <DateTimePicker
-            testID='dateTimePicker'
-            value={date}
-            mode={mode}
-            is24Hour={true}
-            display='default'
-            onChange={onChange}
-            neutralButtonLabel='clear'
-            minimumDate={getTom()}
-          />
-        )}
         <Formik
           enableReinitialize
           initialValues={{
@@ -236,6 +202,59 @@ const AddReminderScreen = ({ navigation, route }) => {
                       />
                     )}
                   </>
+                )}
+
+                <AppText>Choose Time</AppText>
+
+                <TouchableOpacity
+                  onPress={showTimepicker}
+                  style={styles.dateTime}
+                >
+                  <Feather
+                    name='clock'
+                    size={25}
+                    color='#6e6969'
+                    style={styles.icon}
+                  />
+                  <AppText style={styles.text}>
+                    {date.toLocaleTimeString()}
+                  </AppText>
+                </TouchableOpacity>
+
+                <AppText
+                  style={{ fontSize: 15, marginBottom: 15, color: '#DC143C' }}
+                >
+                  *Time must be greater than current time for successful
+                  reminder
+                </AppText>
+
+                <AppText>Choose Date</AppText>
+                <TouchableOpacity
+                  onPress={showDatepicker}
+                  style={styles.dateTime}
+                >
+                  <Feather
+                    name='calendar'
+                    size={25}
+                    color='#6e6969'
+                    style={styles.icon}
+                  />
+                  <AppText style={styles.text}>
+                    {date.toLocaleDateString()}
+                  </AppText>
+                </TouchableOpacity>
+
+                {show && (
+                  <DateTimePicker
+                    testID='dateTimePicker'
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display='default'
+                    onChange={onChange}
+                    neutralButtonLabel='clear'
+                    minimumDate={getTom()}
+                  />
                 )}
 
                 <AppFormField
