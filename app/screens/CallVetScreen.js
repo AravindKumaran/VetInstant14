@@ -26,33 +26,23 @@ const validationSchema = Yup.object().shape({
 
 const CallVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
-  console.log('Route', route.params)
+  // console.log('Route', route.params)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
   // const [startPayment, setStartPayment] = useState(false)
   const notificationListener = useRef()
-  const startPayment = useRef(null)
+  const startPayment = useRef()
 
-  const sendPushToken = async () => {
+  const sendPushToken = async (message) => {
     if (route.params.doc.user.token && !startPayment.current) {
       setLoading(true)
-      // const res = await usersApi.getPushToken(user.doctorId)
-
-      // if (!res.ok) {
-      //   setLoading(false)
-      //   console.log('Error', res)
-      //   return
-      // }
-
-      // if (res.data.token === null) {
-      //   setLoading(false)
-      //   return
-      // }
 
       const pushRes = await usersApi.sendPushNotification({
         targetExpoPushToken: route.params.doc.user.token,
-        title: 'Incoming Call Request from PetOwner',
-        message: `Are you available for next 15-30 minutes?\n** Don't close the app from background!!`,
+        title: `Incoming Call Request from ${user.name}`,
+        message:
+          message ||
+          `Are you available for next 15-30 minutes?\n** Don't close the app from background!!`,
         datas: { token: user.token || null },
       })
 
@@ -71,17 +61,20 @@ const CallVetScreen = ({ navigation, route }) => {
     notificationListener.current = Notifications.addNotificationReceivedListener(
       (notification) => {
         console.log('REceived', notification)
+        console.log('REceived', notification.request.content.data)
         if (
           notification.request.content.data.status === 'ok' &&
           !startPayment.current
         ) {
           startPayment.current = true
           alert(`Yes I'm available. Complete the payment within 5-10 minutes`)
+          console.log('Start Payment', startPayment.current)
         } else if (
           notification.request.content.data.status === 'cancel' &&
           !startPayment.current
         ) {
           startPayment.current = null
+          console.log('Start Payment', startPayment.current)
           alert(
             `Sorry! I'm not available. Please try with other available doctors`
           )
@@ -95,13 +88,13 @@ const CallVetScreen = ({ navigation, route }) => {
   }, [])
 
   const handleSubmit = async (values) => {
-    // if (values.videoCall) {
-    //   // sendPushToken()
-
-    //   return
-    // }
-
-    if (values.videoCall) {
+    if (values.videoCall && !startPayment.current) {
+      sendPushToken()
+      alert(
+        "Notification send to doctor! Please wait for 2-5 minutes for response before taking any new action. Don't close this screen"
+      )
+    } else if (values.videoCall && startPayment.current) {
+      startPayment.current = null
       const res = await usersApi.payDoctor({
         amt: route?.params?.doc.fee * 1 + 100,
       })
@@ -152,6 +145,9 @@ const CallVetScreen = ({ navigation, route }) => {
             console.log('Error', tokenRes)
           }
           setLoading(false)
+          sendPushToken(
+            'I have completed the payment.Please join the video call'
+          )
           navigation.navigate('VideoCall', {
             docId: route?.params?.doc.user._id,
             userId: user._id,
