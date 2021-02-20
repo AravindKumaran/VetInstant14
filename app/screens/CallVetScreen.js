@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
@@ -17,6 +17,78 @@ import AuthContext from '../context/authContext'
 import RazorpayCheckout from 'react-native-razorpay'
 import AppImageListPicker from '../components/forms/AppImageListPicker'
 import * as Notifications from 'expo-notifications'
+
+import Pick from '../components/picker';
+import AppFormPicker from '../components/forms/AppFormPicker'
+
+const Appetite = [
+  { label: 'a. Normal', value: 'Normal' },
+  { label: 'b. Not Observed', value: 'Not Observed' },
+  { label: 'c. Different from Normal', value: 'Different from Normal' },
+]
+
+const Behaviour = [
+  { label: 'a. Normal', value: 'Normal' },
+  { label: 'b. Not Observed', value: 'Not Observed' },
+  { label: 'c. Different from Normal', value: 'Different from Normal' },
+]
+
+const Activity = [
+  { label: 'a. Normal', value: 'Normal' },
+  { label: 'b. Not Observed', value: 'Not Observed' },
+  { label: 'c. Different from Normal', value: 'Different from Normal' },
+]
+
+const Feces = [
+  { label: 'a. Normal', value: 'Normal' },
+  { label: 'b. Not Observed', value: 'Not Observed' },
+  { label: 'c. Abnormal Colour', value: 'Abnormal Colour' },
+  { label: 'd. Worms', value: 'Worms' },
+]
+
+const Urine = [
+  { label: 'a. Normal', value: 'Normal' },
+  { label: 'b. Not Observed', value: 'Not Observed' },
+  { label: 'c. Abnormal Colour', value: 'Abnormal Colour' },
+]
+
+const Eyes = [
+  { label: 'a. Normal', value: 'Normal' },
+  { label: 'b. Abnormal Discharged', value: 'Abnormal Discharged' },
+  { label: 'c. Kotlin', value: 'Kotlin' },
+]
+
+const Mucous = [
+  { label: 'a. White', value: 'White' },
+  { label: 'b. Pink-White', value: 'Pink-White' },
+  { label: 'c. Pink', value: 'Pink' },
+  { label: 'd. Red-Pink', value: 'Red-Pink' },
+  { label: 'e. Red', value: 'Red' },
+  { label: 'f. Dark Red', value: 'Dark Red' },
+  { label: 'g. Yellow', value: 'Yellow' },
+]
+
+const Ears = [
+  { label: 'a. Normal', value: 'Normal' },
+  { label: 'b. Abnormal Discharge', value: 'Abnormal Discharge' },
+  { label: 'c. Abnormal Odour', value: 'Abnormal Odour' },
+  { label: 'd. Abnormal appearance', value: 'Abnormal appearance' },
+]
+
+const Skin = [
+  { label: 'a. Normal', value: 'Normal' },
+  { label: 'b. Injuries', value: 'Injuries' },
+  { label: 'c. Odour', value: 'Odour' },
+  { label: 'd. Hairfall', value: 'Hairfall' },
+  { label: 'e. Rough Coat', value: 'Rough Coat' },
+  { label: 'f. Changes in Appearance', value: 'Changes in Appearance' },
+]
+
+const Gait = [
+  { label: 'a. Normal', value: 'Normal' },
+  { label: 'b. Not Observed', value: 'Not Observed' },
+  { label: 'c. Different from Normal', value: 'Different from Normal' },
+]
 
 const validationSchema = Yup.object().shape({
   problems: Yup.string().max(100).required().label('Problems'),
@@ -274,6 +346,86 @@ const CallVetScreen = ({ navigation, route }) => {
                 name='problems'
                 numberOfLines={3}
                 placeholder='enter your pet problems'
+              />
+
+              <AppFormField
+                label='For how long have you noticed this problem? (Indicate number of days)'
+                autoCapitalize='none'
+                autoCorrect={false}
+                name='time'
+                numberOfLines={3}
+                placeholder='enter the period of the problem'
+              />
+
+              {/* <Pick /> */}
+
+              <AppFormPicker
+                  items={Appetite}
+                  label='Appetite'
+                  name='Appetite'
+                />
+
+              <AppFormPicker
+                  items={Behaviour}
+                  label='General Behaviour'
+                  name='Behaviour'
+                />
+
+              <AppFormPicker
+                  items={Activity}
+                  label='Activity'
+                  name='Activity'
+                />
+
+              <AppFormPicker
+                  items={Feces}
+                  label='Feces (Select all options that apply)'
+                  name='Feces'
+                />
+         
+              <AppFormPicker
+                  items={Urine}
+                  label='Urine (Select all options that apply)'
+                  name='Urine'
+                />
+  
+              <AppFormPicker
+                  items={Eyes}
+                  label='Eyes'
+                  name='Eyes'
+                />
+
+              <AppFormPicker
+                  items={Mucous}
+                  label='Mucous Membrane of the Eye'
+                  name='Mucous'
+                />
+
+              <AppFormPicker
+                  items={Ears}
+                  label='Ears (Select all options that apply)'
+                  name='Ears'
+                />
+
+              <AppFormPicker
+                  items={Skin}
+                  label='Skin and Coat (Select all options that apply)'
+                  name='Skin'
+                />
+
+              <AppFormPicker
+                  items={Gait}
+                  label='Gait'
+                  name='Gait'
+                />  
+
+              <AppFormField
+                label='Comments'
+                autoCapitalize='none'
+                autoCorrect={false}
+                name='comment'
+                numberOfLines={3}
+                placeholder='enter your comments to clarify your doubts'
               />
 
               <AppText style={{ marginVertical: 20 }}>
