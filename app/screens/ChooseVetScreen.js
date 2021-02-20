@@ -30,7 +30,6 @@ const ChooseVetScreen = ({ navigation, route }) => {
       })
     } else {
       const hosRes = await hospitalsApi.getHospitalsDoctors(user.hospitalId)
-      console.log('hoSRes', hosRes)
       if (!hosRes.ok) {
         setLoading(false)
         console.log(res)
@@ -38,7 +37,9 @@ const ChooseVetScreen = ({ navigation, route }) => {
       }
       let msg = 'Please choose other Vet that is currently available online ?'
       if (hosRes.data.count > 0) {
-        const dc = hosRes.data.doctors.find((doc) => doc.user.isOnline)
+        const dc = hosRes.data.doctors.find(
+          (doc) => doc.user.isOnline && doc.firstAvailaibeVet
+        )
         if (dc) {
           msg = `But Doctor ${dc.user.name} from the same hospital is currently available with consultation Fees of ₹${dc.fee}.\n\n So, Do you want to continue with Doctor ${dc.user.name}?
           `
@@ -73,8 +74,12 @@ const ChooseVetScreen = ({ navigation, route }) => {
       setLoading(false)
       return
     }
+    console.log('Res', res.data)
     const dc = res.data.doctors.filter(
-      (doc) => doc.user?.isOnline === true && doc.user._id !== user.doctorId
+      (doc) =>
+        doc.user?.isOnline === true &&
+        doc.user._id !== user.doctorId &&
+        doc.firstAvailaibeVet
     )
     if (dc.length > 0) {
       setLoading(false)
