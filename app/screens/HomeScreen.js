@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   Platform,
+  Alert,
 } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { useIsFocused } from '@react-navigation/native'
@@ -107,6 +108,28 @@ const HomeScreen = ({ navigation, route }) => {
     authStorage.removeToken()
   }
 
+  const sendPushToken = async (token, message, status) => {
+    setLoading(true)
+
+    const pushRes = await usersApi.sendPushNotification({
+      targetExpoPushToken: token,
+      title: 'PetOwner Response!',
+      message: message,
+      datas: { tokenn: user.token || null, status: status || null },
+    })
+    if (!pushRes.ok) {
+      setLoading(false)
+      console.log('Error', pushRes)
+      return
+    }
+    setLoading(false)
+    if (status === 'ok') {
+      alert(
+        "Wait for doctor notification to continue further, Don't close the app from background! "
+      )
+    }
+  }
+
   useEffect(() => {
     const saveNotificationToken = async () => {
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
@@ -149,9 +172,70 @@ const HomeScreen = ({ navigation, route }) => {
       (notification) => console.log('REceived', notification)
     )
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
-      (notification) => {
-        console.log('Response', notification)
-        navigation.navigate('CallVet', { doPayment: true })
+      async (notification) => {
+        console.log('Response', notification.notification.request.content)
+        if (notification.notification?.request?.content?.data) {
+          const { token } = notification.notification?.request?.content?.data
+          Alert.alert(
+            'Incoming Call Request from doctor',
+            `${notification.notification?.request?.content.body}`,
+            [
+              {
+                text: 'No',
+                onPress: () => {
+                  sendPushToken(
+                    token,
+                    `Sorry! I'm not available right now`,
+                    'nocall'
+                  )
+
+                  return
+                },
+                style: 'cancel',
+              },
+              {
+                text: 'Yes',
+                onPress: () => {
+                  sendPushToken(
+                    token,
+                    `Yes I'm available. Please start the call\n Click to start the call`,
+                    'startcall'
+                  )
+                  // console.log('OK Pressed')
+                  return
+                },
+              },
+            ],
+            { cancelable: false }
+          )
+        }
+
+        if (notification.notification?.request?.content?.data?.callStarted) {
+          // console.log(
+          //   'Call Started',
+          //   notification.notification?.request?.content?.data?.details
+          // )
+          const tokenRes = await usersApi.getVideoToken({
+            userName: user.name,
+            roomName:
+              notification.notification?.request?.content?.data?.details?.name,
+          })
+          console.log('Video Token', tokenRes)
+          if (!tokenRes.ok) {
+            setLoading(false)
+            console.log('Error', tokenRes)
+          }
+
+          navigation.navigate('VideoCall', {
+            docId:
+              notification.notification?.request?.content?.data?.details
+                ?.receiverId,
+            userId: user._id,
+            name: user.name,
+            token: tokenRes.data,
+          })
+        }
+        // navigation.navigate('CallVet', { doPayment: true })
       }
     )
 
