@@ -18,82 +18,93 @@ import RazorpayCheckout from 'react-native-razorpay'
 import AppImageListPicker from '../components/forms/AppImageListPicker'
 import * as Notifications from 'expo-notifications'
 
-import Pick from '../components/picker';
 import AppFormPicker from '../components/forms/AppFormPicker'
 
 const Appetite = [
-  { label: 'a. Normal', value: 'Normal' },
-  { label: 'b. Not Observed', value: 'Not Observed' },
-  { label: 'c. Different from Normal', value: 'Different from Normal' },
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Not Observed', value: 'Not Observed' },
+  { label: 'Different from Normal', value: 'Different from Normal' },
 ]
 
 const Behaviour = [
-  { label: 'a. Normal', value: 'Normal' },
-  { label: 'b. Not Observed', value: 'Not Observed' },
-  { label: 'c. Different from Normal', value: 'Different from Normal' },
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Not Observed', value: 'Not Observed' },
+  { label: 'Different from Normal', value: 'Different from Normal' },
 ]
 
 const Activity = [
-  { label: 'a. Normal', value: 'Normal' },
-  { label: 'b. Not Observed', value: 'Not Observed' },
-  { label: 'c. Different from Normal', value: 'Different from Normal' },
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Not Observed', value: 'Not Observed' },
+  { label: 'Different from Normal', value: 'Different from Normal' },
 ]
 
-const Feces = [
-  { label: 'a. Normal', value: 'Normal' },
-  { label: 'b. Not Observed', value: 'Not Observed' },
-  { label: 'c. Abnormal Colour', value: 'Abnormal Colour' },
-  { label: 'd. Worms', value: 'Worms' },
+const Faces = [
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Not Observed', value: 'Not Observed' },
+  { label: 'Abnormal Colour', value: 'Abnormal Colour' },
+  { label: 'Worms', value: 'Worms' },
 ]
 
 const Urine = [
-  { label: 'a. Normal', value: 'Normal' },
-  { label: 'b. Not Observed', value: 'Not Observed' },
-  { label: 'c. Abnormal Colour', value: 'Abnormal Colour' },
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Not Observed', value: 'Not Observed' },
+  { label: 'Abnormal Colour', value: 'Abnormal Colour' },
 ]
 
 const Eyes = [
-  { label: 'a. Normal', value: 'Normal' },
-  { label: 'b. Abnormal Discharged', value: 'Abnormal Discharged' },
-  { label: 'c. Kotlin', value: 'Kotlin' },
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Abnormal Discharged', value: 'Abnormal Discharged' },
+  { label: 'Kotlin', value: 'Kotlin' },
 ]
 
 const Mucous = [
-  { label: 'a. White', value: 'White' },
-  { label: 'b. Pink-White', value: 'Pink-White' },
-  { label: 'c. Pink', value: 'Pink' },
-  { label: 'd. Red-Pink', value: 'Red-Pink' },
-  { label: 'e. Red', value: 'Red' },
-  { label: 'f. Dark Red', value: 'Dark Red' },
-  { label: 'g. Yellow', value: 'Yellow' },
+  { label: ' White', value: 'White' },
+  { label: ' Pink-White', value: 'Pink-White' },
+  { label: ' Pink', value: 'Pink' },
+  { label: ' Red-Pink', value: 'Red-Pink' },
+  { label: ' Red', value: 'Red' },
+  { label: ' Dark Red', value: 'Dark Red' },
+  { label: ' Yellow', value: 'Yellow' },
 ]
 
 const Ears = [
-  { label: 'a. Normal', value: 'Normal' },
-  { label: 'b. Abnormal Discharge', value: 'Abnormal Discharge' },
-  { label: 'c. Abnormal Odour', value: 'Abnormal Odour' },
-  { label: 'd. Abnormal appearance', value: 'Abnormal appearance' },
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Abnormal Discharge', value: 'Abnormal Discharge' },
+  { label: 'Abnormal Odour', value: 'Abnormal Odour' },
+  { label: 'Abnormal appearance', value: 'Abnormal appearance' },
 ]
 
 const Skin = [
-  { label: 'a. Normal', value: 'Normal' },
-  { label: 'b. Injuries', value: 'Injuries' },
-  { label: 'c. Odour', value: 'Odour' },
-  { label: 'd. Hairfall', value: 'Hairfall' },
-  { label: 'e. Rough Coat', value: 'Rough Coat' },
-  { label: 'f. Changes in Appearance', value: 'Changes in Appearance' },
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Injuries', value: 'Injuries' },
+  { label: 'Odour', value: 'Odour' },
+  { label: 'Hairfall', value: 'Hairfall' },
+  { label: 'Rough Coat', value: 'Rough Coat' },
+  { label: 'Changes in Appearance', value: 'Changes in Appearance' },
 ]
-
 const Gait = [
-  { label: 'a. Normal', value: 'Normal' },
-  { label: 'b. Not Observed', value: 'Not Observed' },
-  { label: 'c. Different from Normal', value: 'Different from Normal' },
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Not Observed', value: 'Not Observed' },
+  { label: 'Different from Normal', value: 'Different from Normal' },
 ]
 
 const validationSchema = Yup.object().shape({
   problems: Yup.string().max(100).required().label('Problems'),
   photo: Yup.string().nullable(),
   images: Yup.array().nullable().label('Image'),
+  time: Yup.number().required().label('Time'),
+  comment: Yup.string().required('Please enter comment'),
+  appetite: Yup.string().nullable().required('Please select a appetite'),
+  behaviour: Yup.string().nullable().required('Please select a behaviour'),
+  activity: Yup.string().nullable().required('Please select a activity'),
+  faces: Yup.string().nullable().required('Please select a faces'),
+  urine: Yup.string().nullable().required('Please select a urine'),
+  eyes: Yup.string().nullable().required('Please select a eyes'),
+  mucous: Yup.string().nullable().required('Please select a mucous'),
+  ears: Yup.string().nullable().required('Please select a ears'),
+  eyes: Yup.string().nullable().required('Please select a eyes'),
+  skin: Yup.string().nullable().required('Please select a skin'),
+  gait: Yup.string().nullable().required('Please select a gait'),
 })
 
 const CallVetScreen = ({ navigation, route }) => {
@@ -101,7 +112,6 @@ const CallVetScreen = ({ navigation, route }) => {
   // console.log('Route', route.params)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
-  // const [startPayment, setStartPayment] = useState(false)
   const notificationListener = useRef()
   const startPayment = useRef()
 
@@ -158,6 +168,74 @@ const CallVetScreen = ({ navigation, route }) => {
       Notifications.removeNotificationSubscription(notificationListener)
     }
   }, [])
+
+  const savePatientProblems = async (values) => {
+    // const patientData = {
+    //   name: user.name,
+    //   problem: values.problems,
+    //   petname: route?.params?.pet.name,
+    //   time: values.time,
+    //   Appetite: values.Appetite,
+    //   Behaviour: values.Behaviour,
+    //   Feces: values.Faces,
+    //   Urine: values.Urine,
+    //   Eyes: values.Eyes,
+    //   Mucous: values.Mucous,
+    //   Ears: values.Ears,
+    //   Skin: values.Skin,
+    //   Gait: values.Gait,
+    //   comment: values.comment,
+    // }
+    const form = new FormData()
+    if (values.images) {
+      values.images.forEach((image, index) => {
+        form.append('images', {
+          name: 'image' + index,
+          type: 'image/jpeg',
+          uri: image,
+        })
+      })
+    }
+    form.append('docname', route?.params?.doc.user.name)
+    form.append('problem', values.problems)
+    form.append('time', values.time)
+    form.append('Appetite', values.appetite)
+    form.append('Behaviour', values.behaviour)
+    form.append('Feces', values.faces)
+    form.append('Urine', values.urine)
+    form.append('Eyes', values.eyes)
+    form.append('Mucous', values.mucous)
+    form.append('Ears', values.ears)
+    form.append('Skin', values.skin)
+    form.append('Gait', values.gait)
+    form.append('comment', values.comment)
+    // console.log('Form', form.images)
+    setLoading(true)
+    const res = await petsApi.savePetProblems(form, route?.params?.pet._id)
+    if (!res.ok) {
+      setError(res.data?.msg)
+      setLoading(false)
+      // console.log(res)
+      return
+    }
+    setError(null)
+    // console.log('Pet Res', res.data)
+    setLoading(false)
+    // console.log('Doc', docRes.data)
+    // const docRes = await doctorsApi.savePatientDetails(
+    //   patientData,
+    //   route?.params?.doc._id
+    // )
+    // if (!docRes.ok) {
+    //   setLoading(false)
+    //   console.log(res)
+    //   return
+    // }
+    // setError(null)
+    // console.log('Pet Res', res.data)
+    // console.log('Doc', docRes.data)
+    // setLoading(false)
+  }
 
   const handleSubmit = async (values) => {
     if (values.videoCall && !startPayment.current) {
@@ -217,6 +295,7 @@ const CallVetScreen = ({ navigation, route }) => {
             console.log('Error', tokenRes)
           }
           setLoading(false)
+          await savePatientProblems(values)
           sendPushToken(
             'I have completed the payment.Please join the video call'
           )
@@ -239,64 +318,13 @@ const CallVetScreen = ({ navigation, route }) => {
 
       // return
     } else if (!values.videoCall) {
+      await savePatientProblems(values)
+      // console.log('Clikccc')
       navigation.navigate('Chat', {
         doc: route?.params?.doc,
         pet: route?.params?.pet,
       })
-      return
     }
-
-    // const patientData = {
-    //   name: user.name,
-    //   problem: values.problems,
-    //   petname: route?.params?.pet.name,
-    // }
-
-    // const form = new FormData()
-    // if (values.images) {
-    //   values.images.forEach((image, index) => {
-    //     form.append('images', {
-    //       name: 'image' + index,
-    //       type: 'image/jpeg',
-    //       uri: image,
-    //     })
-    //   })
-    // }
-
-    // form.append('docname', route?.params?.doc.user.name)
-    // form.append('problem', values.problems)
-
-    // console.log('Form', form.images)
-    // setLoading(true)
-    // const res = await petsApi.savePetProblems(form, route?.params?.pet._id)
-
-    // if (!res.ok) {
-    //   setError(res.data?.msg)
-    //   setLoading(false)
-    //   // console.log(res)
-    //   return
-    // }
-
-    // setError(null)
-    // console.log('Pet Res', res.data)
-    // setLoading(false)
-    // console.log('Doc', docRes.data)
-
-    // const docRes = await doctorsApi.savePatientDetails(
-    //   patientData,
-    //   route?.params?.doc._id
-    // )
-
-    // if (!docRes.ok) {
-    //   setLoading(false)
-    //   console.log(res)
-    //   return
-    // }
-
-    // setError(null)
-    // console.log('Pet Res', res.data)
-    // console.log('Doc', docRes.data)
-    // setLoading(false)
   }
 
   return (
@@ -333,6 +361,18 @@ const CallVetScreen = ({ navigation, route }) => {
             photo: null,
             videoCall: true,
             images: [],
+            time: '',
+            comment: '',
+            appetite: '',
+            behaviour: '',
+            activity: '',
+            faces: '',
+            urine: '',
+            eyes: '',
+            mucous: '',
+            ears: '',
+            skin: '',
+            gait: '',
           }}
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
@@ -353,71 +393,61 @@ const CallVetScreen = ({ navigation, route }) => {
                 autoCapitalize='none'
                 autoCorrect={false}
                 name='time'
-                numberOfLines={3}
+                numberOfLines={1}
                 placeholder='enter the period of the problem'
               />
 
-              {/* <Pick /> */}
+              <AppFormPicker
+                items={Appetite}
+                label='Appetite'
+                name='appetite'
+              />
 
               <AppFormPicker
-                  items={Appetite}
-                  label='Appetite'
-                  name='Appetite'
-                />
+                items={Behaviour}
+                label='General Behaviour'
+                name='behaviour'
+              />
 
               <AppFormPicker
-                  items={Behaviour}
-                  label='General Behaviour'
-                  name='Behaviour'
-                />
+                items={Activity}
+                label='Activity'
+                name='activity'
+              />
 
               <AppFormPicker
-                  items={Activity}
-                  label='Activity'
-                  name='Activity'
-                />
+                items={Faces}
+                label='Faces (Select all options that apply)'
+                name='faces'
+              />
 
               <AppFormPicker
-                  items={Feces}
-                  label='Feces (Select all options that apply)'
-                  name='Feces'
-                />
-         
-              <AppFormPicker
-                  items={Urine}
-                  label='Urine (Select all options that apply)'
-                  name='Urine'
-                />
-  
-              <AppFormPicker
-                  items={Eyes}
-                  label='Eyes'
-                  name='Eyes'
-                />
+                items={Urine}
+                label='Urine (Select all options that apply)'
+                name='urine'
+              />
+
+              <AppFormPicker items={Eyes} label='Eyes' name='eyes' />
 
               <AppFormPicker
-                  items={Mucous}
-                  label='Mucous Membrane of the Eye'
-                  name='Mucous'
-                />
+                items={Mucous}
+                label='Mucous Membrane of the Eye'
+                name='mucous'
+              />
 
               <AppFormPicker
-                  items={Ears}
-                  label='Ears (Select all options that apply)'
-                  name='Ears'
-                />
+                items={Ears}
+                label='Ears (Select all options that apply)'
+                name='ears'
+              />
 
               <AppFormPicker
-                  items={Skin}
-                  label='Skin and Coat (Select all options that apply)'
-                  name='Skin'
-                />
+                items={Skin}
+                label='Skin and Coat (Select all options that apply)'
+                name='skin'
+              />
 
-              <AppFormPicker
-                  items={Gait}
-                  label='Gait'
-                  name='Gait'
-                />  
+              <AppFormPicker items={Gait} label='Gait' name='gait' />
 
               <AppFormField
                 label='Comments'

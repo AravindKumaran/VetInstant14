@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import AppText from '../components/AppText'
 
 import petsApi from '../api/pets'
@@ -23,6 +23,7 @@ const PetPrescriptionScreen = ({ route }) => {
         return
       }
       setError(null)
+      console.log('ResPEt', res.data.exPet.prescriptions)
       setPetPrescriptions(res.data.exPet.prescriptions)
       setLoading(false)
     }
@@ -50,6 +51,20 @@ const PetPrescriptionScreen = ({ route }) => {
                 <AppText>
                   Time: {new Date(pbm.date).toLocaleTimeString()}
                 </AppText>
+                {pbm.img && (
+                  <>
+                    <AppText>Prescription Image:</AppText>
+                    <Image
+                      source={{
+                        uri: `http://192.168.43.242:8000/${pbm.img}`,
+                      }}
+                      // source={{
+                      //   uri: `https://vetinstantbe.azurewebsites.net/api/v1/${pbm.img}`,
+                      // }}
+                      style={{ width: 150, height: 150, borderRadius: 75 }}
+                    />
+                  </>
+                )}
               </View>
             ))}
           </>
