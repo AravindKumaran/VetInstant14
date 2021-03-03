@@ -44,6 +44,7 @@ const LoginScreen = ({ navigation }) => {
       console.log(userRes)
       return
     }
+    console.log('Socket', socket)
     socket.emit('online', userRes.data.user._id)
     setUser(userRes.data.user)
     setLoading(false)

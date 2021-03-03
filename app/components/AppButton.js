@@ -9,7 +9,7 @@ const AppButton = ({ title, onPress, btnStyle, txtStyle, iconName }) => {
       {iconName && (
         <Feather style={styles.icon} name={iconName} size={25} color='#fff' />
       )}
-      <Text style={[styles.text, txtStyle]}>{title}</Text>
+      {title && <Text style={[styles.text, txtStyle]}>{title}</Text>}
     </TouchableOpacity>
   )
 }
@@ -33,6 +33,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textTransform: 'uppercase',
     fontWeight: 'bold',
+    width: '100%',
+    textAlign: 'center',
   },
 })
 

@@ -23,7 +23,7 @@ const AddPetButton = ({ title, onPress, name, img }) => {
             //   uri: `http://192.168.29.239:8000/${img}`,
             // }}
             source={{
-              uri: `https://vetinstantbe.azurewebsites.net/api/v1/${img}`,
+              uri: `https://vetinstantbe.azurewebsites.net/${img}`,
             }}
             style={{ width: 150, height: 150, borderRadius: 75 }}
           />
