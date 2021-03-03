@@ -53,9 +53,9 @@ const PetProblemScreen = ({ route }) => {
                 <AppText>Skin: {pb.Skin}</AppText>
                 <AppText>Urine: {pb.Urine}</AppText>
                 <AppText>Comment: {pb.comment}</AppText>
-                {pb.images.length > 0 && <AppText>Pet Problem image</AppText>}
+                {pb.images?.length > 0 && <AppText>Pet Problem image</AppText>}
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {pb.images.length > 0 &&
+                  {pb.images?.length > 0 &&
                     pb.images.map((img, i) => (
                       <>
                         <Image

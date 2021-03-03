@@ -109,7 +109,7 @@ const validationSchema = Yup.object().shape({
 
 const CallVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
-  // console.log('Route', route.params)
+  // console.log('Route', +route.params.doc.fee === 0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
   const notificationListener = useRef()
@@ -238,7 +238,39 @@ const CallVetScreen = ({ navigation, route }) => {
   }
 
   const handleSubmit = async (values) => {
-    if (values.videoCall && !startPayment.current) {
+    if (values.videoCall && +route.params.doc.fee === 0) {
+      const roomRes = await roomsApi.createRoom({
+        name: `${user._id}-${route.params?.doc?.user?._id}`,
+        senderName: user.name,
+        receiverId: route.params?.doc?.user?._id,
+        petId: route.params?.pet._id,
+      })
+      if (!roomRes.ok) {
+        console.log(roomRes)
+        setLoading(false)
+        return
+      }
+      const tokenRes = await usersApi.getVideoToken({
+        userName: user.name,
+        roomName: roomRes.data.room.name,
+      })
+      // console.log('Video Token', tokenRes)
+      if (!tokenRes.ok) {
+        setLoading(false)
+        console.log('Error', tokenRes)
+      }
+      setLoading(false)
+      await savePatientProblems(values)
+      sendPushToken(
+        `Hello Dr. ${route.params.doc.user.name}, I have started the video call. Please join it`
+      )
+      navigation.navigate('VideoCall', {
+        docId: route?.params?.doc.user._id,
+        userId: user._id,
+        name: user.name,
+        token: tokenRes.data,
+      })
+    } else if (values.videoCall && !startPayment.current) {
       sendPushToken()
       alert(
         "Notification send to doctor! Please wait for 2-5 minutes for response before taking any new action. Don't close this screen"
@@ -469,7 +501,7 @@ const CallVetScreen = ({ navigation, route }) => {
                   title='Call'
                   iconName='video'
                   btnStyle={{ width: '50%', marginRight: 10 }}
-                  txtStyle={{ textAlign: 'center' }}
+                  txtStyle={{ textAlign: 'center', width: '-100%' }}
                   onPress={(e) => {
                     setFieldValue('videoCall', true)
                     handleSubmit(e)
@@ -479,6 +511,7 @@ const CallVetScreen = ({ navigation, route }) => {
                   title='Chat'
                   iconName='message-circle'
                   btnStyle={{ width: '50%', marginRight: 5 }}
+                  txtStyle={{ textAlign: 'center', width: '-100%' }}
                   onPress={(e) => {
                     setFieldValue('videoCall', false)
                     handleSubmit(e)
