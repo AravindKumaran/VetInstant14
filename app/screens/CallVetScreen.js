@@ -19,6 +19,8 @@ import AppImageListPicker from '../components/forms/AppImageListPicker'
 import * as Notifications from 'expo-notifications'
 
 import AppFormPicker from '../components/forms/AppFormPicker'
+// import Selected from '../components/utils/select'
+// import Select from 'react-select'
 
 const Appetite = [
   { label: 'Normal', value: 'Normal' },
@@ -53,8 +55,7 @@ const Urine = [
 
 const Eyes = [
   { label: 'Normal', value: 'Normal' },
-  { label: 'Abnormal Discharged', value: 'Abnormal Discharged' },
-  { label: 'Kotlin', value: 'Kotlin' },
+  { label: 'Abnormal Discharge', value: 'Abnormal Discharge' },
 ]
 
 const Mucous = [
@@ -82,6 +83,7 @@ const Skin = [
   { label: 'Rough Coat', value: 'Rough Coat' },
   { label: 'Changes in Appearance', value: 'Changes in Appearance' },
 ]
+
 const Gait = [
   { label: 'Normal', value: 'Normal' },
   { label: 'Not Observed', value: 'Not Observed' },
