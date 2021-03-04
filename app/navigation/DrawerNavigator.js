@@ -67,6 +67,7 @@ const DrawerNavigator = () => (
         ),
         headerShown: true,
         unmountOnBlur: true,
+        title: 'Call Log',
       }}
     />
     <Drawer.Screen
@@ -78,6 +79,7 @@ const DrawerNavigator = () => (
         ),
         headerShown: true,
         unmountOnBlur: true,
+        title: 'Scheduled Calls',
       }}
     />
     {/* <Drawer.Screen
