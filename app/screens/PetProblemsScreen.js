@@ -35,7 +35,7 @@ const PetProblemScreen = ({ route }) => {
       <View style={styles.container}>
         <LoadingIndicator visible={loading} />
         {petsProblems.length === 0 ? (
-          <AppText style={{ textAlign: 'center' }}>No Problems Found!</AppText>
+          <AppText style={{ textAlign: 'center' }}>No Problems Found</AppText>
         ) : (
           <>
             {petsProblems.map((pb, index) => (
@@ -45,14 +45,44 @@ const PetProblemScreen = ({ route }) => {
                 <AppText>Time Period: {pb.time}</AppText>
                 <AppText>Appetite: {pb.Appetite}</AppText>
                 <AppText>Behaviour: {pb.Behaviour}</AppText>
-                <AppText>Ears: {pb.Ears}</AppText>
                 <AppText>Eyes: {pb.Eyes}</AppText>
-                <AppText>Faces: {pb.Feces}</AppText>
                 <AppText>Gait: {pb.Gait}</AppText>
                 <AppText>Mucous: {pb.Mucous}</AppText>
-                <AppText>Skin: {pb.Skin}</AppText>
-                <AppText>Urine: {pb.Urine}</AppText>
                 <AppText>Comment: {pb.comment}</AppText>
+                {pb.Ears?.length > 0 && (
+                  <AppText style={{ fontSize: 22 }}>Ears: </AppText>
+                )}
+
+                {pb.Ears?.length > 0 &&
+                  pb.Ears.map((er, i) => (
+                    <AppText key={`${i}-Ears`}> {er}</AppText>
+                  ))}
+
+                {pb.Feces?.length > 0 && (
+                  <AppText style={{ fontSize: 22 }}>Faces: </AppText>
+                )}
+
+                {pb.Feces?.length > 0 &&
+                  pb.Feces.map((fc, i) => (
+                    <AppText key={`Feces ${i}`}> {fc}</AppText>
+                  ))}
+                {pb.Urine?.length > 0 && (
+                  <AppText style={{ fontSize: 22 }}>Urines: </AppText>
+                )}
+
+                {pb.Urine?.length > 0 &&
+                  pb.Urine.map((ur, i) => (
+                    <AppText key={`Urines ${i}`}> {ur}</AppText>
+                  ))}
+                {pb.Skin?.length > 0 && (
+                  <AppText style={{ fontSize: 22 }}>Skins: </AppText>
+                )}
+
+                {pb.Skin?.length > 0 &&
+                  pb.Skin.map((sk, i) => (
+                    <AppText key={`Skins ${i}`}> {sk}</AppText>
+                  ))}
+
                 {pb.images?.length > 0 && <AppText>Pet Problem image</AppText>}
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {pb.images?.length > 0 &&

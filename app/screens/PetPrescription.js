@@ -37,14 +37,14 @@ const PetPrescriptionScreen = ({ route }) => {
         <LoadingIndicator visible={loading} />
         {petPrescriptions.length === 0 ? (
           <AppText style={{ textAlign: 'center' }}>
-            No Prescriptions Found!
+            No Prescriptions Found
           </AppText>
         ) : (
           <>
             {petPrescriptions.map((pbm, index) => (
               <View key={index} style={styles.card}>
                 <AppText>Prescription: {pbm.prescription}</AppText>
-                <AppText>Doctor name: {pbm.docname}</AppText>
+                <AppText>Doctor Name: {pbm.docname}</AppText>
                 <AppText>
                   Date: {new Date(pbm.date).toLocaleDateString()}
                 </AppText>

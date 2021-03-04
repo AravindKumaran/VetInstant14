@@ -53,13 +53,43 @@ const AppNavigator = ({ navigation }) => {
           ),
         }}
       />
-      <Stack.Screen name='AddPet' component={AddPetScreen} />
-      <Stack.Screen name='ChooseVet' component={ChooseVetScreen} />
+      <Stack.Screen
+        name='AddPet'
+        component={AddPetScreen}
+        options={{
+          title: 'Add Pet',
+        }}
+      />
+      <Stack.Screen
+        name='ChooseVet'
+        component={ChooseVetScreen}
+        options={{
+          title: 'Select Vet',
+        }}
+      />
       <Stack.Screen name='Reminder' component={ReminderScreen} />
-      <Stack.Screen name='AddReminder' component={AddReminderScreen} />
+      <Stack.Screen
+        name='AddReminder'
+        component={AddReminderScreen}
+        options={{
+          title: 'Add Reminder',
+        }}
+      />
       <Stack.Screen name='CallVet' component={CallVetScreen} />
-      <Stack.Screen name='PetProblems' component={PetProblemScreen} />
-      <Stack.Screen name='PetPrescription' component={PetPrescriptionScreen} />
+      <Stack.Screen
+        name='PetProblems'
+        component={PetProblemScreen}
+        options={{
+          title: 'Pet Problems',
+        }}
+      />
+      <Stack.Screen
+        name='PetPrescription'
+        component={PetPrescriptionScreen}
+        options={{
+          title: 'Pet Prescriptions',
+        }}
+      />
       <Stack.Screen name='OnlineVet' component={OnlineVetScreen} />
       <Stack.Screen name='Chat' component={ChatScreen} />
       <Stack.Screen

@@ -16,6 +16,10 @@ const App = () => {
     const token = await authStorage.getToken()
     if (!token) return
     const userRes = await usersApi.getLoggedInUser()
+    if (!userRes.ok) {
+      console.log('Error', userRes)
+      return
+    }
     setUser(userRes.data.user)
   }
 

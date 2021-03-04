@@ -23,7 +23,7 @@ const VetNavigator = ({ navigation }) => {
         name='MyVet'
         component={MyVetScreen}
         options={{
-          title: 'MyVet', //Set Header Title
+          title: 'My Vet', //Set Header Title
           headerTintColor: 'black', //Set Header text color
           headerTitleStyle: {
             fontSize: 20,

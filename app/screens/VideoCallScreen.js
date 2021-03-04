@@ -230,8 +230,8 @@ const VideoCallScreen = ({ navigation, route }) => {
                 }}
               >
                 {waitingTime === 0
-                  ? 'Doctor is not responding!Either you wait or Try again after some time!'
-                  : `Waiting for doctor to connect...${waitingTime}`}
+                  ? 'Doctor Is Not Responding.Either You Can wait Or Try Again After Some Time.'
+                  : `Waiting For Doctor To Connect...${waitingTime}`}
               </AppText>
             </View>
           )}

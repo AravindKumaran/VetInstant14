@@ -33,7 +33,7 @@ const LoginScreen = ({ navigation }) => {
     if (!res.ok) {
       console.log('Res', res)
       setLoading(false)
-      setError(res.data?.msg ? res.data.msg : 'Something Went Wrong!')
+      setError(res.data?.msg ? res.data.msg : 'Something Went Wrong.')
       return
     }
     setError(null)

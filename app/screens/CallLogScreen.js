@@ -47,7 +47,7 @@ const CallLogScreen = () => {
             color='#af8282'
           />
           <AppText style={{ fontSize: 25, paddingLeft: 5, color: '#000' }}>
-            Missed Call
+            Missed Calls
           </AppText>
         </View>
 
@@ -98,7 +98,7 @@ const CallLogScreen = () => {
           ))
         ) : (
           <AppText style={{ textAlign: 'center', fontSize: 25 }}>
-            No Logs Found!
+            No Logs Found
           </AppText>
         )}
 
@@ -110,7 +110,7 @@ const CallLogScreen = () => {
             color='#af8282'
           />
           <AppText style={{ fontSize: 25, paddingLeft: 5, color: '#000' }}>
-            Completed Call
+            Completed Calls
           </AppText>
         </View>
         {completedCall.length > 0 ? (
@@ -160,7 +160,7 @@ const CallLogScreen = () => {
           ))
         ) : (
           <AppText style={{ textAlign: 'center', fontSize: 25 }}>
-            No Logs Found!
+            No Logs Found
           </AppText>
         )}
       </View>

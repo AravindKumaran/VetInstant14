@@ -37,7 +37,7 @@ const RegisterScreen = () => {
     const res = await authApi.register(name, email, password)
     if (!res.ok) {
       setLoading(false)
-      setError(res.data?.msg ? res.data.msg : 'Something Went Wrong!')
+      setError(res.data?.msg ? res.data.msg : 'Something Went Wrong')
       return
     }
     setError(null)
@@ -82,7 +82,7 @@ const RegisterScreen = () => {
                 autoCapitalize='none'
                 autoCorrect={false}
                 name='name'
-                placeholder='Enter your name'
+                placeholder='Enter Your Name'
               />
 
               <AppFormField
@@ -91,7 +91,7 @@ const RegisterScreen = () => {
                 autoCorrect={false}
                 keyboardType='email-address'
                 name='email'
-                placeholder='Enter your email id'
+                placeholder='Enter Your Email ID'
               />
 
               <AppFormField
@@ -100,7 +100,7 @@ const RegisterScreen = () => {
                 icon='lock'
                 name='password'
                 secureTextEntry
-                placeholder='Enter your password'
+                placeholder='Enter Your Password'
               />
 
               <AppFormField
@@ -109,7 +109,7 @@ const RegisterScreen = () => {
                 icon='lock'
                 name='cnfPassword'
                 secureTextEntry
-                placeholder='Retype your password'
+                placeholder='Retype Your Password'
               />
 
               <SubmitButton title='Register' />

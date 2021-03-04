@@ -86,7 +86,7 @@ const ChooseVetScreen = ({ navigation, route }) => {
       navigation.navigate('CallVet', { doc: dc[0], pet: route.params.pet })
     } else {
       setLoading(false)
-      alert('No Vet is currently available.Please try after few minutes!')
+      alert('No Vet Is Currently Available.Please Try After Few Minutes.')
     }
   }
 
@@ -102,8 +102,8 @@ const ChooseVetScreen = ({ navigation, route }) => {
             marginTop: 20,
           }}
         >
-          Choose between your vet and available vets(online) to talks about your
-          pets problem
+          Choose Between Your Vet And Available Vets(online) To Talk About Your
+          Pets Problem
         </AppText>
         <AppButton
           title='My Vet (Waiting Time - 24 hrs)'

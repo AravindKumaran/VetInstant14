@@ -19,8 +19,7 @@ import AppImageListPicker from '../components/forms/AppImageListPicker'
 import * as Notifications from 'expo-notifications'
 
 import AppFormPicker from '../components/forms/AppFormPicker'
-// import Selected from '../components/utils/select'
-// import Select from 'react-select'
+import AppMultiSelect from '../components/forms/AppMultiSelect'
 
 const Appetite = [
   { label: 'Normal', value: 'Normal' },
@@ -41,16 +40,16 @@ const Activity = [
 ]
 
 const Faces = [
-  { label: 'Normal', value: 'Normal' },
-  { label: 'Not Observed', value: 'Not Observed' },
-  { label: 'Abnormal Colour', value: 'Abnormal Colour' },
-  { label: 'Worms', value: 'Worms' },
+  { id: 1, name: 'Normal' },
+  { id: 2, name: 'Not Observed' },
+  { id: 3, name: 'Abnormal Colour' },
+  { id: 4, name: 'Worms' },
 ]
 
 const Urine = [
-  { label: 'Normal', value: 'Normal' },
-  { label: 'Not Observed', value: 'Not Observed' },
-  { label: 'Abnormal Colour', value: 'Abnormal Colour' },
+  { id: 1, name: 'Normal' },
+  { id: 2, name: 'Abnormal Colour' },
+  { id: 3, name: 'Not Observed' },
 ]
 
 const Eyes = [
@@ -69,19 +68,19 @@ const Mucous = [
 ]
 
 const Ears = [
-  { label: 'Normal', value: 'Normal' },
-  { label: 'Abnormal Discharge', value: 'Abnormal Discharge' },
-  { label: 'Abnormal Odour', value: 'Abnormal Odour' },
-  { label: 'Abnormal appearance', value: 'Abnormal appearance' },
+  { id: 1, name: 'Normal' },
+  { id: 2, name: 'Abnormal Discharge' },
+  { id: 3, name: 'Abnormal Odour' },
+  { id: 4, name: 'Abnormal appearance' },
 ]
 
 const Skin = [
-  { label: 'Normal', value: 'Normal' },
-  { label: 'Injuries', value: 'Injuries' },
-  { label: 'Odour', value: 'Odour' },
-  { label: 'Hairfall', value: 'Hairfall' },
-  { label: 'Rough Coat', value: 'Rough Coat' },
-  { label: 'Changes in Appearance', value: 'Changes in Appearance' },
+  { id: 1, name: 'Normal' },
+  { id: 2, name: 'Injuries' },
+  { id: 3, name: 'Odour' },
+  { id: 4, name: 'Hairfall' },
+  { id: 5, name: 'Rough Coat' },
+  { id: 6, name: 'Changes in Appearance' },
 ]
 
 const Gait = [
@@ -99,14 +98,15 @@ const validationSchema = Yup.object().shape({
   appetite: Yup.string().nullable().required('Please select a appetite'),
   behaviour: Yup.string().nullable().required('Please select a behaviour'),
   activity: Yup.string().nullable().required('Please select a activity'),
-  faces: Yup.string().nullable().required('Please select a faces'),
-  urine: Yup.string().nullable().required('Please select a urine'),
   eyes: Yup.string().nullable().required('Please select a eyes'),
   mucous: Yup.string().nullable().required('Please select a mucous'),
-  ears: Yup.string().nullable().required('Please select a ears'),
-  eyes: Yup.string().nullable().required('Please select a eyes'),
-  skin: Yup.string().nullable().required('Please select a skin'),
   gait: Yup.string().nullable().required('Please select a gait'),
+  eyes: Yup.string().required('Please select a eyes'),
+
+  ears: Yup.array().required().min(1).label('Ears'),
+  skin: Yup.array().required().min(1).label('Skin'),
+  faces: Yup.array().required().min(1).label('Faces'),
+  urine: Yup.array().required().min(1).label('Urine'),
 })
 
 const CallVetScreen = ({ navigation, route }) => {
@@ -126,7 +126,7 @@ const CallVetScreen = ({ navigation, route }) => {
         title: `Incoming Call Request from ${user.name}`,
         message:
           message ||
-          `Are you available for next 15-30 minutes?\n** Don't close the app from background!!`,
+          `Are You Available For Next 15-30 Minutes?\n** Don't Close The App From Background`,
         datas: { token: user.token || null },
       })
 
@@ -137,7 +137,7 @@ const CallVetScreen = ({ navigation, route }) => {
       }
       setLoading(false)
     } else {
-      alert('Something Went Wrong! Try again later')
+      alert('Something Went Wrong. Try Again Later')
     }
   }
 
@@ -151,7 +151,7 @@ const CallVetScreen = ({ navigation, route }) => {
           !startPayment.current
         ) {
           startPayment.current = true
-          alert(`Yes I'm available. Complete the payment within 5-10 minutes`)
+          alert(`Yes I'm available. Complete The Payment Within 5-10 Minutes`)
           console.log('Start Payment', startPayment.current)
         } else if (
           notification.request.content.data.status === 'cancel' &&
@@ -160,7 +160,7 @@ const CallVetScreen = ({ navigation, route }) => {
           startPayment.current = null
           console.log('Start Payment', startPayment.current)
           alert(
-            `Sorry! I'm not available. Please try with other available doctors`
+            `Sorry! I'm Not Available. Please Try With Other Available Doctors`
           )
         }
       }
@@ -188,6 +188,8 @@ const CallVetScreen = ({ navigation, route }) => {
     //   Gait: values.Gait,
     //   comment: values.comment,
     // }
+
+    // console.log('Values', values)
     const form = new FormData()
     if (values.images) {
       values.images.forEach((image, index) => {
@@ -203,12 +205,22 @@ const CallVetScreen = ({ navigation, route }) => {
     form.append('time', values.time)
     form.append('Appetite', values.appetite)
     form.append('Behaviour', values.behaviour)
-    form.append('Feces', values.faces)
-    form.append('Urine', values.urine)
     form.append('Eyes', values.eyes)
     form.append('Mucous', values.mucous)
-    form.append('Ears', values.ears)
-    form.append('Skin', values.skin)
+
+    values.skin.forEach((sk) => {
+      form.append('Skin', sk)
+    })
+    values.faces.forEach((fc) => {
+      form.append('Feces', fc)
+    })
+    values.ears.forEach((er) => {
+      form.append('Ears', er)
+    })
+    values.urine.forEach((ur) => {
+      form.append('Urine', ur)
+    })
+
     form.append('Gait', values.gait)
     form.append('comment', values.comment)
     // console.log('Form', form.images)
@@ -264,7 +276,7 @@ const CallVetScreen = ({ navigation, route }) => {
       setLoading(false)
       await savePatientProblems(values)
       sendPushToken(
-        `Hello Dr. ${route.params.doc.user.name}, I have started the video call. Please join it`
+        `Hello Dr. ${route.params.doc.user.name}, I Have Started The Video Call. Please Join It`
       )
       navigation.navigate('VideoCall', {
         docId: route?.params?.doc.user._id,
@@ -275,7 +287,7 @@ const CallVetScreen = ({ navigation, route }) => {
     } else if (values.videoCall && !startPayment.current) {
       sendPushToken()
       alert(
-        "Notification send to doctor! Please wait for 2-5 minutes for response before taking any new action. Don't close this screen"
+        "Notification Sent To Doctor. Please Wait For 2-5 Minutes For Response Before Taking Any New Action. Don't Close This S creen"
       )
     } else if (values.videoCall && startPayment.current) {
       startPayment.current = null
@@ -362,7 +374,7 @@ const CallVetScreen = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView nestedScrollEnabled={true}>
       <LoadingIndicator visible={loading} />
       <View style={styles.btnWrapper}>
         <AppButton
@@ -387,7 +399,7 @@ const CallVetScreen = ({ navigation, route }) => {
         <AppText
           style={{ textAlign: 'center', fontSize: 20, marginVertical: 20 }}
         >
-          Please Provide the problems of your pet below
+          Please Provide The Problems Of Your Pet Below
         </AppText>
         <Formik
           initialValues={{
@@ -400,12 +412,12 @@ const CallVetScreen = ({ navigation, route }) => {
             appetite: '',
             behaviour: '',
             activity: '',
-            faces: '',
-            urine: '',
+            faces: [],
+            urine: [],
             eyes: '',
             mucous: '',
-            ears: '',
-            skin: '',
+            ears: [],
+            skin: [],
             gait: '',
           }}
           onSubmit={handleSubmit}
@@ -419,16 +431,16 @@ const CallVetScreen = ({ navigation, route }) => {
                 autoCorrect={false}
                 name='problems'
                 numberOfLines={3}
-                placeholder='enter your pet problems'
+                placeholder='Enter Your Pet Problems'
               />
 
               <AppFormField
-                label='For how long have you noticed this problem? (Indicate number of days)'
+                label='For How Long Have You Noticed This Problem? (Indicate Number Of Days)'
                 autoCapitalize='none'
                 autoCorrect={false}
                 name='time'
                 numberOfLines={1}
-                placeholder='enter the period of the problem'
+                placeholder='Enter The Period Of The Problem'
               />
 
               <AppFormPicker
@@ -449,15 +461,15 @@ const CallVetScreen = ({ navigation, route }) => {
                 name='activity'
               />
 
-              <AppFormPicker
+              <AppMultiSelect
                 items={Faces}
-                label='Faces (Select all options that apply)'
+                label='Feces (Select All Options That Apply)'
                 name='faces'
               />
 
-              <AppFormPicker
+              <AppMultiSelect
                 items={Urine}
-                label='Urine (Select all options that apply)'
+                label='Urine (Select All Options That Apply)'
                 name='urine'
               />
 
@@ -465,19 +477,19 @@ const CallVetScreen = ({ navigation, route }) => {
 
               <AppFormPicker
                 items={Mucous}
-                label='Mucous Membrane of the Eye'
+                label='Mucous Membrane of the Eye (Gently Pull Down The EyeLid With A Finger And Note Its Colour. Choose The Most Appropriate Colour Description Below).'
                 name='mucous'
               />
 
-              <AppFormPicker
+              <AppMultiSelect
                 items={Ears}
-                label='Ears (Select all options that apply)'
+                label='Ears (Select All Options That Apply)'
                 name='ears'
               />
 
-              <AppFormPicker
+              <AppMultiSelect
                 items={Skin}
-                label='Skin and Coat (Select all options that apply)'
+                label='Skin And Coat (Select All Options That Apply)'
                 name='skin'
               />
 
@@ -489,7 +501,7 @@ const CallVetScreen = ({ navigation, route }) => {
                 autoCorrect={false}
                 name='comment'
                 numberOfLines={3}
-                placeholder='enter your comments to clarify your doubts'
+                placeholder='Enter Your Comments To Clarify Your Doubts'
               />
 
               <AppText style={{ marginVertical: 20 }}>

@@ -67,7 +67,7 @@ const MyVetScreen = ({ navigation }) => {
                 <AppText>{docDetail.user.name}</AppText>
               </View>
               <AppButton
-                title='Edit Vet'
+                title='Change Vet'
                 onPress={() =>
                   navigation.navigate('SaveVet', {
                     hosp: hospDetail,
