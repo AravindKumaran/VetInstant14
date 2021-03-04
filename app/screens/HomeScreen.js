@@ -125,7 +125,7 @@ const HomeScreen = ({ navigation, route }) => {
     setLoading(false)
     if (status === 'ok') {
       alert(
-        "Wait for doctor notification to continue further, Don't close the app from background! "
+        "Wait For Doctor Notification To Continue Further, Don't Close The App From Background. "
       )
     }
   }
@@ -134,7 +134,7 @@ const HomeScreen = ({ navigation, route }) => {
     const saveNotificationToken = async () => {
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
       if (status !== 'granted') {
-        alert('No notification permissions!')
+        alert('No Notification Permissions')
         return
       }
       try {
@@ -177,7 +177,7 @@ const HomeScreen = ({ navigation, route }) => {
         if (notification.notification?.request?.content?.data) {
           const { token } = notification.notification?.request?.content?.data
           Alert.alert(
-            'Incoming Call Request from doctor',
+            'Incoming Call Request From Doctor',
             `${notification.notification?.request?.content.body}`,
             [
               {
@@ -185,7 +185,7 @@ const HomeScreen = ({ navigation, route }) => {
                 onPress: () => {
                   sendPushToken(
                     token,
-                    `Sorry! I'm not available right now`,
+                    `Sorry. I'm Not Available Right Now`,
                     'nocall'
                   )
 
@@ -198,7 +198,7 @@ const HomeScreen = ({ navigation, route }) => {
                 onPress: () => {
                   sendPushToken(
                     token,
-                    `Yes I'm available. Please start the call\n Click to start the call`,
+                    `Yes I'm Available. Please Start The Call\n Click To Start The Call`,
                     'startcall'
                   )
                   // console.log('OK Pressed')
@@ -250,11 +250,11 @@ const HomeScreen = ({ navigation, route }) => {
       <LoadingIndicator visible={loading} />
       <View style={styles.container}>
         <AppText style={{ fontWeight: '500', fontSize: 30 }}>
-          Hi, {user.name}
+          Hi {user.name}
         </AppText>
-        <AppText style={{ fontWeight: '100', fontSize: 13 }}>
+        {/* <AppText style={{ fontWeight: '100', fontSize: 13 }}>
           In order to start a call please add your pet below
-        </AppText>
+        </AppText> */}
 
         <View style={styles.addPetContainer}>
           {loading ? (

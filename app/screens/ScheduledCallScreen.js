@@ -76,7 +76,7 @@ const ScheduledCallScreen = () => {
           ))
         ) : (
           <AppText style={{ textAlign: 'center', fontSize: 25 }}>
-            No Call Scheduled For You!
+          No Calls Scheduled
           </AppText>
         )}
       </View>

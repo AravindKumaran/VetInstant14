@@ -31,7 +31,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
     }
 
     setLoading(false)
-    alert('Email Sent! Please check your inbox')
+    alert('Email Sent. Please Check Your Inbox')
 
     navigation.navigate('ResetPassword')
   }

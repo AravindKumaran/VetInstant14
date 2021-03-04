@@ -88,7 +88,7 @@ const AddReminderScreen = ({ navigation, route }) => {
     }
     const identifier = await Notifications.scheduleNotificationAsync({
       content: {
-        title: 'Your Today Reminders Are Pending!',
+        title: 'Your Today Reminders Are Pending',
         body: `${rmr.reminder}`,
       },
       trigger: trObj,

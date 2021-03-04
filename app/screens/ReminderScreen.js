@@ -46,9 +46,9 @@ const ReminderScreen = ({ navigation }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        {todayReminders.length === 0 && upcomingReminders.length === 0 && (
+        {/* {todayReminders.length === 0 && upcomingReminders.length === 0 && (
           <AppText>There's no reminders found!</AppText>
-        )}
+        )} */}
         <AppButton
           title='New Reminder'
           onPress={() =>

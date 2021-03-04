@@ -71,7 +71,7 @@ const OnlineVetScreen = ({ navigation }) => {
             <AppText
               style={{ textAlign: 'center', fontSize: 22, marginTop: 100 }}
             >
-              No Vet is Available right now! Please try again after few minutes!
+              No Vet is Available Right Now. Please Try Again After Few Minutes.
             </AppText>
           )}
         </View>
