@@ -124,7 +124,7 @@ const CallVetScreen = ({ navigation, route }) => {
         title: `Incoming Call Request from ${user.name}`,
         message:
           message ||
-          `Are you available for next 15-30 minutes?\n** Don't close the app from background!!`,
+          `Are You Available For Next 15-30 Minutes?\n** Don't Close The App From Background`,
         datas: { token: user.token || null },
       })
 
@@ -135,7 +135,7 @@ const CallVetScreen = ({ navigation, route }) => {
       }
       setLoading(false)
     } else {
-      alert('Something Went Wrong! Try again later')
+      alert('Something Went Wrong. Try Again Later')
     }
   }
 
@@ -149,7 +149,7 @@ const CallVetScreen = ({ navigation, route }) => {
           !startPayment.current
         ) {
           startPayment.current = true
-          alert(`Yes I'm available. Complete the payment within 5-10 minutes`)
+          alert(`Yes I'm available. Complete The Payment Within 5-10 Minutes`)
           console.log('Start Payment', startPayment.current)
         } else if (
           notification.request.content.data.status === 'cancel' &&
@@ -158,7 +158,7 @@ const CallVetScreen = ({ navigation, route }) => {
           startPayment.current = null
           console.log('Start Payment', startPayment.current)
           alert(
-            `Sorry! I'm not available. Please try with other available doctors`
+            `Sorry! I'm Not Available. Please Try With Other Available Doctors`
           )
         }
       }
@@ -262,7 +262,7 @@ const CallVetScreen = ({ navigation, route }) => {
       setLoading(false)
       await savePatientProblems(values)
       sendPushToken(
-        `Hello Dr. ${route.params.doc.user.name}, I have started the video call. Please join it`
+        `Hello Dr. ${route.params.doc.user.name}, I Have Started The Video Call. Please Join It`
       )
       navigation.navigate('VideoCall', {
         docId: route?.params?.doc.user._id,
@@ -273,7 +273,7 @@ const CallVetScreen = ({ navigation, route }) => {
     } else if (values.videoCall && !startPayment.current) {
       sendPushToken()
       alert(
-        "Notification send to doctor! Please wait for 2-5 minutes for response before taking any new action. Don't close this screen"
+        "Notification Sent To Doctor. Please Wait For 2-5 Minutes For Response Before Taking Any New Action. Don't Close This S creen"
       )
     } else if (values.videoCall && startPayment.current) {
       startPayment.current = null
@@ -385,7 +385,7 @@ const CallVetScreen = ({ navigation, route }) => {
         <AppText
           style={{ textAlign: 'center', fontSize: 20, marginVertical: 20 }}
         >
-          Please Provide the problems of your pet below
+          Please Provide The Problems Of Your Pet Below
         </AppText>
         <Formik
           initialValues={{
@@ -417,16 +417,16 @@ const CallVetScreen = ({ navigation, route }) => {
                 autoCorrect={false}
                 name='problems'
                 numberOfLines={3}
-                placeholder='enter your pet problems'
+                placeholder='Enter Your Pet Problems'
               />
 
               <AppFormField
-                label='For how long have you noticed this problem? (Indicate number of days)'
+                label='For How Long Have You Noticed This Problem? (Indicate Number Of Days)'
                 autoCapitalize='none'
                 autoCorrect={false}
                 name='time'
                 numberOfLines={1}
-                placeholder='enter the period of the problem'
+                placeholder='Enter The Period Of The Problem'
               />
 
               <AppFormPicker
@@ -449,13 +449,13 @@ const CallVetScreen = ({ navigation, route }) => {
 
               <AppFormPicker
                 items={Faces}
-                label='Faces (Select all options that apply)'
+                label='Feces (Select All Options That Apply)'
                 name='faces'
               />
 
               <AppFormPicker
                 items={Urine}
-                label='Urine (Select all options that apply)'
+                label='Urine (Select All Options That Apply)'
                 name='urine'
               />
 
@@ -463,19 +463,19 @@ const CallVetScreen = ({ navigation, route }) => {
 
               <AppFormPicker
                 items={Mucous}
-                label='Mucous Membrane of the Eye'
+                label='Mucous Membrane of the Eye (Gently Pull Down The EyeLid With A Finger And Note Its Colour. Choose The Most Appropriate Colour Description Below).'
                 name='mucous'
               />
 
               <AppFormPicker
                 items={Ears}
-                label='Ears (Select all options that apply)'
+                label='Ears (Select All Options That Apply)'
                 name='ears'
               />
 
               <AppFormPicker
                 items={Skin}
-                label='Skin and Coat (Select all options that apply)'
+                label='Skin And Coat (Select All Options That Apply)'
                 name='skin'
               />
 
@@ -487,7 +487,7 @@ const CallVetScreen = ({ navigation, route }) => {
                 autoCorrect={false}
                 name='comment'
                 numberOfLines={3}
-                placeholder='enter your comments to clarify your doubts'
+                placeholder='Enter Your Comments To Clarify Your Doubts'
               />
 
               <AppText style={{ marginVertical: 20 }}>

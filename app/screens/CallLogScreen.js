@@ -98,7 +98,7 @@ const CallLogScreen = () => {
           ))
         ) : (
           <AppText style={{ textAlign: 'center', fontSize: 25 }}>
-            No Logs Found!
+            No Logs Found
           </AppText>
         )}
 
@@ -160,7 +160,7 @@ const CallLogScreen = () => {
           ))
         ) : (
           <AppText style={{ textAlign: 'center', fontSize: 25 }}>
-            No Logs Found!
+            No Logs Found
           </AppText>
         )}
       </View>

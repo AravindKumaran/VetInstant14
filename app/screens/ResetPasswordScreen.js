@@ -33,7 +33,7 @@ const ResetPasswordScreen = ({ navigation }) => {
     }
 
     setLoading(false)
-    alert('Password Reset Successfully! Please Login Again')
+    alert('Password Reset Successfully. Please Login Again')
 
     navigation.navigate('Login')
   }
@@ -63,7 +63,7 @@ const ResetPasswordScreen = ({ navigation }) => {
                 icon='account-key'
                 name='code'
                 placeholder='Verification Code'
-                placeholder='Enter code!'
+                placeholder='Enter code'
                 maxLength={6}
               />
               <AppFormField

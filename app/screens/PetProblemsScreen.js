@@ -35,7 +35,7 @@ const PetProblemScreen = ({ route }) => {
       <View style={styles.container}>
         <LoadingIndicator visible={loading} />
         {petsProblems.length === 0 ? (
-          <AppText style={{ textAlign: 'center' }}>No Problems Found!</AppText>
+          <AppText style={{ textAlign: 'center' }}>No Problems Found</AppText>
         ) : (
           <>
             {petsProblems.map((pb, index) => (
