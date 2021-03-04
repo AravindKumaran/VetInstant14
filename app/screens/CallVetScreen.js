@@ -19,6 +19,7 @@ import AppImageListPicker from '../components/forms/AppImageListPicker'
 import * as Notifications from 'expo-notifications'
 
 import AppFormPicker from '../components/forms/AppFormPicker'
+import AppMultiSelect from '../components/forms/AppMultiSelect'
 
 const Appetite = [
   { label: 'Normal', value: 'Normal' },
@@ -39,16 +40,16 @@ const Activity = [
 ]
 
 const Faces = [
-  { label: 'Normal', value: 'Normal' },
-  { label: 'Not Observed', value: 'Not Observed' },
-  { label: 'Abnormal Colour', value: 'Abnormal Colour' },
-  { label: 'Worms', value: 'Worms' },
+  { id: 1, name: 'Normal' },
+  { id: 2, name: 'Not Observed' },
+  { id: 3, name: 'Abnormal Colour' },
+  { id: 4, name: 'Worms' },
 ]
 
 const Urine = [
-  { label: 'Normal', value: 'Normal' },
-  { label: 'Not Observed', value: 'Not Observed' },
-  { label: 'Abnormal Colour', value: 'Abnormal Colour' },
+  { id: 1, name: 'Normal' },
+  { id: 2, name: 'Abnormal Colour' },
+  { id: 3, name: 'Not Observed' },
 ]
 
 const Eyes = [
@@ -68,19 +69,19 @@ const Mucous = [
 ]
 
 const Ears = [
-  { label: 'Normal', value: 'Normal' },
-  { label: 'Abnormal Discharge', value: 'Abnormal Discharge' },
-  { label: 'Abnormal Odour', value: 'Abnormal Odour' },
-  { label: 'Abnormal appearance', value: 'Abnormal appearance' },
+  { id: 1, name: 'Normal' },
+  { id: 2, name: 'Abnormal Discharge' },
+  { id: 3, name: 'Abnormal Odour' },
+  { id: 4, name: 'Abnormal appearance' },
 ]
 
 const Skin = [
-  { label: 'Normal', value: 'Normal' },
-  { label: 'Injuries', value: 'Injuries' },
-  { label: 'Odour', value: 'Odour' },
-  { label: 'Hairfall', value: 'Hairfall' },
-  { label: 'Rough Coat', value: 'Rough Coat' },
-  { label: 'Changes in Appearance', value: 'Changes in Appearance' },
+  { id: 1, name: 'Normal' },
+  { id: 2, name: 'Injuries' },
+  { id: 3, name: 'Odour' },
+  { id: 4, name: 'Hairfall' },
+  { id: 5, name: 'Rough Coat' },
+  { id: 6, name: 'Changes in Appearance' },
 ]
 const Gait = [
   { label: 'Normal', value: 'Normal' },
@@ -97,14 +98,15 @@ const validationSchema = Yup.object().shape({
   appetite: Yup.string().nullable().required('Please select a appetite'),
   behaviour: Yup.string().nullable().required('Please select a behaviour'),
   activity: Yup.string().nullable().required('Please select a activity'),
-  faces: Yup.string().nullable().required('Please select a faces'),
-  urine: Yup.string().nullable().required('Please select a urine'),
   eyes: Yup.string().nullable().required('Please select a eyes'),
   mucous: Yup.string().nullable().required('Please select a mucous'),
-  ears: Yup.string().nullable().required('Please select a ears'),
-  eyes: Yup.string().nullable().required('Please select a eyes'),
-  skin: Yup.string().nullable().required('Please select a skin'),
   gait: Yup.string().nullable().required('Please select a gait'),
+  eyes: Yup.string().required('Please select a eyes'),
+
+  ears: Yup.array().required().min(1).label('Ears'),
+  skin: Yup.array().required().min(1).label('Skin'),
+  faces: Yup.array().required().min(1).label('Faces'),
+  urine: Yup.array().required().min(1).label('Urine'),
 })
 
 const CallVetScreen = ({ navigation, route }) => {
@@ -186,6 +188,8 @@ const CallVetScreen = ({ navigation, route }) => {
     //   Gait: values.Gait,
     //   comment: values.comment,
     // }
+
+    // console.log('Values', values)
     const form = new FormData()
     if (values.images) {
       values.images.forEach((image, index) => {
@@ -201,12 +205,22 @@ const CallVetScreen = ({ navigation, route }) => {
     form.append('time', values.time)
     form.append('Appetite', values.appetite)
     form.append('Behaviour', values.behaviour)
-    form.append('Feces', values.faces)
-    form.append('Urine', values.urine)
     form.append('Eyes', values.eyes)
     form.append('Mucous', values.mucous)
-    form.append('Ears', values.ears)
-    form.append('Skin', values.skin)
+
+    values.skin.forEach((sk) => {
+      form.append('Skin', sk)
+    })
+    values.faces.forEach((fc) => {
+      form.append('Feces', fc)
+    })
+    values.ears.forEach((er) => {
+      form.append('Ears', er)
+    })
+    values.urine.forEach((ur) => {
+      form.append('Urine', ur)
+    })
+
     form.append('Gait', values.gait)
     form.append('comment', values.comment)
     // console.log('Form', form.images)
@@ -360,7 +374,7 @@ const CallVetScreen = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView nestedScrollEnabled={true}>
       <LoadingIndicator visible={loading} />
       <View style={styles.btnWrapper}>
         <AppButton
@@ -398,12 +412,12 @@ const CallVetScreen = ({ navigation, route }) => {
             appetite: '',
             behaviour: '',
             activity: '',
-            faces: '',
-            urine: '',
+            faces: [],
+            urine: [],
             eyes: '',
             mucous: '',
-            ears: '',
-            skin: '',
+            ears: [],
+            skin: [],
             gait: '',
           }}
           onSubmit={handleSubmit}
@@ -447,15 +461,15 @@ const CallVetScreen = ({ navigation, route }) => {
                 name='activity'
               />
 
-              <AppFormPicker
+              <AppMultiSelect
                 items={Faces}
                 label='Faces (Select all options that apply)'
                 name='faces'
               />
 
-              <AppFormPicker
+              <AppMultiSelect
                 items={Urine}
-                label='Urine (Select all options that apply)'
+                label='Urine(Select all options that apply)'
                 name='urine'
               />
 
@@ -467,13 +481,13 @@ const CallVetScreen = ({ navigation, route }) => {
                 name='mucous'
               />
 
-              <AppFormPicker
+              <AppMultiSelect
                 items={Ears}
                 label='Ears (Select all options that apply)'
                 name='ears'
               />
 
-              <AppFormPicker
+              <AppMultiSelect
                 items={Skin}
                 label='Skin and Coat (Select all options that apply)'
                 name='skin'
