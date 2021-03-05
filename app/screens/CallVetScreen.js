@@ -115,7 +115,28 @@ const CallVetScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
   const notificationListener = useRef()
+  const [waitingTime, setWaitingTime] = useState(5)
   const startPayment = useRef()
+  const timeRef = useRef(null)
+
+  const startTimer = () => {
+    timeRef.current = setInterval(() => {
+      setWaitingTime((time) => {
+        if (time >= 1) return time - 1
+
+        startPayment.current = true
+
+        resetTimer()
+        return 0
+      })
+    }, 1000)
+  }
+
+  const resetTimer = () => {
+    clearInterval(timeRef.current)
+    timeRef.current = null
+    setWaitingTime(0)
+  }
 
   const sendPushToken = async (message) => {
     if (route.params.doc.user.token && !startPayment.current) {
@@ -168,6 +189,7 @@ const CallVetScreen = ({ navigation, route }) => {
 
     return () => {
       Notifications.removeNotificationSubscription(notificationListener)
+      clearInterval(timeRef.current)
     }
   }, [])
 
@@ -284,13 +306,22 @@ const CallVetScreen = ({ navigation, route }) => {
         name: user.name,
         token: tokenRes.data,
       })
-    } else if (values.videoCall && !startPayment.current) {
-      sendPushToken()
-      alert(
-        "Notification Sent To Doctor. Please Wait For 2-5 Minutes For Response Before Taking Any New Action. Don't Close This S creen"
-      )
-    } else if (values.videoCall && startPayment.current) {
+    }
+    // else if (values.videoCall && !startPayment.current) {
+    //   startTimer()
+    //   sendPushToken()
+    //   alert(
+    //     "Notification Sent To Doctor. Complete your payment by clicking on call button again . Don't Close This Screen"
+    //   )
+    // alert(
+    //   "Notification Sent To Doctor. Please Wait For 2-5 Minutes For Response Before Taking Any New Action. Don't Close This S creen"
+    // )
+    // }
+    else if (values.videoCall) {
       startPayment.current = null
+      alert(
+        "Notification Sent To Doctor. Complete your payment. Don't Close This Screen"
+      )
       const res = await usersApi.payDoctor({
         amt: route?.params?.doc.fee * 1 + 100,
       })
