@@ -87,21 +87,23 @@ const PetProblemScreen = ({ route }) => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {pb.images?.length > 0 &&
                     pb.images.map((img, i) => (
-                      <Image
-                        key={i + img}
-                        source={{
-                          uri: `http://192.168.43.242:8000/${img}`,
-                        }}
-                        // source={{
-                        //   uri: `https://vetinstantbe.azurewebsites.net/api/v1/${img}`,
-                        // }}
-                        style={{
-                          width: 150,
-                          height: 150,
-                          borderRadius: 75,
-                          marginHorizontal: 5,
-                        }}
-                      />
+                      <>
+                        <Image
+                          key={i + img}
+                          source={{
+                            uri: `http://192.168.29.239:8000/${img}`,
+                          }}
+                          // source={{
+                          //   uri: `https://vetinstantbe.azurewebsites.net/api/v1/${img}`,
+                          // }}
+                          style={{
+                            width: 150,
+                            height: 150,
+                            borderRadius: 75,
+                            marginHorizontal: 5,
+                          }}
+                        />
+                      </>
                     ))}
                 </ScrollView>
               </View>

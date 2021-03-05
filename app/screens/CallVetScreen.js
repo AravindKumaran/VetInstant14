@@ -54,8 +54,7 @@ const Urine = [
 
 const Eyes = [
   { label: 'Normal', value: 'Normal' },
-  { label: 'Abnormal Discharged', value: 'Abnormal Discharged' },
-  { label: 'Kotlin', value: 'Kotlin' },
+  { label: 'Abnormal Discharge', value: 'Abnormal Discharge' },
 ]
 
 const Mucous = [
@@ -83,6 +82,7 @@ const Skin = [
   { id: 5, name: 'Rough Coat' },
   { id: 6, name: 'Changes in Appearance' },
 ]
+
 const Gait = [
   { label: 'Normal', value: 'Normal' },
   { label: 'Not Observed', value: 'Not Observed' },

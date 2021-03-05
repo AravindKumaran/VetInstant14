@@ -36,6 +36,9 @@ const validationSchema = Yup.object().shape({
 const petTypes = [
   { label: 'Dog', value: 'dog' },
   { label: 'Cat', value: 'cat' },
+  { label: 'Cattle', value: 'cattle' },
+  { label: 'Sheep/Goat', value: 'sheep/goat' },
+  { label: 'Poultry', value: 'poultry' },
 ]
 
 const genders = [
