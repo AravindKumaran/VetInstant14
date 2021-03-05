@@ -138,11 +138,13 @@ const ImagePickerBottomSheet = ({ imageUri, onChangeImage, imageList }) => {
           <AppButton
             title='Take Photo'
             iconName='camera'
+            txtStyle={{ textAlign: 'center', width: '-100%' }}
             onPress={openCamera}
           />
           <AppButton
             title='Choose From Library'
             iconName='image'
+            txtStyle={{ textAlign: 'center', width: '-100%' }}
             onPress={openImageLibrary}
           />
           <AppButton
