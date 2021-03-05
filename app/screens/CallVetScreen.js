@@ -20,6 +20,7 @@ import * as Notifications from 'expo-notifications'
 
 import AppFormPicker from '../components/forms/AppFormPicker'
 import AppMultiSelect from '../components/forms/AppMultiSelect'
+import socket from '../components/utils/socket'
 
 const Appetite = [
   { label: 'Normal', value: 'Normal' },
@@ -115,28 +116,7 @@ const CallVetScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
   const notificationListener = useRef()
-  const [waitingTime, setWaitingTime] = useState(5)
   const startPayment = useRef()
-  const timeRef = useRef(null)
-
-  const startTimer = () => {
-    timeRef.current = setInterval(() => {
-      setWaitingTime((time) => {
-        if (time >= 1) return time - 1
-
-        startPayment.current = true
-
-        resetTimer()
-        return 0
-      })
-    }, 1000)
-  }
-
-  const resetTimer = () => {
-    clearInterval(timeRef.current)
-    timeRef.current = null
-    setWaitingTime(0)
-  }
 
   const sendPushToken = async (message) => {
     if (route.params.doc.user.token && !startPayment.current) {
@@ -173,7 +153,7 @@ const CallVetScreen = ({ navigation, route }) => {
         ) {
           startPayment.current = true
           alert(`Yes I'm available. Complete The Payment Within 5-10 Minutes`)
-          console.log('Start Payment', startPayment.current)
+          // console.log('Start Payment', startPayment.current)
         } else if (
           notification.request.content.data.status === 'cancel' &&
           !startPayment.current
@@ -189,7 +169,6 @@ const CallVetScreen = ({ navigation, route }) => {
 
     return () => {
       Notifications.removeNotificationSubscription(notificationListener)
-      clearInterval(timeRef.current)
     }
   }, [])
 
@@ -297,6 +276,12 @@ const CallVetScreen = ({ navigation, route }) => {
       }
       setLoading(false)
       await savePatientProblems(values)
+      socket.emit('videoCall', {
+        token: user.token,
+        docId: route.params?.doc?.user?._id,
+        paymentDone: false,
+        name: user.name,
+      })
       sendPushToken(
         `Hello Dr. ${route.params.doc.user.name}, I Have Started The Video Call. Please Join It`
       )
@@ -306,22 +291,19 @@ const CallVetScreen = ({ navigation, route }) => {
         name: user.name,
         token: tokenRes.data,
       })
-    }
-    // else if (values.videoCall && !startPayment.current) {
-    //   startTimer()
-    //   sendPushToken()
-    //   alert(
-    //     "Notification Sent To Doctor. Complete your payment by clicking on call button again . Don't Close This Screen"
-    //   )
-    // alert(
-    //   "Notification Sent To Doctor. Please Wait For 2-5 Minutes For Response Before Taking Any New Action. Don't Close This S creen"
-    // )
-    // }
-    else if (values.videoCall) {
-      startPayment.current = null
+    } else if (values.videoCall && !startPayment.current) {
+      sendPushToken()
+      socket.emit('videoCall', {
+        token: user.token,
+        docId: route.params?.doc?.user?._id,
+        paymentDone: false,
+        name: user.name,
+      })
       alert(
-        "Notification Sent To Doctor. Complete your payment. Don't Close This Screen"
+        "Notification Sent To Doctor. Please Wait For 2-5 Minutes For Response Before Taking Any New Action. Don't Close This Screen"
       )
+    } else if (values.videoCall && startPayment.current) {
+      startPayment.current = null
       const res = await usersApi.payDoctor({
         amt: route?.params?.doc.fee * 1 + 100,
       })
@@ -373,6 +355,12 @@ const CallVetScreen = ({ navigation, route }) => {
           }
           setLoading(false)
           await savePatientProblems(values)
+          socket.emit('videoCall', {
+            token: user.token,
+            docId: route.params?.doc?.user?._id,
+            paymentDone: true,
+            name: user.name,
+          })
           sendPushToken(
             'I have completed the payment.Please join the video call'
           )
