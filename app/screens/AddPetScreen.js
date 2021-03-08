@@ -72,7 +72,7 @@ const AddPetScreen = ({ navigation, route }) => {
   }, [])
 
   const handleSubmit = async (values) => {
-    console.log('Values', values)
+    // console.log('Values', values)
     const form = new FormData()
     if (route?.params?.editPet) {
       if (
@@ -99,9 +99,13 @@ const AddPetScreen = ({ navigation, route }) => {
       // }
     }
 
-    // if (!values.photo.startsWith('img')) {
-
-    // }
+    if (!route?.params?.editPet) {
+      form.append('photo', {
+        name: 'photo',
+        type: 'image/jpeg',
+        uri: values.photo,
+      })
+    }
 
     if (values.images && !route?.params?.editPet) {
       values.images.forEach((image, index) => {
