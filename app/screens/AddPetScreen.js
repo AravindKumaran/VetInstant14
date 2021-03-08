@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { StyleSheet, View } from 'react-native'
 import { Formik } from 'formik'
@@ -46,19 +46,64 @@ const genders = [
   { label: 'Female', value: 'female' },
 ]
 
-const AddPetScreen = ({ navigation }) => {
+const AddPetScreen = ({ navigation, route }) => {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+  console.log('AddRoutes', route?.params?.pet?._id)
+
+  const editValues = {
+    name: route?.params?.pet?.name,
+    breed: route?.params?.pet?.breed,
+    years: String(route?.params?.pet?.years),
+    months: String(route?.params?.pet?.months),
+    weight: String(route?.params?.pet?.weight),
+    photo: `http://192.168.43.242:8000/img/${route?.params?.pet?.photo}`,
+    gender: route?.params?.pet?.gender,
+    type: route?.params?.pet?.type,
+    images: route?.params?.pet?.petHistoryImages?.map(
+      (img) => `http://192.168.43.242:8000/img/${img}`
+    ),
+  }
+
+  useEffect(() => {
+    if (route?.params?.editPet) {
+      navigation.setOptions({ title: 'Edit Pet' })
+    }
+  }, [])
 
   const handleSubmit = async (values) => {
+    console.log('Values', values)
     const form = new FormData()
-    form.append('photo', {
-      name: 'photo',
-      type: 'image/jpeg',
-      uri: values.photo,
-    })
+    if (route?.params?.editPet) {
+      if (
+        values.photo?.startsWith('http') ||
+        values.photo?.startsWith('https')
+      ) {
+        const pht = values.photo.split('img/')[1]
+        values.photo = pht
+      } else {
+        form.append('photo', {
+          name: 'photo',
+          type: 'image/jpeg',
+          uri: values.photo,
+        })
+      }
 
-    if (values.images) {
+      // if (values.images.length > 0) {
+      //   values.images = values.images.map((img) => {
+      //     if (img.startsWith('http') || img.startsWith('https')) {
+      //       img = img.split('img/')[1]
+      //     }
+      //     return img
+      //   })
+      // }
+    }
+
+    // if (!values.photo.startsWith('img')) {
+
+    // }
+
+    if (values.images && !route?.params?.editPet) {
       values.images.forEach((image, index) => {
         form.append('images', {
           name: 'image' + index,
@@ -68,17 +113,23 @@ const AddPetScreen = ({ navigation }) => {
       })
     }
     form.append('name', values.name)
-    form.append('years', values.years)
-    form.append('months', values.months)
+    form.append('years', +values.years)
+    form.append('months', +values.months)
     form.append('breed', values.breed)
     form.append('gender', values.gender)
     form.append('type', values.type)
-    form.append('weight', values.weight)
+    form.append('weight', +values.weight)
     setLoading(true)
-    const res = await petsApi.savePet(form)
+
+    let res
+    if (route?.params?.editPet) {
+      res = await petsApi.updatePet(route?.params?.pet?._id, form)
+    } else {
+      res = await petsApi.savePet(form)
+    }
     if (!res.ok) {
       setLoading(false)
-      setError(res.data.msg)
+      setError(res?.data?.msg)
       console.log(res)
       return
     }
@@ -95,80 +146,97 @@ const AddPetScreen = ({ navigation }) => {
           {error && <ErrorMessage error={error} visible={!loading} />}
 
           <Formik
-            initialValues={{
-              name: '',
-              breed: '',
-              years: '',
-              months: '',
-              weight: '',
-              photo: null,
-              gender: null,
-              type: null,
-              images: [],
-            }}
+            initialValues={
+              route?.params?.editPet
+                ? editValues
+                : {
+                    name: '',
+                    breed: '',
+                    years: '',
+                    months: '',
+                    weight: '',
+                    photo: null,
+                    gender: null,
+                    type: null,
+                    images: [],
+                  }
+            }
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
           >
-            {() => (
-              <>
-                <AppImagePicker name='photo' />
-                <AppFormPicker items={petTypes} label='Species' name='type' />
-
-                <AppFormField
-                  label='Name'
-                  autoCapitalize='none'
-                  autoCorrect={false}
-                  name='name'
-                  placeholder='Enter your pet name'
-                />
-                <AppFormField
-                  label='Breed'
-                  autoCapitalize='none'
-                  autoCorrect={false}
-                  name='breed'
-                  placeholder='Enter your pet breed'
-                />
-                <AppFormPicker items={genders} label='Gender' name='gender' />
-
-                <AppText>Age</AppText>
-
-                <View style={styles.wrapper}>
-                  <AppFormField
-                    autoCapitalize='none'
-                    autoCorrect={false}
-                    name='years'
-                    keyboardType='numeric'
-                    placeholder='Years'
-                    maxLength={3}
-                  />
+            {({ setFieldValue }) => {
+              // useEffect(() => {
+              //   if (route?.params?.editPet) {
+              //     setFieldValue('name', route?.params?.pet?.name, true)
+              //   }
+              // }, [])
+              return (
+                <>
+                  <AppImagePicker name='photo' />
+                  <AppFormPicker items={petTypes} label='Species' name='type' />
 
                   <AppFormField
+                    label='Name'
                     autoCapitalize='none'
                     autoCorrect={false}
-                    name='months'
-                    keyboardType='numeric'
-                    placeholder='Months'
-                    maxLength={2}
+                    name='name'
+                    placeholder='Enter your pet name'
                   />
-                </View>
+                  <AppFormField
+                    label='Breed'
+                    autoCapitalize='none'
+                    autoCorrect={false}
+                    name='breed'
+                    placeholder='Enter your pet breed'
+                  />
+                  <AppFormPicker items={genders} label='Gender' name='gender' />
 
-                <AppFormField
-                  label='Weight'
-                  autoCapitalize='none'
-                  autoCorrect={false}
-                  name='weight'
-                  keyboardType='numeric'
-                  placeholder='Enter your pet weight in kgs'
-                  maxLength={5}
-                />
-                <AppText style={{ marginVertical: 20 }}>
-                  Pet History (Optional)
-                </AppText>
-                <AppImageListPicker name='images' />
+                  <AppText>Age</AppText>
 
-                <SubmitButton title='Save Pet' />
-              </>
-            )}
+                  <View style={styles.wrapper}>
+                    <AppFormField
+                      autoCapitalize='none'
+                      autoCorrect={false}
+                      name='years'
+                      keyboardType='numeric'
+                      placeholder='Years'
+                      maxLength={3}
+                    />
+
+                    <AppFormField
+                      autoCapitalize='none'
+                      autoCorrect={false}
+                      name='months'
+                      keyboardType='numeric'
+                      placeholder='Months'
+                      maxLength={2}
+                    />
+                  </View>
+
+                  <AppFormField
+                    label='Weight'
+                    autoCapitalize='none'
+                    autoCorrect={false}
+                    name='weight'
+                    keyboardType='numeric'
+                    placeholder='Enter your pet weight in kgs'
+                    maxLength={5}
+                  />
+                  {!route?.params?.editPet && (
+                    <>
+                      <AppText style={{ marginVertical: 20 }}>
+                        Pet History (Optional)
+                      </AppText>
+                      <AppImageListPicker name='images' />
+                    </>
+                  )}
+
+                  <SubmitButton
+                    title={route?.params?.editPet ? 'Update Pet' : 'Save Pet'}
+                  />
+                </>
+              )
+            }}
           </Formik>
         </View>
       </ScrollView>

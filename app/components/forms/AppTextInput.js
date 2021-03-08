@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-const AppTextInput = ({ icon, numberOfLines = 1, width, ...rest }) => {
+const AppTextInput = ({ icon, numberOfLines = 1, width, value, ...rest }) => {
   return (
     <View style={[styles.container]}>
       {icon && (
@@ -16,6 +16,7 @@ const AppTextInput = ({ icon, numberOfLines = 1, width, ...rest }) => {
       <TextInput
         style={styles.textInput}
         numberOfLines={numberOfLines}
+        value={value}
         {...rest}
       />
     </View>

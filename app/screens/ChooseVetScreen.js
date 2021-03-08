@@ -11,7 +11,7 @@ import hospitalsApi from '../api/hospitals'
 
 const ChooseVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
-  // console.log('Choose', route.params.pet)
+  console.log('Choose', route.params.pet)
   const [loading, setLoading] = useState(false)
 
   const checkMyVetPresence = async () => {
@@ -122,6 +122,17 @@ const ChooseVetScreen = ({ navigation, route }) => {
           btnStyle={{ padding: 16 }}
           txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
           onPress={() => navigation.navigate('Reminder')}
+        />
+        <AppButton
+          title='Edit Pet'
+          btnStyle={{ padding: 16 }}
+          txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
+          onPress={() =>
+            navigation.navigate('AddPet', {
+              pet: route.params.pet,
+              editPet: true,
+            })
+          }
         />
       </View>
     </>
