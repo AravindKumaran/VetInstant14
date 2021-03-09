@@ -49,7 +49,7 @@ const genders = [
 const AddPetScreen = ({ navigation, route }) => {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-  console.log('AddRoutes', route?.params?.pet?._id)
+  // console.log('AddRoutes', route?.params?.pet?.photo)
 
   const editValues = {
     name: route?.params?.pet?.name,
@@ -57,12 +57,10 @@ const AddPetScreen = ({ navigation, route }) => {
     years: String(route?.params?.pet?.years),
     months: String(route?.params?.pet?.months),
     weight: String(route?.params?.pet?.weight),
-    photo: `http://192.168.43.242:8000/img/${route?.params?.pet?.photo}`,
+    photo: `${route?.params?.pet?.photo}`,
     gender: route?.params?.pet?.gender,
     type: route?.params?.pet?.type,
-    images: route?.params?.pet?.petHistoryImages?.map(
-      (img) => `http://192.168.43.242:8000/img/${img}`
-    ),
+    images: route?.params?.pet?.petHistoryImages,
   }
 
   useEffect(() => {
@@ -75,13 +73,7 @@ const AddPetScreen = ({ navigation, route }) => {
     // console.log('Values', values)
     const form = new FormData()
     if (route?.params?.editPet) {
-      if (
-        values.photo?.startsWith('http') ||
-        values.photo?.startsWith('https')
-      ) {
-        const pht = values.photo.split('img/')[1]
-        values.photo = pht
-      } else {
+      if (!values.photo?.startsWith('https')) {
         form.append('photo', {
           name: 'photo',
           type: 'image/jpeg',
