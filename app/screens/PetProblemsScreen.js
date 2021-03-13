@@ -91,10 +91,10 @@ const PetProblemScreen = ({ route }) => {
                         <Image
                           key={i + img}
                           source={{
-                            uri: `http://192.168.29.239:8000/${img}`,
+                            uri: `${img}`,
                           }}
                           // source={{
-                          //   uri: `https://vetinstantbe.azurewebsites.net/api/v1/${img}`,
+                          //   uri: `https://vetinstantbe.azurewebsites.net/img/${img}`,
                           // }}
                           style={{
                             width: 150,

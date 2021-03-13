@@ -56,10 +56,10 @@ const PetPrescriptionScreen = ({ route }) => {
                     <AppText>Prescription Image:</AppText>
                     <Image
                       source={{
-                        uri: `http://192.168.29.239:8000/${pbm.img}`,
+                        uri: `${pbm.img}`,
                       }}
                       // source={{
-                      //   uri: `https://vetinstantbe.azurewebsites.net/api/v1/${pbm.img}`,
+                      //   uri: `https://vetinstantbe.azurewebsites.net/img/${pbm.img}`,
                       // }}
                       style={{ width: 150, height: 150, borderRadius: 75 }}
                     />

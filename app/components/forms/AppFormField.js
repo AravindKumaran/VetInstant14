@@ -7,7 +7,13 @@ import ErrorMessage from './ErrorMessage'
 import AppText from '../AppText'
 
 const AppFormField = ({ name, label, numberOfLines, contStyle, ...rest }) => {
-  const { setFieldTouched, handleChange, errors, touched } = useFormikContext()
+  const {
+    setFieldTouched,
+    handleChange,
+    errors,
+    touched,
+    values,
+  } = useFormikContext()
   return (
     <View style={[styles.container, contStyle]}>
       {label && <AppText>{label}</AppText>}
@@ -15,6 +21,7 @@ const AppFormField = ({ name, label, numberOfLines, contStyle, ...rest }) => {
         onBlur={() => setFieldTouched(name)}
         onChangeText={handleChange(name)}
         numberOfLines={numberOfLines}
+        value={values[name]}
         {...rest}
       />
 
