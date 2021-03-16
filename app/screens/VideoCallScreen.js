@@ -75,6 +75,10 @@ const VideoCallScreen = ({ navigation, route }) => {
       console.log('Outside Effect')
       clearInterval(timeRef.current)
       twilioVideo.current.disconnect()
+      // navigation.reset({
+      //   index: 0,
+      //   routes: [{ name: 'Home' }],
+      // })
     }
   }, [])
 
@@ -99,6 +103,11 @@ const VideoCallScreen = ({ navigation, route }) => {
   const _onEndButtonPress = () => {
     clearInterval(timeRef.current)
     twilioVideo.current.disconnect()
+    // navigation.reset({
+    //   index: 0,
+    //   routes: [{ name: 'Home' }],
+    // })
+
     navigation.goBack()
   }
 

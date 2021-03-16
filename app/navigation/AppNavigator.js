@@ -13,7 +13,6 @@ import OnlineVetScreen from '../screens/OnlineVetScreen'
 import PetProblemScreen from '../screens/PetProblemsScreen'
 import PetPrescriptionScreen from '../screens/PetPrescription'
 import ReminderScreen from '../screens/ReminderScreen'
-import VideoCallScreen from '../screens/VideoCallScreen'
 
 import { Feather } from '@expo/vector-icons'
 
@@ -92,11 +91,6 @@ const AppNavigator = ({ navigation }) => {
       />
       <Stack.Screen name='OnlineVet' component={OnlineVetScreen} />
       <Stack.Screen name='Chat' component={ChatScreen} />
-      <Stack.Screen
-        name='VideoCall'
-        component={VideoCallScreen}
-        options={{ headerShown: false }}
-      />
     </Stack.Navigator>
   )
 }

@@ -9,6 +9,8 @@ import CallLogScreen from '../screens/CallLogScreen'
 import DrawerContent from '../components/DrawerContent'
 import ScheduledCallScreen from '../screens/ScheduledCallScreen'
 
+import PendingNavigator from './PendingNavigator'
+
 const Drawer = createDrawerNavigator()
 
 const DrawerNavigator = () => (
@@ -54,6 +56,16 @@ const DrawerNavigator = () => (
       options={{
         drawerIcon: ({ color, size }) => (
           <Feather name='user-plus' size={size} color={color} />
+        ),
+        unmountOnBlur: true,
+      }}
+    />
+    <Drawer.Screen
+      name='PendingCalls'
+      component={PendingNavigator}
+      options={{
+        drawerIcon: ({ color, size }) => (
+          <Feather name='phone-off' size={size} color={color} />
         ),
         unmountOnBlur: true,
       }}

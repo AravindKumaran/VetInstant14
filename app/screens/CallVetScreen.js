@@ -9,6 +9,7 @@ import AppFormField from '../components/forms/AppFormField'
 
 import petsApi from '../api/pets'
 import doctorsApi from '../api/doctors'
+import pendingsApi from '../api/callPending'
 import roomsApi from '../api/rooms'
 import usersApi from '../api/users'
 import ErrorMessage from '../components/forms/ErrorMessage'
@@ -112,22 +113,17 @@ const validationSchema = Yup.object().shape({
 
 const CallVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
-  // console.log('Route', +route.params.doc.fee === 0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
-  const notificationListener = useRef()
-  const startPayment = useRef()
 
-  const sendPushToken = async (message) => {
-    if (route.params.doc.user.token && !startPayment.current) {
+  const sendPushToken = async (title, message) => {
+    if (route.params.doc.user.token) {
       setLoading(true)
 
       const pushRes = await usersApi.sendPushNotification({
         targetExpoPushToken: route.params.doc.user.token,
-        title: `Incoming Call Request from ${user.name}`,
-        message:
-          message ||
-          `Are You Available For Next 15-30 Minutes?\n** Don't Close The App From Background`,
+        title: `Incoming ${title ? title : 'CaLL'} Request from ${user.name}`,
+        message: message || `Open the pending calls page for further action`,
         datas: { token: user.token || null },
       })
 
@@ -141,36 +137,6 @@ const CallVetScreen = ({ navigation, route }) => {
       alert('Something Went Wrong. Try Again Later')
     }
   }
-
-  useEffect(() => {
-    notificationListener.current = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        console.log('REceived', notification)
-        console.log('REceived', notification.request.content.data)
-        if (
-          notification.request.content.data.status === 'ok' &&
-          !startPayment.current
-        ) {
-          startPayment.current = true
-          alert(`Yes I'm available. Complete The Payment Within 5-10 Minutes`)
-          // console.log('Start Payment', startPayment.current)
-        } else if (
-          notification.request.content.data.status === 'cancel' &&
-          !startPayment.current
-        ) {
-          startPayment.current = null
-          console.log('Start Payment', startPayment.current)
-          alert(
-            `Sorry! I'm Not Available. Please Try With Other Available Doctors`
-          )
-        }
-      }
-    )
-
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener)
-    }
-  }, [])
 
   const savePatientProblems = async (values) => {
     // const patientData = {
@@ -253,138 +219,41 @@ const CallVetScreen = ({ navigation, route }) => {
   }
 
   const handleSubmit = async (values) => {
-    if (values.videoCall && +route.params.doc.fee === 0) {
-      const roomRes = await roomsApi.createRoom({
-        name: `${user._id}-${route.params?.doc?.user?._id}`,
-        senderName: user.name,
-        receiverId: route.params?.doc?.user?._id,
-        petId: route.params?.pet._id,
-      })
-      if (!roomRes.ok) {
-        console.log(roomRes)
-        setLoading(false)
-        return
-      }
-      const tokenRes = await usersApi.getVideoToken({
-        userName: user.name,
-        roomName: roomRes.data.room.name,
-      })
-      // console.log('Video Token', tokenRes)
-      if (!tokenRes.ok) {
-        setLoading(false)
-        console.log('Error', tokenRes)
-      }
-      setLoading(false)
-      await savePatientProblems(values)
-      socket.emit('videoCall', {
-        token: user.token,
-        docId: route.params?.doc?.user?._id,
-        paymentDone: false,
-        name: user.name,
-      })
-      sendPushToken(
-        `Hello Dr. ${route.params.doc.user.name}, I Have Started The Video Call. Please Join It`
-      )
-      navigation.navigate('VideoCall', {
-        docId: route?.params?.doc.user._id,
-        userId: user._id,
-        name: user.name,
-        token: tokenRes.data,
-      })
-    } else if (values.videoCall && !startPayment.current) {
+    if (values.videoCall) {
       sendPushToken()
-      socket.emit('videoCall', {
+      // socket.emit('videoCall', {
+      //   token: user.token,
+      //   docId: route.params?.doc?.user?._id,
+      //   paymentDone: false,
+      //   name: user.name,
+      // })
+
+      const penData = {
         token: user.token,
         docId: route.params?.doc?.user?._id,
+        docName: route.params?.doc?.user?.name,
+        docFee: route?.params?.doc.fee * 1,
         paymentDone: false,
-        name: user.name,
-      })
-      alert(
-        "Notification Sent To Doctor. Please Wait For 2-5 Minutes For Response Before Taking Any New Action. Don't Close This Screen"
-      )
-    } else if (values.videoCall && startPayment.current) {
-      startPayment.current = null
-      const res = await usersApi.payDoctor({
-        amt: route?.params?.doc.fee * 1 + 100,
-      })
-      if (!res.ok) {
+        userName: user.name,
+        userId: user._id,
+        petId: route.params?.pet._id,
+        status: 'requested',
+      }
+      setLoading(true)
+      await savePatientProblems(values)
+      const penRes = await pendingsApi.saveCallPending(penData)
+      if (!penRes.ok) {
         setLoading(false)
-        console.log('Error', res)
+        console.log('Error', penRes)
       }
       setLoading(false)
-      const options = {
-        description: 'Payment For Doctor Consultation',
-        currency: 'INR',
-        key: 'rzp_test_GbpjxWePHidlJt',
-        amount: res.data.result.amount,
-        name: `${route?.params?.doc.user.name}`,
-        order_id: res.data.result.id,
-      }
-      RazorpayCheckout.open(options)
-        .then(async (data) => {
-          setLoading(true)
-          const verifyRes = await usersApi.verifyPayment({
-            id: res.data.result.id,
-            paid_id: data.razorpay_payment_id,
-            sign: data.razorpay_signature,
-          })
-          if (!verifyRes.ok) {
-            setLoading(false)
-            console.log(verifyRes)
-            return
-          }
-          const roomRes = await roomsApi.createRoom({
-            name: `${user._id}-${route.params?.doc?.user?._id}`,
-            senderName: user.name,
-            receiverId: route.params?.doc?.user?._id,
-            petId: route.params?.pet._id,
-          })
-          if (!roomRes.ok) {
-            console.log(roomRes)
-            setLoading(false)
-            return
-          }
-          const tokenRes = await usersApi.getVideoToken({
-            userName: user.name,
-            roomName: roomRes.data.room.name,
-          })
-          console.log('Video Token', tokenRes)
-          if (!tokenRes.ok) {
-            setLoading(false)
-            console.log('Error', tokenRes)
-          }
-          setLoading(false)
-          await savePatientProblems(values)
-          socket.emit('videoCall', {
-            token: user.token,
-            docId: route.params?.doc?.user?._id,
-            paymentDone: true,
-            name: user.name,
-          })
-          sendPushToken(
-            'I have completed the payment.Please join the video call'
-          )
-          navigation.navigate('VideoCall', {
-            docId: route?.params?.doc.user._id,
-            userId: user._id,
-            name: user.name,
-            token: tokenRes.data,
-          })
-          // setLoading(false)
-          // alert(`Success: ${verifyRes.data.verify}`)
-        })
-        .catch((error) => {
-          // handle failure
-          console.log(error)
-          setLoading(false)
-          // alert(`Error: ${error.code} | ${error.description}`)
-        })
-      // setLoading(true)
-
-      // return
+      alert(
+        'Notification Sent To Doctor. Please go to pending calls screen for further action'
+      )
+      navigation.navigate('Home')
     } else if (!values.videoCall) {
+      sendPushToken('chat', 'I have started the chat.Please join')
       await savePatientProblems(values)
-      // console.log('Clikccc')
       navigation.navigate('Chat', {
         doc: route?.params?.doc,
         pet: route?.params?.pet,
@@ -458,7 +327,7 @@ const CallVetScreen = ({ navigation, route }) => {
                 autoCapitalize='none'
                 autoCorrect={false}
                 name='time'
-                numberOfLines={1}
+                keyboardType='numeric'
                 placeholder='Enter The Period Of The Problem'
               />
 
@@ -531,7 +400,7 @@ const CallVetScreen = ({ navigation, route }) => {
 
               <View style={styles.btnContainer}>
                 <AppButton
-                  title='Call'
+                  title='Request Call'
                   iconName='video'
                   btnStyle={{ width: '50%', marginRight: 10 }}
                   txtStyle={{ textAlign: 'center', width: '-100%' }}

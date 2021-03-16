@@ -1,11 +1,10 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
   View,
   Platform,
-  Alert,
 } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { useIsFocused } from '@react-navigation/native'
@@ -43,8 +42,6 @@ const HomeScreen = ({ navigation, route }) => {
   const [rmr, setRmr] = useState([])
   const [todayReminders, setTodayReminders] = useState([])
   const [upcomingReminders, setUpcomingReminders] = useState([])
-  const notificationListener = useRef()
-  const responseListener = useRef()
 
   const isFocused = useIsFocused()
 
@@ -167,82 +164,6 @@ const HomeScreen = ({ navigation, route }) => {
         vibrationPattern: [0, 250, 250, 250],
       })
     }
-
-    notificationListener.current = Notifications.addNotificationReceivedListener(
-      (notification) => console.log('REceived', notification)
-    )
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(
-      async (notification) => {
-        console.log('Response', notification.notification.request.content)
-        if (notification.notification?.request?.content?.data) {
-          const { token } = notification.notification?.request?.content?.data
-          Alert.alert(
-            'Incoming Call Request From Doctor',
-            `${notification.notification?.request?.content.body}`,
-            [
-              {
-                text: 'No',
-                onPress: () => {
-                  sendPushToken(
-                    token,
-                    `Sorry. I'm Not Available Right Now`,
-                    'nocall'
-                  )
-
-                  return
-                },
-                style: 'cancel',
-              },
-              {
-                text: 'Yes',
-                onPress: () => {
-                  sendPushToken(
-                    token,
-                    `Yes I'm Available. Please Start The Call\n Click To Start The Call`,
-                    'startcall'
-                  )
-                  // console.log('OK Pressed')
-                  return
-                },
-              },
-            ],
-            { cancelable: false }
-          )
-        }
-
-        if (notification.notification?.request?.content?.data?.callStarted) {
-          // console.log(
-          //   'Call Started',
-          //   notification.notification?.request?.content?.data?.details
-          // )
-          const tokenRes = await usersApi.getVideoToken({
-            userName: user.name,
-            roomName:
-              notification.notification?.request?.content?.data?.details?.name,
-          })
-          console.log('Video Token', tokenRes)
-          if (!tokenRes.ok) {
-            setLoading(false)
-            console.log('Error', tokenRes)
-          }
-
-          navigation.navigate('VideoCall', {
-            docId:
-              notification.notification?.request?.content?.data?.details
-                ?.receiverId,
-            userId: user._id,
-            name: user.name,
-            token: tokenRes.data,
-          })
-        }
-        // navigation.navigate('CallVet', { doPayment: true })
-      }
-    )
-
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener)
-      Notifications.removeNotificationSubscription(responseListener)
-    }
   }, [])
 
   return (
@@ -252,9 +173,6 @@ const HomeScreen = ({ navigation, route }) => {
         <AppText style={{ fontWeight: '500', fontSize: 30 }}>
           Hi {user.name}
         </AppText>
-        {/* <AppText style={{ fontWeight: '100', fontSize: 13 }}>
-          In order to start a call please add your pet below
-        </AppText> */}
 
         <View style={styles.addPetContainer}>
           {loading ? (
