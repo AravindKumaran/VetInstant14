@@ -420,6 +420,16 @@ const CallVetScreen = ({ navigation, route }) => {
                   }}
                 />
               </View>
+              <AppButton
+                  title='Make Payment'
+                  iconName='dollar-sign'
+                  btnStyle={{ width: '60%', marginRight: 5, alignSelf: 'center'}}
+                  txtStyle={{ textAlign: 'center', width: '-100%' }}
+                  onPress={(e) => {
+                    setFieldValue('videoCall', false)
+                    handleSubmit(e)
+                  }}
+                />
             </>
           )}
         </Formik>
