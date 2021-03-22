@@ -18,6 +18,8 @@ import AppText from '../components/AppText'
 import callLogsApi from '../api/callLog'
 import LoadingIndicator from '../components/LoadingIndicator'
 
+import pendingsApi from '../api/callPending'
+
 const VideoCallScreen = ({ navigation, route }) => {
   const { user, docId, userId } = route.params
   // console.log('Routtt', route)
@@ -50,6 +52,18 @@ const VideoCallScreen = ({ navigation, route }) => {
     setWaitingTime(0)
   }
 
+  const handleDeleteCall = async () => {
+    const callRes = await pendingsApi.singleCallPending(route.params?.item._id)
+    if (callRes.ok) {
+      const call = callRes.data.call
+      call.userJoined && call.docJoined
+        ? await pendingsApi.deleteCallPending(call._id)
+        : await pendingsApi.updateCallPending(call._id, {
+            userJoined: false,
+          })
+    }
+  }
+
   useEffect(() => {
     console.log('Inside Effect', token)
 
@@ -59,6 +73,14 @@ const VideoCallScreen = ({ navigation, route }) => {
         await _requestAudioPermission()
         await _requestCameraPermission()
       }
+
+      const cRes = await pendingsApi.updateCallPending(route.params?.item._id, {
+        userJoined: true,
+      })
+      if (!cRes.ok) {
+        navigation.goBack()
+        return
+      }
       twilioVideo.current.connect({
         accessToken: token,
         // enableNetworkQualityReporting: true,
@@ -67,6 +89,7 @@ const VideoCallScreen = ({ navigation, route }) => {
       if (videoTracks.size === 0) {
         startTimer()
       }
+
       console.log('Connecting')
     }
     _onConnectButtonPress()
@@ -74,6 +97,7 @@ const VideoCallScreen = ({ navigation, route }) => {
     return () => {
       console.log('Outside Effect')
       clearInterval(timeRef.current)
+      handleDeleteCall()
       twilioVideo.current.disconnect()
       // navigation.reset({
       //   index: 0,
@@ -102,6 +126,7 @@ const VideoCallScreen = ({ navigation, route }) => {
 
   const _onEndButtonPress = () => {
     clearInterval(timeRef.current)
+    handleDeleteCall()
     twilioVideo.current.disconnect()
     // navigation.reset({
     //   index: 0,

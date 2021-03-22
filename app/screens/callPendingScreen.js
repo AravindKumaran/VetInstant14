@@ -118,7 +118,7 @@ const CallPendingScreen = ({ navigation }) => {
   }
 
   const handleVideo = async (item) => {
-    console.log('Vudfdsg', item)
+    // console.log('Vudfdsg', item)
     const roomRes = await roomsApi.createRoom({
       name: `${item.userId}-${item.docId}`,
       senderName: item.userName,
@@ -146,6 +146,7 @@ const CallPendingScreen = ({ navigation }) => {
       userId: user._id,
       name: user.name,
       token: tokenRes.data,
+      item,
     })
   }
 
