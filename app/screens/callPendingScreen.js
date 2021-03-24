@@ -228,9 +228,10 @@ const CallPendingScreen = ({ navigation }) => {
               {dayjs(item.extraInfo).format('DD/MM/YYYY')}
             </AppText>
           </AppText>
-          {dayjs().isSameOrAfter(dayjs(item.extraInfo)) && (
-            <AppButton title='Join Now' onPress={() => handleVideo(item)} />
-          )}
+          <AppButton title='Join Now' onPress={() => handleVideo(item)} />
+          {/* {dayjs().isSameOrAfter(dayjs(item.extraInfo)) && (
+
+          )} */}
         </>
       )}
     </View>
