@@ -66,55 +66,73 @@ const CallPendingScreen = ({ navigation }) => {
   }
 
   const handlePayment = async (item, str) => {
-    const res = await usersApi.payDoctor({
-      amt: item.docFee * 1 + 100,
-    })
-    if (!res.ok) {
+    if (item.docFee === 0) {
+      const allPCalls = [...pendingCalls]
+      const pCall = allPCalls.find((p) => p._id === item._id)
+      if (pCall) {
+        pCall.status = str
+        pCall.paymentDone = true
+      }
+      setLoading(true)
+      const pRes = await pendingsApi.updateCallPending(item._id, pCall)
+      if (!pRes.ok) {
+        console.log('Error', pRes)
+        setLoading(false)
+        return
+      }
       setLoading(false)
-      console.log('Error', res)
-    }
-    setLoading(false)
-    const options = {
-      description: 'Payment For Doctor Consultation',
-      currency: 'INR',
-      key: 'rzp_test_GbpjxWePHidlJt',
-      amount: res.data.result.amount,
-      name: item.docName,
-      order_id: res.data.result.id,
-    }
-    RazorpayCheckout.open(options)
-      .then(async (data) => {
-        setLoading(true)
-        const verifyRes = await usersApi.verifyPayment({
-          id: res.data.result.id,
-          paid_id: data.razorpay_payment_id,
-          sign: data.razorpay_signature,
-        })
-        if (!verifyRes.ok) {
-          setLoading(false)
-          console.log(verifyRes)
-          return
-        }
-        const allPCalls = [...pendingCalls]
-        const pCall = allPCalls.find((p) => p._id === item._id)
-        if (pCall) {
-          pCall.status = str
-          pCall.paymentDone = true
-        }
+      setPendingCalls(allPCalls)
+    } else {
+      const res = await usersApi.payDoctor({
+        amt: item.docFee * 1 + 100,
+      })
+      if (!res.ok) {
+        setLoading(false)
+        console.log('Error', res)
+      }
+      setLoading(false)
+      const options = {
+        description: 'Payment For Doctor Consultation',
+        currency: 'INR',
+        key: 'rzp_test_GbpjxWePHidlJt',
+        amount: res.data.result.amount,
+        name: item.docName,
+        order_id: res.data.result.id,
+      }
+      RazorpayCheckout.open(options)
+        .then(async (data) => {
+          setLoading(true)
+          const verifyRes = await usersApi.verifyPayment({
+            id: res.data.result.id,
+            paid_id: data.razorpay_payment_id,
+            sign: data.razorpay_signature,
+          })
+          if (!verifyRes.ok) {
+            setLoading(false)
+            console.log(verifyRes)
+            return
+          }
+          const allPCalls = [...pendingCalls]
+          const pCall = allPCalls.find((p) => p._id === item._id)
+          if (pCall) {
+            pCall.status = str
+            pCall.paymentDone = true
+          }
 
-        const pRes = await pendingsApi.updateCallPending(item._id, pCall)
-        if (!pRes.ok) {
-          console.log('Error', pRes)
+          const pRes = await pendingsApi.updateCallPending(item._id, pCall)
+          if (!pRes.ok) {
+            console.log('Error', pRes)
+            setLoading(false)
+            return
+          }
           setLoading(false)
-          return
-        }
-        setLoading(false)
-        setPendingCalls(allPCalls)
-      })
-      .catch((error) => {
-        console.log(error)
-        setLoading(false)
-      })
+          setPendingCalls(allPCalls)
+        })
+        .catch((error) => {
+          console.log(error)
+          setLoading(false)
+        })
+    }
   }
 
   const handleVideo = async (item) => {
