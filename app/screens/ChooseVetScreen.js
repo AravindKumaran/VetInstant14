@@ -11,7 +11,7 @@ import hospitalsApi from '../api/hospitals'
 
 const ChooseVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext)
-  console.log('Choose', route.params.pet)
+  // console.log('Choose', route.params.pet)
   const [loading, setLoading] = useState(false)
 
   const checkMyVetPresence = async () => {

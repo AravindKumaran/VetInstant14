@@ -112,6 +112,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const CallVetScreen = ({ navigation, route }) => {
+  // console.log('Route', route.params.doc)
   const { user } = useContext(AuthContext)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState()
@@ -132,6 +133,28 @@ const CallVetScreen = ({ navigation, route }) => {
         console.log('Error', pushRes)
         return
       }
+      setLoading(false)
+    } else {
+      alert('Something Went Wrong. Try Again Later')
+    }
+  }
+
+  const sendWebPushToken = async (title, message) => {
+    if (route.params.doc.user?.webToken) {
+      setLoading(true)
+
+      const pushRes = await usersApi.sendWebPushNotification({
+        webToken: route.params.doc.user.webToken,
+        title: `Incoming ${title ? title : 'Call'} Request from ${user.name}`,
+        body: message || `Open the pending calls page for further action`,
+      })
+
+      if (!pushRes.ok) {
+        setLoading(false)
+        console.log('Error', pushRes)
+        return
+      }
+      // console.log('PushRes', pushRes)
       setLoading(false)
     } else {
       alert('Something Went Wrong. Try Again Later')
@@ -221,6 +244,7 @@ const CallVetScreen = ({ navigation, route }) => {
   const handleSubmit = async (values) => {
     if (values.videoCall) {
       sendPushToken()
+      sendWebPushToken()
       // socket.emit('videoCall', {
       //   token: user.token,
       //   docId: route.params?.doc?.user?._id,
@@ -230,6 +254,7 @@ const CallVetScreen = ({ navigation, route }) => {
 
       const penData = {
         token: user.token,
+        webToken: route.params?.doc?.user?.webToken,
         docId: route.params?.doc?.user?._id,
         docName: route.params?.doc?.user?.name,
         docFee: route?.params?.doc.fee * 1,
@@ -309,7 +334,7 @@ const CallVetScreen = ({ navigation, route }) => {
             gait: '',
           }}
           onSubmit={handleSubmit}
-          validationSchema={validationSchema}
+          // validationSchema={validationSchema}
         >
           {({ handleSubmit, setFieldValue }) => (
             <>

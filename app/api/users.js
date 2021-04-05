@@ -35,6 +35,9 @@ const getPushToken = (id) => {
 const sendPushNotification = (data) => {
   return client.post(`${endPoint}/sendNotification`, data)
 }
+const sendWebPushNotification = (data) => {
+  return client.post(`${endPoint}/sendWebNotification`, data)
+}
 
 export default {
   getUsers,
@@ -46,4 +49,5 @@ export default {
   createPushToken,
   getPushToken,
   sendPushNotification,
+  sendWebPushNotification,
 }
