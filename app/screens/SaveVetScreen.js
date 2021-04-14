@@ -44,7 +44,8 @@ const SaveVetScreen = ({ navigation, route }) => {
       console.log(res)
       return
     }
-    let allHospitals = res.data.hospitals
+    let allHospitals = res.data.hospitals.filter((hosp) => hosp.block === false)
+    // console.log('hospp', allHospitals[0])
     let newHospitals = allHospitals.reduce((acc, item) => {
       acc.push({
         label: item.name.charAt(0).toUpperCase() + item.name.slice(1),
@@ -64,8 +65,8 @@ const SaveVetScreen = ({ navigation, route }) => {
       console.log(res)
       return
     }
-    let allDoctors = res.data.doctors
-    // console.log(allDoctors)
+    let allDoctors = res.data.doctors.filter((doc) => doc.user.block === false)
+    console.log('Alldoccs', allDoctors[0])
     let newDoctors = allDoctors.reduce((acc, item) => {
       acc.push({
         label: item.user.name.charAt(0).toUpperCase() + item.user.name.slice(1),

@@ -22,6 +22,11 @@ const ChooseVetScreen = ({ navigation, route }) => {
       setLoading(false)
       return
     }
+    if (res.data.doctor.user?.block) {
+      alert('Your vet is blocked. Please choose another vet')
+      setLoading(false)
+      return
+    }
     if (res.data.doctor.user?.isOnline) {
       setLoading(false)
       navigation.navigate('CallVet', {
@@ -38,7 +43,10 @@ const ChooseVetScreen = ({ navigation, route }) => {
       let msg = 'Please choose other Vet that is currently available online ?'
       if (hosRes.data.count > 0) {
         const dc = hosRes.data.doctors.find(
-          (doc) => doc.user.isOnline && doc.firstAvailaibeVet
+          (doc) =>
+            doc.user.isOnline &&
+            doc.firstAvailaibeVet &&
+            doc.user.block === false
         )
         if (dc) {
           msg = `But Doctor ${dc.user.name} from the same hospital is currently available with consultation Fees of ₹${dc.fee}.\n\n So, Do you want to continue with Doctor ${dc.user.name}?
@@ -79,8 +87,10 @@ const ChooseVetScreen = ({ navigation, route }) => {
       (doc) =>
         doc.user?.isOnline === true &&
         doc.user._id !== user.doctorId &&
-        doc.firstAvailaibeVet
+        doc.firstAvailaibeVet &&
+        doc.user.block === false
     )
+    console.log('Dc', dc[0])
     if (dc.length > 0) {
       setLoading(false)
       navigation.navigate('CallVet', { doc: dc[0], pet: route.params.pet })
