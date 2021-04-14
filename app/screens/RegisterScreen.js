@@ -37,6 +37,7 @@ const RegisterScreen = () => {
     const res = await authApi.register(name, email, password)
     if (!res.ok) {
       setLoading(false)
+      console.log('Ress Regs', res)
       setError(res.data?.msg ? res.data.msg : 'Something Went Wrong')
       return
     }
