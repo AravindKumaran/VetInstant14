@@ -22,12 +22,60 @@ import RazorpayCheckout from 'react-native-razorpay'
 import LoadingIndicator from '../components/LoadingIndicator'
 import AuthContext from '../context/authContext'
 
+import * as Notifications from 'expo-notifications'
+import {
+  storeObjectData,
+  getObjectData,
+  removeValue,
+} from '../components/utils/reminderStorage'
+
 const CallPendingScreen = ({ navigation }) => {
   const { user } = useContext(AuthContext)
   const [pendingCalls, setPendingCalls] = useState([])
 
   const [loading, setLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+
+  const sendPushToken = async (token, title, message) => {
+    if (token) {
+      setLoading(true)
+
+      const pushRes = await usersApi.sendPushNotification({
+        targetExpoPushToken: token,
+        title: `${title ? title : 'Incoming CALL Request from'}  ${user.name}`,
+        message: message || `Open the pending calls page for further action`,
+        datas: { token: user.token || null },
+      })
+
+      if (!pushRes.ok) {
+        setLoading(false)
+        console.log('Error', pushRes)
+        return
+      }
+      setLoading(false)
+    } else {
+      alert('Something Went Wrong. Try Again Later')
+    }
+  }
+
+  const scheduleNotification = async (rmr) => {
+    // console.log('Rmr', rmr.docName)
+    let d = new Date(rmr.extraInfo)
+    const date = new Date(d.getTime() - 10 * 60 * 1000)
+    const trigger = new Date(date)
+    trigger.setMinutes(date.getMinutes())
+    trigger.setSeconds(date.getSeconds())
+    console.log('Trigger', trigger.toLocaleString())
+    console.log('Original', date.toLocaleString())
+    const identifier = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: 'Your Today Scheduled Call Reminder',
+        body: `You have call with Dr. ${rmr.docName}. Please join it`,
+      },
+      trigger,
+    })
+    return identifier
+  }
 
   const getUserPendingCalls = async () => {
     setLoading(true)
@@ -38,7 +86,32 @@ const CallPendingScreen = ({ navigation }) => {
       setRefreshing(false)
       return
     }
-    console.log('Ress', pres.data)
+    // console.log('Ress', pres.data)
+    const allScheduledCalls = pres.data.calls.filter(
+      (call) => call.status === 'scheduled'
+    )
+
+    allScheduledCalls.forEach(async (call) => {
+      const d = new Date(call.extraInfo)
+      const rmr = await getObjectData(
+        `${d.toLocaleDateString()}-${d.toLocaleTimeString()}`
+      )
+
+      // console.log('Rmr', rmr.docName)
+      if (!rmr) {
+        const idt1 = await scheduleNotification(call)
+        call['identifier'] = idt1
+        call[
+          'reminder'
+        ] = `You have call with Dr. ${call.docName}.See Pending Calls`
+        console.log('Rmsdr', call)
+        await storeObjectData(
+          `${d.toLocaleDateString()}-${d.toLocaleTimeString()}`,
+          call
+        )
+      }
+    })
+
     setPendingCalls(pres.data.calls)
     setLoading(false)
     setRefreshing(false)
@@ -61,6 +134,20 @@ const CallPendingScreen = ({ navigation }) => {
       setLoading(false)
       return
     }
+    const d = new Date(item.extraInfo)
+    const rmr = await getObjectData(
+      `${d.toLocaleDateString()}-${d.toLocaleTimeString()}`
+    )
+    if (rmr) {
+      await removeValue(`${d.toLocaleDateString()}-${d.toLocaleTimeString()}`)
+      await Notifications.cancelScheduledNotificationAsync(rmr.identifier)
+    }
+
+    await sendPushToken(
+      pRes.data.calls.docMobToken,
+      'Call Denied By',
+      "Sorry I can't process further"
+    )
     setLoading(false)
     setPendingCalls(allPCalls)
   }
@@ -125,6 +212,7 @@ const CallPendingScreen = ({ navigation }) => {
             setLoading(false)
             return
           }
+          await sendPushToken(pRes.data.calls.docMobToken, 'Payment Done By')
           setLoading(false)
           setPendingCalls(allPCalls)
         })
@@ -158,7 +246,16 @@ const CallPendingScreen = ({ navigation }) => {
       console.log('Error', tokenRes)
     }
     setLoading(false)
+    const d = new Date(item.extraInfo)
+    const rmr = await getObjectData(
+      `${d.toLocaleDateString()}-${d.toLocaleTimeString()}`
+    )
+    if (rmr) {
+      // await Notifications.cancelScheduledNotificationAsync(rmr.identifier)
+      await removeValue(`${d.toLocaleDateString()}-${d.toLocaleTimeString()}`)
+    }
 
+    await sendPushToken(item.docMobToken, 'Please Join, Video Call Started By')
     navigation.navigate('VideoCall', {
       docId: item.docId,
       userId: user._id,

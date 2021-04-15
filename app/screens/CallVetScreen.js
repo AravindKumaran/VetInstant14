@@ -118,7 +118,7 @@ const CallVetScreen = ({ navigation, route }) => {
   const [error, setError] = useState()
 
   const sendPushToken = async (title, message) => {
-    if (route.params.doc.user.token) {
+    if (route?.params.doc?.user?.token) {
       setLoading(true)
 
       const pushRes = await usersApi.sendPushNotification({
@@ -162,24 +162,6 @@ const CallVetScreen = ({ navigation, route }) => {
   // }
 
   const savePatientProblems = async (values) => {
-    // const patientData = {
-    //   name: user.name,
-    //   problem: values.problems,
-    //   petname: route?.params?.pet.name,
-    //   time: values.time,
-    //   Appetite: values.Appetite,
-    //   Behaviour: values.Behaviour,
-    //   Feces: values.Faces,
-    //   Urine: values.Urine,
-    //   Eyes: values.Eyes,
-    //   Mucous: values.Mucous,
-    //   Ears: values.Ears,
-    //   Skin: values.Skin,
-    //   Gait: values.Gait,
-    //   comment: values.comment,
-    // }
-
-    // console.log('Values', values)
     const form = new FormData()
     if (values.images) {
       values.images.forEach((image, index) => {
@@ -225,20 +207,6 @@ const CallVetScreen = ({ navigation, route }) => {
     setError(null)
     // console.log('Pet Res', res.data)
     setLoading(false)
-    // console.log('Doc', docRes.data)
-    // const docRes = await doctorsApi.savePatientDetails(
-    //   patientData,
-    //   route?.params?.doc._id
-    // )
-    // if (!docRes.ok) {
-    //   setLoading(false)
-    //   console.log(res)
-    //   return
-    // }
-    // setError(null)
-    // console.log('Pet Res', res.data)
-    // console.log('Doc', docRes.data)
-    // setLoading(false)
   }
 
   const handleSubmit = async (values) => {
@@ -253,7 +221,6 @@ const CallVetScreen = ({ navigation, route }) => {
       // })
 
       const penData = {
-        token: user.token,
         // webToken: route.params?.doc?.user?.webToken,
         docId: route.params?.doc?.user?._id,
         docName: route.params?.doc?.user?.name,
@@ -263,6 +230,8 @@ const CallVetScreen = ({ navigation, route }) => {
         userId: user._id,
         petId: route.params?.pet._id,
         status: 'requested',
+        docMobToken: route.params?.doc?.user?.token,
+        userMobToken: user.token,
       }
       setLoading(true)
       await savePatientProblems(values)
