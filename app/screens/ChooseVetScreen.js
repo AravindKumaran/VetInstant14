@@ -37,7 +37,7 @@ const ChooseVetScreen = ({ navigation, route }) => {
       const hosRes = await hospitalsApi.getHospitalsDoctors(user.hospitalId)
       if (!hosRes.ok) {
         setLoading(false)
-        console.log(res)
+        console.log('Error', hosRes)
         return
       }
       let msg = 'Please choose other Vet that is currently available online ?'

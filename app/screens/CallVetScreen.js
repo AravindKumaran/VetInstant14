@@ -225,6 +225,9 @@ const CallVetScreen = ({ navigation, route }) => {
         docId: route.params?.doc?.user?._id,
         docName: route.params?.doc?.user?.name,
         docFee: route?.params?.doc.fee * 1,
+        hospId:
+          route?.params?.doc?.hospital?._id ||
+          route?.params?.doc?.user?.hospitalId,
         paymentDone: false,
         userName: user.name,
         userId: user._id,

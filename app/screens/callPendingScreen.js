@@ -10,6 +10,7 @@ import {
   FlatList,
   RefreshControl,
   SafeAreaView,
+  Alert,
 } from 'react-native'
 
 import AppText from '../components/AppText'
@@ -18,6 +19,8 @@ import AppButton from '../components/AppButton'
 import pendingsApi from '../api/callPending'
 import roomsApi from '../api/rooms'
 import usersApi from '../api/users'
+import doctorsApi from '../api/doctors'
+import hospitalsApi from '../api/hospitals'
 import RazorpayCheckout from 'react-native-razorpay'
 import LoadingIndicator from '../components/LoadingIndicator'
 import AuthContext from '../context/authContext'
@@ -298,6 +301,136 @@ const CallPendingScreen = ({ navigation }) => {
     })
   }
 
+  const checkOtherVetPresence = async (item) => {
+    setLoading(true)
+    const hosRes = await hospitalsApi.getHospitalsDoctors(item.hospId)
+    if (!hosRes.ok) {
+      setLoading(false)
+      console.log('Error', hosRes)
+      return
+    }
+    if (hosRes.data.count === 0) {
+      alert('No doctor from same hospital available')
+      setLoading(false)
+      return
+    }
+    let msg = 'Please choose other Vet that is currently available online ?'
+    if (hosRes.data.count > 0) {
+      console.log('dhff', hosRes.data.doctors[0])
+      const dc = hosRes.data.doctors.find((doc) => {
+        return (
+          doc.user.isOnline &&
+          doc.firstAvailaibeVet &&
+          doc.user.block === false &&
+          doc.user._id !== item.docId
+        )
+      })
+      if (dc) {
+        msg = `Doctor ${dc.user.name} from the same hospital is currently available with consultation Fees of ₹${dc.fee}.\n\n So, Do you want to continue with Doctor ${dc.user.name}?
+          `
+
+        Alert.alert('Info', `Choose other Vet\n\n ${msg}`, [
+          {
+            text: 'No',
+            style: 'cancel',
+          },
+          {
+            text: 'Yes',
+            onPress: async () => {
+              const allPCalls = [...pendingCalls]
+              const pCall = allPCalls.find((p) => p._id === item._id)
+              if (pCall) {
+                pCall.status = 'requested'
+                pCall.docName = dc.user.name
+                pCall.docId = dc.user._id
+                pCall.hospId = dc.hospital._id
+                pCall.docFee = dc.fee
+                pCall.docMobToken = dc.user.token
+              }
+              setLoading(true)
+              const pRes = await pendingsApi.updateCallPending(item._id, pCall)
+              if (!pRes.ok) {
+                console.log('Error', pRes)
+                setLoading(false)
+                return
+              }
+              await sendPushToken(pRes.data.calls.docMobToken)
+              alert(
+                'Notification Sent To Doctor. Please go to pending calls screen for further action'
+              )
+              setLoading(false)
+              setPendingCalls(allPCalls)
+            },
+          },
+        ])
+      } else {
+        alert(`No Vet from same hospital is currently online.\n\n${msg}`)
+      }
+    }
+    setLoading(false)
+  }
+
+  const getOnlineAvailableDoctors = async (item) => {
+    setLoading(true)
+    const res = await doctorsApi.getOnlineDoctors()
+    if (!res.ok) {
+      console.log(res)
+      setLoading(false)
+      return
+    }
+    // console.log('Res', res.data)
+    const dc = res.data.doctors.filter(
+      (doc) =>
+        doc.user?.isOnline === true &&
+        doc.user._id !== item.docId &&
+        doc.firstAvailaibeVet &&
+        doc.user.block === false
+    )
+    if (dc.length > 0) {
+      setLoading(false)
+      const msg = `Doctor ${dc[0].user.name} from ${dc[0]?.hospital?.name} is currently available with consultation Fees of ₹${dc[0].fee}.\n\n So, Do you want to continue with Doctor ${dc[0].user.name}?
+          `
+
+      Alert.alert('Info', `Choose other Vet\n\n ${msg}`, [
+        {
+          text: 'No',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: async () => {
+            const allPCalls = [...pendingCalls]
+            const pCall = allPCalls.find((p) => p._id === item._id)
+            if (pCall) {
+              pCall.status = 'requested'
+              pCall.docName = dc[0].user.name
+              pCall.docId = dc[0].user._id
+              pCall.hospId = dc[0].hospital._id
+              pCall.docFee = dc[0].fee
+              pCall.docMobToken = dc[0].user.token
+            }
+            setLoading(true)
+            const pRes = await pendingsApi.updateCallPending(item._id, pCall)
+            if (!pRes.ok) {
+              console.log('Error', pRes)
+              setLoading(false)
+              return
+            }
+            await sendPushToken(pRes.data.calls.docMobToken)
+            alert(
+              'Notification Sent To Doctor. Please go to pending calls screen for further action'
+            )
+            setLoading(false)
+            setPendingCalls(allPCalls)
+          },
+        },
+      ])
+    } else {
+      setLoading(false)
+      alert('No Vet Is Currently Available.Please Try After Few Minutes.')
+    }
+  }
+
   const _renderItem = ({ item, index }) => (
     <View style={styles.card}>
       <AppText
@@ -331,6 +464,18 @@ const CallPendingScreen = ({ navigation }) => {
         <>
           <AppText style={{ fontWeight: 'bold' }}>Status:</AppText>
           <AppText>Call has been denied</AppText>
+          <AppButton
+            title='Choose Other Vet From Same Hospital (Waiting Time - max. 30 mins)'
+            btnStyle={{ padding: 18, marginBottom: 20 }}
+            txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
+            onPress={() => checkOtherVetPresence(item)}
+          />
+          <AppButton
+            title='First Available Vet Online (Waiting Time - max. 15 mins)'
+            btnStyle={{ padding: 16 }}
+            txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
+            onPress={() => getOnlineAvailableDoctors(item)}
+          />
         </>
       )}
       {item.status === 'scheduled' && (
@@ -352,6 +497,18 @@ const CallPendingScreen = ({ navigation }) => {
             onPress={() => handlePayment(item, 'scheduledPayment')}
           />
           <AppButton title='Deny' onPress={() => handleDeny(item)} />
+          <AppButton
+            title='Choose Other Vet From Same Hospital (Waiting Time - max. 30 mins)'
+            btnStyle={{ padding: 18, marginBottom: 20 }}
+            txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
+            onPress={() => checkOtherVetPresence(item)}
+          />
+          <AppButton
+            title='First Available Vet Online (Waiting Time - max. 15 mins)'
+            btnStyle={{ padding: 16 }}
+            txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
+            onPress={() => getOnlineAvailableDoctors(item)}
+          />
         </>
       )}
       {item.status === 'paymentDone' && item.paymentDone && (
