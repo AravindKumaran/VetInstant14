@@ -91,6 +91,24 @@ const CallPendingScreen = ({ navigation }) => {
       (call) => call.status === 'scheduled'
     )
 
+    const expiredCalls = []
+    const allCalls = pres.data.calls.filter((call) => {
+      if (call?.deleteAfter) {
+        if (dayjs().isSameOrAfter(dayjs(call.deleteAfter))) {
+          expiredCalls.push(call)
+          return
+        } else {
+          return call
+        }
+      } else {
+        return call
+      }
+    })
+
+    expiredCalls.forEach(async (call) => {
+      await pendingsApi.deleteCallPendingAfter(call._id)
+    })
+
     allScheduledCalls.forEach(async (call) => {
       const d = new Date(call.extraInfo)
       const rmr = await getObjectData(
@@ -112,7 +130,8 @@ const CallPendingScreen = ({ navigation }) => {
       }
     })
 
-    setPendingCalls(pres.data.calls)
+    // setPendingCalls(pres.data.calls)
+    setPendingCalls(allCalls)
     setLoading(false)
     setRefreshing(false)
   }
@@ -159,6 +178,13 @@ const CallPendingScreen = ({ navigation }) => {
       if (pCall) {
         pCall.status = str
         pCall.paymentDone = true
+        if (str === 'scheduledPayment') {
+          const d = new Date(item.extraInfo)
+          pCall.deleteAfter = new Date(d.getTime() + 72 * 60 * 60 * 1000)
+        } else {
+          const d = new Date()
+          pCall.deleteAfter = new Date(d.getTime() + 72 * 60 * 60 * 1000)
+        }
       }
       setLoading(true)
       const pRes = await pendingsApi.updateCallPending(item._id, pCall)
@@ -204,6 +230,13 @@ const CallPendingScreen = ({ navigation }) => {
           if (pCall) {
             pCall.status = str
             pCall.paymentDone = true
+            if (str === 'scheduledPayment') {
+              const d = new Date(item.extraInfo)
+              pCall.deleteAfter = new Date(d.getTime() + 72 * 60 * 60 * 1000)
+            } else {
+              const d = new Date()
+              pCall.deleteAfter = new Date(d.getTime() + 72 * 60 * 60 * 1000)
+            }
           }
 
           const pRes = await pendingsApi.updateCallPending(item._id, pCall)

@@ -17,6 +17,9 @@ const updateCallPending = (id, data) => {
 const deleteCallPending = (id) => {
   return client.delete(`${endPoint}/${id}`)
 }
+const deleteCallPendingAfter = (id) => {
+  return client.delete(`${endPoint}/after/${id}`)
+}
 const singleCallPending = (id) => {
   return client.get(`${endPoint}/${id}`)
 }
@@ -26,5 +29,6 @@ export default {
   getCallPendingByUser,
   updateCallPending,
   deleteCallPending,
+  deleteCallPendingAfter,
   singleCallPending,
 }
