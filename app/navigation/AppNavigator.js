@@ -23,7 +23,7 @@ const AppNavigator = ({ navigation }) => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#d8d8d8', //Set Header color
+          backgroundColor: '#FFFFFF', //Set Header color
         },
         headerTitleAlign: 'center',
       }}
@@ -32,8 +32,8 @@ const AppNavigator = ({ navigation }) => {
         name='Home'
         component={HomeScreen}
         options={{
-          title: 'Home', //Set Header Title
-          headerTintColor: 'black', //Set Header text color
+          title: 'VetInstant', //Set Header Title
+          headerTintColor: '#41CE8A', //Set Header text color
           headerTitleStyle: {
             fontSize: 20,
           },

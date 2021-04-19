@@ -170,9 +170,9 @@ const HomeScreen = ({ navigation, route }) => {
     <ScrollView vertical={true}>
       <LoadingIndicator visible={loading} />
       <View style={styles.container}>
-        <AppText style={{ fontWeight: '500', fontSize: 30 }}>
+        {/* <AppText style={{ fontWeight: '500', fontSize: 30 }}>
           Hi {user.name}
-        </AppText>
+        </AppText> */}
 
         <View style={styles.addPetContainer}>
           {loading ? (

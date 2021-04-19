@@ -17,7 +17,7 @@ const DrawerNavigator = () => (
   <Drawer.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: '#d8d8d8',
+        backgroundColor: '#FFFFFF',
         paddingLeft: 20,
       },
       headerTitleAlign: 'center',
