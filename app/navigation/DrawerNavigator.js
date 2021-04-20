@@ -1,31 +1,33 @@
-import React from 'react'
-import { Feather } from '@expo/vector-icons'
-import { createDrawerNavigator } from '@react-navigation/drawer'
+import React from "react";
+import { Feather } from "@expo/vector-icons";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import AppNavigator from './AppNavigator'
-import VetNavigator from './VetNavigator'
-import CallLogScreen from '../screens/CallLogScreen'
+import AppNavigator from "./AppNavigator";
+import VetNavigator from "./VetNavigator";
+import CallLogScreen from "../screens/CallLogScreen";
 
-import DrawerContent from '../components/DrawerContent'
-import ScheduledCallScreen from '../screens/ScheduledCallScreen'
+import DrawerContent from "../components/DrawerContent";
+import ScheduledCallScreen from "../screens/ScheduledCallScreen";
 
-import PendingNavigator from './PendingNavigator'
+import PendingNavigator from "./PendingNavigator";
 
-const Drawer = createDrawerNavigator()
+import BottomTab from "../navigation/BottomTab";
+
+const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => (
   <Drawer.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: "#FFFFFF",
         paddingLeft: 20,
       },
-      headerTitleAlign: 'center',
+      headerTitleAlign: "center",
     }}
-    backBehavior={'order'}
+    backBehavior={"order"}
     drawerContentOptions={{
-      activeBackgroundColor: '#f2f2f2',
-      activeTintColor: '#000000',
+      activeBackgroundColor: "#f2f2f2",
+      activeTintColor: "#000000",
       labelStyle: { fontSize: 18 },
       itemStyle: {
         borderTopRightRadius: 30,
@@ -40,58 +42,59 @@ const DrawerNavigator = () => (
     drawerContent={(props) => <DrawerContent {...props} />}
   >
     <Drawer.Screen
-      name='Home'
-      component={AppNavigator}
+      name="Home"
+      // component={AppNavigator}
+      component={BottomTab}
       options={{
         drawerIcon: ({ color, size }) => (
-          <Feather name='home' size={size} color={color} />
+          <Feather name="home" size={size} color={color} />
         ),
         unmountOnBlur: true,
       }}
     />
 
     <Drawer.Screen
-      name='MyVet'
+      name="MyVet"
       component={VetNavigator}
       options={{
         drawerIcon: ({ color, size }) => (
-          <Feather name='user-plus' size={size} color={color} />
+          <Feather name="user-plus" size={size} color={color} />
         ),
         unmountOnBlur: true,
       }}
     />
     <Drawer.Screen
-      name='PendingCalls'
+      name="PendingCalls"
       component={PendingNavigator}
       options={{
         drawerIcon: ({ color, size }) => (
-          <Feather name='phone-off' size={size} color={color} />
+          <Feather name="phone-off" size={size} color={color} />
         ),
         unmountOnBlur: true,
       }}
     />
     <Drawer.Screen
-      name='CallLog'
+      name="CallLog"
       component={CallLogScreen}
       options={{
         drawerIcon: ({ color, size }) => (
-          <Feather name='phone' size={size} color={color} />
+          <Feather name="phone" size={size} color={color} />
         ),
         headerShown: true,
         unmountOnBlur: true,
-        title: 'Call Log',
+        title: "Call Log",
       }}
     />
     <Drawer.Screen
-      name='ScheduledCall'
+      name="ScheduledCall"
       component={ScheduledCallScreen}
       options={{
         drawerIcon: ({ color, size }) => (
-          <Feather name='phone-outgoing' size={size} color={color} />
+          <Feather name="phone-outgoing" size={size} color={color} />
         ),
         headerShown: true,
         unmountOnBlur: true,
-        title: 'Scheduled Calls',
+        title: "Scheduled Calls",
       }}
     />
     {/* <Drawer.Screen
@@ -104,6 +107,6 @@ const DrawerNavigator = () => (
       }}
     /> */}
   </Drawer.Navigator>
-)
+);
 
-export default DrawerNavigator
+export default DrawerNavigator;

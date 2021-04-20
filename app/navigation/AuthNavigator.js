@@ -7,6 +7,7 @@ import RegisterScreen from "../screens/RegisterScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
+import AddPetScreen from '../screens/AddPetScreen';
 
 const Stack = createStackNavigator();
 

@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
     .label("Confirm Password"),
 });
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ navigation }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
