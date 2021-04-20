@@ -20,9 +20,9 @@ import ChooseVetPicker from "../components/forms/ChooseVetPicker";
 import { Formik } from "formik";
 
 const reminders = [
-  { label: "Deworming", value: "Deworming" },
-  { label: "Medicine", value: "Medicine" },
-  { label: "Vaccine", value: "Vaccine" },
+  { label: "Buttowski", value: "Buttowski" },
+  { label: "Ramsay", value: "Ramsay" },
+  { label: "Mariam", value: "Mariam" },
 ];
 
 const MyVetScreen = ({ navigation }) => {
@@ -73,19 +73,19 @@ const MyVetScreen = ({ navigation }) => {
       src: require("../../assets/doctor2.png"),
       name: "Dr. Bottowski",
       hospital: "VetPlus Veteneriary Hospital",
-      amount: "$20",
+      amount: "$30",
     },
     {
       src: require("../../assets/doctor1.png"),
       name: "Dr. Bottowski",
       hospital: "PetCare Veteneriary Hospital",
-      amount: "$20",
+      amount: "$40",
     },
     {
       src: require("../../assets/doctor2.png"),
       name: "Dr. Bottowski",
       hospital: "VetPlus Veteneriary Hospital",
-      amount: "$20",
+      amount: "$50",
     },
   ];
 
@@ -152,7 +152,7 @@ const MyVetScreen = ({ navigation }) => {
                       </AppText>
                       <AppText>{hospDetail.name}</AppText>
                     </View> */}
-                    <View style={{ paddingTop: 10 }}>
+                    <View style={{ paddingTop: 10, margin: 10 }}>
                       {doctors.map((c, i) => (
                         <>
                           <View key={`${c.name}-${i}`} style={styles.catItem}>
@@ -165,15 +165,21 @@ const MyVetScreen = ({ navigation }) => {
                                 borderRadius: 30,
                                 borderWidth: 2.5,
                                 borderColor: "#FFFFFF",
+                                padding: 10,
                               }}
                             />
-                            <View style={{ flexDirection: "column" }}>
-                              <Text>{c.name}</Text>
-                              <Text>{c.hospital}</Text>
+                            <View
+                              style={{
+                                flexDirection: "column",
+                                marginLeft: 10,
+                              }}
+                            >
+                              <Text style={styles.text1}>{c.name}</Text>
+                              <Text style={styles.text2}>{c.hospital}</Text>
                             </View>
                             <View style={styles.Rectangle}>
                               <TouchableOpacity>
-                                <Text style={styles.text1}>{c.amount}</Text>
+                                <Text style={styles.text3}>{c.amount}</Text>
                               </TouchableOpacity>
                             </View>
                           </View>
@@ -252,23 +258,36 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     marginRight: 180,
   },
-  Rectangle: {
-    width: 80,
-    height: 30,
-    backgroundColor: "#f3f3f3",
-    borderRadius: 20,
-    right: 0,
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#51DA98",
-  },
+  // Rectangle: {
+  //   width: 80,
+  //   height: 30,
+  //   backgroundColor: "#f3f3f3",
+  //   borderRadius: 20,
+  //   left: 10,
+  //   justifyContent: "center",
+  //   alignContent: "center",
+  //   alignItems: "center",
+  //   borderWidth: 1,
+  //   borderColor: "#51DA98",
+  // },
   text1: {
+    fontFamily: "Proxima Nova",
+    fontWeight: "700",
+    fontSize: 12,
+    color: "#47687F",
+  },
+  text2: {
     fontFamily: "Proxima Nova",
     fontWeight: "400",
     fontSize: 12,
-    color: "#51DA98",
+    color: "#839BAB",
+  },
+  text3: {
+    fontFamily: "Proxima Nova",
+    fontWeight: "700",
+    fontSize: 20,
+    color: "#47687F",
+    marginLeft: 70,
   },
 });
 
