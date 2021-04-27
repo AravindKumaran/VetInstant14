@@ -1,47 +1,56 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 
-import { StyleSheet, ScrollView, View } from 'react-native'
-import AppButton from '../components/AppButton'
-import AppText from '../components/AppText'
-import { Feather } from '@expo/vector-icons'
-import * as Notifications from 'expo-notifications'
+import { StyleSheet, ScrollView, View } from "react-native";
+import AppButton from "../components/AppButton";
+import AppText from "../components/AppText";
+import { Feather } from "@expo/vector-icons";
+import * as Notifications from "expo-notifications";
 
 import {
   getObjectData,
   getAllKeys,
   clearAll,
   removeValue,
-} from '../components/utils/reminderStorage'
+} from "../components/utils/reminderStorage";
+
+import ChoosePicker from "../components/forms/ChoosePicker";
+import { Formik } from "formik";
+
+const pet = [
+  { label: "Bruno", value: "Bruno" },
+  { label: "Kit", value: "Kit" },
+  { label: "Drogon", value: "Drogon" },
+];
 
 const ReminderScreen = ({ navigation }) => {
-  const [todayReminders, setTodayReminders] = useState([])
-  const [upcomingReminders, setUpcomingReminders] = useState([])
+  const [todayReminders, setTodayReminders] = useState([]);
+  const [upcomingReminders, setUpcomingReminders] = useState([]);
 
   const getReminders = async () => {
-    const data = await getAllKeys()
+    const data = await getAllKeys();
     // console.log(data)
 
     if (data.length > 0) {
       data.forEach(async (dateTime) => {
-        console.log('Dateime', dateTime)
-        const date = dateTime.split('-')[0]
+        console.log("Dateime", dateTime);
+        const date = dateTime.split("-")[0];
         if (date === new Date().toLocaleDateString()) {
-          const rmr = await getObjectData(dateTime)
-          todayReminders.push(rmr)
+          const rmr = await getObjectData(dateTime);
+          todayReminders.push(rmr);
         } else {
-          const rmr = await getObjectData(dateTime)
-          upcomingReminders.push(rmr)
+          const rmr = await getObjectData(dateTime);
+          upcomingReminders.push(rmr);
         }
 
-        setTodayReminders([...Array.from(new Set(todayReminders))])
-        setUpcomingReminders([...new Set(upcomingReminders)])
-      })
+        setTodayReminders([...Array.from(new Set(todayReminders))]);
+        setUpcomingReminders([...new Set(upcomingReminders)]);
+      });
     }
-  }
+  };
 
   useEffect(() => {
-    getReminders()
-  }, [])
+    getReminders();
+  }, []);
 
   return (
     <ScrollView>
@@ -49,10 +58,17 @@ const ReminderScreen = ({ navigation }) => {
         {/* {todayReminders.length === 0 && upcomingReminders.length === 0 && (
           <AppText>There's no reminders found!</AppText>
         )} */}
+        <Formik
+          initialValues={{
+            pet: "",
+          }}
+        >
+          <ChoosePicker items={pet} label="Choose your pet" name="pet" />
+        </Formik>
         <AppButton
-          title='New Reminder'
+          title="New Reminder"
           onPress={() =>
-            navigation.navigate('AddReminder', {
+            navigation.navigate("AddReminder", {
               rmr: todayReminders,
             })
           }
@@ -66,21 +82,21 @@ const ReminderScreen = ({ navigation }) => {
                 <View style={styles.innerCard}>
                   <AppText style={{ flex: 1 }}>{rmr.reminder}</AppText>
                   <Feather
-                    name='trash-2'
+                    name="trash-2"
                     size={22}
-                    color='#6e6969'
+                    color="#6e6969"
                     style={styles.icon}
                     onPress={async () => {
                       await Notifications.cancelScheduledNotificationAsync(
                         rmr.identifier
-                      )
-                      const d = new Date(rmr.date)
+                      );
+                      const d = new Date(rmr.date);
 
                       await removeValue(
                         `${d.toLocaleDateString()}-${d.toLocaleTimeString()}`
-                      )
-                      todayReminders.splice(index, 1)
-                      setTodayReminders([...todayReminders])
+                      );
+                      todayReminders.splice(index, 1);
+                      setTodayReminders([...todayReminders]);
                     }}
                   />
                 </View>
@@ -96,27 +112,27 @@ const ReminderScreen = ({ navigation }) => {
               <View key={index} style={styles.card}>
                 <AppText style={{ fontSize: 15 }}>
                   {rmr.endDate
-                    ? rmr.endDate.split('T')[0]
-                    : rmr.date.split('T')[0]}
+                    ? rmr.endDate.split("T")[0]
+                    : rmr.date.split("T")[0]}
                 </AppText>
                 <View style={styles.innerCard}>
                   <AppText style={{ flex: 1 }}>{rmr.reminder}</AppText>
                   <Feather
-                    name='trash-2'
+                    name="trash-2"
                     size={22}
-                    color='#6e6969'
+                    color="#6e6969"
                     style={styles.icon}
                     onPress={async () => {
                       await Notifications.cancelScheduledNotificationAsync(
                         rmr.identifier
-                      )
-                      const d = new Date(rmr.date)
+                      );
+                      const d = new Date(rmr.date);
 
                       await removeValue(
                         `${d.toLocaleDateString()}-${d.toLocaleTimeString()}`
-                      )
-                      upcomingReminders.splice(index, 1)
-                      setUpcomingReminders([...upcomingReminders])
+                      );
+                      upcomingReminders.splice(index, 1);
+                      setUpcomingReminders([...upcomingReminders]);
                     }}
                   />
                 </View>
@@ -126,26 +142,26 @@ const ReminderScreen = ({ navigation }) => {
         )}
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 25,
-    marginVertical: 30,
+    // marginHorizontal: 25,
+    // marginVertical: 30,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingVertical: 20,
     paddingHorizontal: 30,
     marginVertical: 10,
     borderRadius: 10,
   },
   innerCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-})
+});
 
-export default ReminderScreen
+export default ReminderScreen;

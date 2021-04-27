@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Bottom2 from "../screens/bottom2";
-import Bottom3 from "../screens/bottom3";
+import PetLobby from "../screens/PetLobby";
+import Room from "../screens/Room";
 import HomeScreen from "../screens/HomeScreen";
 import {
   Image,
@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import AppNavigator from "./AppNavigator";
+import ChatScreen from "../screens/ChatScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -62,8 +63,8 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name={"Bottom2"}
-        component={Bottom2}
+        name={"PetLobby"}
+        component={PetLobby}
         options={{
           tabBarIcon: ({ focused, color }) => (
             <>
@@ -76,8 +77,8 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name={"Bottom3"}
-        component={Bottom3}
+        name={"Room"}
+        component={Room}
         options={{
           tabBarIcon: ({ focused, tintColor }) => (
             <>

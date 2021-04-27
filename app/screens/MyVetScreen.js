@@ -80,6 +80,7 @@ const MyVetScreen = ({ navigation }) => {
   const doctors = [
     {
       src: require("../../assets/doctor1.png"),
+      src: require("../../assets/doctor1.png"),
       name: "Dr. Bottowski",
       hospital: "PetCare Veteneriary Hospital",
       amount: "$20",
