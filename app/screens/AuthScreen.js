@@ -70,10 +70,10 @@ const AuthScreen = ({ route, navigation }) => {
     <>
       <LoadingIndicator visible={loading} />
       <View style={styles.container}>
-        <View>
+        {/* <View>
           <Text style={styles.text}>VetInstant</Text>
           <Text style={styles.title}>{title}</Text>
-        </View>
+        </View> */}
 
         <AppButton title='Continue with Email ID' onPress={handlePress} />
 
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 15,
+    padding: 25,
   },
   text: {
     fontSize: 25,
