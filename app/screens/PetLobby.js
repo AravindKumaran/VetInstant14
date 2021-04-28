@@ -16,6 +16,7 @@ import ReminderScreen from "./ReminderScreen";
 import PetPrescriptionScreen from "../screens/PetPrescription";
 import MedicalHistory from "../screens/MedicalHistory";
 import PetMedication from "./PetMedication";
+import PetVaccination from "./PetVaccination";
 
 const MyCustomLeftComponent = ({ navigation }) => {
   return (
@@ -280,7 +281,7 @@ const PetLobby = () => {
       {active === "prescriptions" && <PetPrescriptionScreen />}
       {active === "reminders" && <ReminderScreen />}
       {active === "history" && <MedicalHistory />}
-      {active === "medication" && <PetMedication />}
+      {active === "medication" && <PetVaccination />}
     </View>
   );
 };
