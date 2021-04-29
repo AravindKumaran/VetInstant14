@@ -281,6 +281,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 25,
     marginVertical: 30,
+    marginBottom: 50,
   },
   dateTime: {
     flexDirection: 'row',
