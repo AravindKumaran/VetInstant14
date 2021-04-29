@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-import { Image, StyleSheet, View, Text } from "react-native";
+import { Image, StyleSheet, View, Text, Dimensions } from "react-native";
 import AppText from "../components/AppText";
 
 import petsApi from "../api/pets";
@@ -11,10 +11,22 @@ import Feather from "react-native-vector-icons/Feather";
 import ChoosePicker from "../components/forms/ChoosePicker";
 import { Formik } from "formik";
 
+import RBSheet from "react-native-raw-bottom-sheet";
+import AppFormField from "../components/forms/AppFormField";
+import AppButton from "../components/AppButton";
+import AddPrescription from "../screens/AddPrescription";
+import AddReminderScreen from "../screens/AddReminderScreen";
+
 const pet = [
   { label: "Bruno", value: "Bruno" },
   { label: "Kit", value: "Kit" },
   { label: "Drogon", value: "Drogon" },
+];
+
+const time = [
+  { label: "Morning", value: "Morning" },
+  { label: "Afternoon", value: "Afternoon" },
+  { label: "Night", value: "Night" },
 ];
 
 const doctors = [
@@ -32,6 +44,8 @@ const PetPrescriptionScreen = ({ route }) => {
   const [petPrescriptions, setPetPrescriptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+
+  const refRBSheet = useRef();
 
   useEffect(() => {
     const getPetPrescriptions = async () => {
@@ -86,7 +100,7 @@ const PetPrescriptionScreen = ({ route }) => {
                 automatically updated here but for prescriptions from externall
                 sources, you can add your prescriptions manually.
               </AppText>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => refRBSheet.current.open()}>
                 <Feather
                   name={"plus-circle"}
                   size={50}
@@ -98,6 +112,27 @@ const PetPrescriptionScreen = ({ route }) => {
                   }}
                 />
               </TouchableOpacity>
+              <RBSheet
+                ref={refRBSheet}
+                height={Dimensions.get("window").height - 200}
+                animationType="fade"
+                closeOnDragDown={true}
+                customStyles={{
+                  wrapper: {
+                    backgroundColor: "rgba(0,0,0,.6)",
+                  },
+                  draggableIcon: {
+                    backgroundColor: "#C4C4C4",
+                  },
+                  container: {
+                    backgroundColor: "#FFFFFF",
+                    borderTopRightRadius: 25,
+                    borderTopLeftRadius: 25,
+                  },
+                }}
+              >
+                <AddPrescription />
+              </RBSheet>
               <View
                 style={{
                   borderWidth: 0.5,
@@ -216,7 +251,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: 20,
   },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "red",
     marginVertical: 10,
     padding: 20,
     borderRadius: 5,
