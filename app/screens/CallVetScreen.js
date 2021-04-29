@@ -232,6 +232,7 @@ const CallVetScreen = ({ navigation, route }) => {
         userName: user.name,
         userId: user._id,
         petId: route.params?.pet._id,
+        petName: route.params?.pet.name,
         status: 'requested',
         docMobToken: route.params?.doc?.user?.token,
         userMobToken: user.token,

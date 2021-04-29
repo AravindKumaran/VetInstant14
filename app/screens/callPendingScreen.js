@@ -11,6 +11,8 @@ import {
   RefreshControl,
   SafeAreaView,
   Alert,
+  TouchableOpacity,
+  Image,
 } from 'react-native'
 
 import AppText from '../components/AppText'
@@ -433,26 +435,153 @@ const CallPendingScreen = ({ navigation }) => {
 
   const _renderItem = ({ item, index }) => (
     <View style={styles.card}>
-      <AppText
-        style={{
-          textTransform: 'capitalize',
-          fontSize: 22,
-          color: '#344247',
-        }}
-      >
-        Dr. {item.docName}
-      </AppText>
+      <View>
+        <AppText
+          style={{
+            textTransform: 'capitalize',
+            fontSize: 18,
+            color: '#47687F',
+            fontWeight: '700',
+            margin: 5,
+            marginLeft: 0,
+          }}
+        >
+          Dr. {item.docName}
+          {item?.petName ? ` & ${item?.petName} ` : ''}
+        </AppText>
+        <View
+          style={{
+            position: 'absolute',
+            right: -13,
+            top: 55,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          <Image
+            source={require('../../assets/doctor1.png')}
+            size={15}
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 30,
+              borderWidth: 2.5,
+              borderColor: '#FFFFFF',
+              padding: 10,
+            }}
+          />
+          <Image
+            source={require('../../assets/doctor2.png')}
+            size={15}
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 30,
+              borderWidth: 2.5,
+              borderColor: '#FFFFFF',
+              padding: 10,
+            }}
+          />
+        </View>
+      </View>
       {item.status === 'requested' && (
         <>
-          <AppText style={{ fontWeight: 'bold' }}>Status:</AppText>
-          <AppText>Waiting for doctor confirmation</AppText>
-          <AppButton title='Deny' onPress={() => handleDeny(item)} />
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Status:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Waiting...
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Room:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Dr. {item.docName} and {item.userName} has joined the room...
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 16,
+              color: '#47687F',
+              fontWeight: '500',
+              marginVertical: 15,
+              textAlign: 'center',
+            }}
+          >
+            Waiting for Vet's Confirmation...
+          </AppText>
+          {/* <AppButton title='Deny' onPress={() => handleDeny(item)} /> */}
         </>
       )}
       {item.status === 'accepted' && (
         <>
-          <AppText style={{ fontWeight: 'bold' }}>Status:</AppText>
-          <AppText>Doctor Approved, proceed to payment</AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Status:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Doctor Approved, proceed to payment
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Room:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Dr. {item.docName} and {item.userName} has joined the room...
+          </AppText>
           <AppButton
             title='Make Payment'
             onPress={() => handlePayment(item, 'paymentDone')}
@@ -462,9 +591,69 @@ const CallPendingScreen = ({ navigation }) => {
       )}
       {item.status === 'deny' && (
         <>
-          <AppText style={{ fontWeight: 'bold' }}>Status:</AppText>
-          <AppText>Call has been denied</AppText>
-          <AppButton
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Status:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Call has been denied
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Room:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Dr. {item.docName} and {item.userName} has joined the room...
+          </AppText>
+          <View style={{ alignItems: 'center', margin: 5 }}>
+            <View style={{ margin: 5 }}>
+              <Text style={styles.text2}>Vet has rejected your request</Text>
+            </View>
+            <TouchableOpacity style={{ margin: 5 }}>
+              <Text style={styles.text3}>Schedule a call via chat</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ margin: 5 }}
+              onPress={() => checkOtherVetPresence(item)}
+            >
+              <Text style={styles.text3}>
+                Choose other vet from same hospital
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ margin: 5 }}
+              onPress={() => getOnlineAvailableDoctors(item)}
+            >
+              <Text style={styles.text3}>Search for first available vet</Text>
+            </TouchableOpacity>
+          </View>
+          {/* <AppButton
             title='Choose Other Vet From Same Hospital (Waiting Time - max. 30 mins)'
             btnStyle={{ padding: 18, marginBottom: 20 }}
             txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
@@ -475,14 +664,30 @@ const CallPendingScreen = ({ navigation }) => {
             btnStyle={{ padding: 16 }}
             txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
             onPress={() => getOnlineAvailableDoctors(item)}
-          />
+          /> */}
         </>
       )}
       {item.status === 'scheduled' && (
         <>
-          <AppText style={{ fontWeight: 'bold' }}>Status:</AppText>
-          <AppText>
-            Doctor has requested to schedule the call at{' '}
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Status:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 3,
+            }}
+          >
+            Call Scheduled at{' '}
             <AppText style={{ fontWeight: 'bold' }}>
               {dayjs(item.extraInfo).format('hh:mm A')}
             </AppText>
@@ -491,39 +696,172 @@ const CallPendingScreen = ({ navigation }) => {
               {dayjs(item.extraInfo).format('DD/MM/YYYY')}
             </AppText>
           </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Room:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Dr. {item.docName} and {item.userName} has joined the room...
+          </AppText>
+
+          <View style={{ margin: 5 }}>
+            <AppText style={[styles.text2, { textAlign: 'center' }]}>
+              Your vet has scheduled the call at{' '}
+              <AppText style={{ fontWeight: 'bold' }}>
+                {dayjs(item.extraInfo).format('hh:mm A')}
+              </AppText>
+              on
+              <AppText style={{ fontWeight: 'bold' }}>
+                {dayjs(item.extraInfo).format('DD/MM/YYYY')}
+              </AppText>
+            </AppText>
+          </View>
 
           <AppButton
-            title='Accept & Make Payment'
+            title='Accept & Pay'
             onPress={() => handlePayment(item, 'scheduledPayment')}
           />
-          <AppButton title='Deny' onPress={() => handleDeny(item)} />
-          <AppButton
-            title='Choose Other Vet From Same Hospital (Waiting Time - max. 30 mins)'
-            btnStyle={{ padding: 18, marginBottom: 20 }}
-            txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
-            onPress={() => checkOtherVetPresence(item)}
-          />
-          <AppButton
-            title='First Available Vet Online (Waiting Time - max. 15 mins)'
-            btnStyle={{ padding: 16 }}
-            txtStyle={{ textTransform: 'capitalize', textAlign: 'center' }}
-            onPress={() => getOnlineAvailableDoctors(item)}
-          />
+          <View style={{ alignItems: 'center', margin: 5 }}>
+            <View style={{ margin: 5 }}>
+              <Text style={styles.text2}>OR</Text>
+            </View>
+            <TouchableOpacity
+              style={{ margin: 5 }}
+              onPress={() => checkOtherVetPresence(item)}
+            >
+              <Text style={styles.text3}>
+                Choose other vet from same hospital
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ margin: 5 }}
+              onPress={() => getOnlineAvailableDoctors(item)}
+            >
+              <Text style={styles.text3}>Search for first available vet</Text>
+            </TouchableOpacity>
+          </View>
         </>
       )}
       {item.status === 'paymentDone' && item.paymentDone && (
         <>
-          <AppText style={{ fontWeight: 'bold' }}>Status:</AppText>
-          <AppText>Payment Succesfully Done</AppText>
-          <AppText>Please Join The Call</AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Status:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Payment Succesfully Done
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Room:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Dr. {item.docName} and {item.userName} has joined the room...
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 14,
+              color: '#FA7C7C',
+              fontWeight: '700',
+              margin: 5,
+              textAlign: 'center',
+            }}
+          >
+            Please Join The Call
+          </AppText>
           <AppButton title='Join Now' onPress={() => handleVideo(item)} />
         </>
       )}
       {item.status === 'scheduledPayment' && item.paymentDone && (
         <>
-          <AppText style={{ fontWeight: 'bold' }}>Status:</AppText>
-          <AppText>Payment Done</AppText>
-          <AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Status:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Payment Done
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '700',
+              margin: 3,
+            }}
+          >
+            Room:
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 12,
+              color: '#47687F',
+              fontWeight: '400',
+              margin: 5,
+            }}
+          >
+            Dr. {item.docName} and {item.userName} has joined the room...
+          </AppText>
+          <AppText
+            style={{
+              fontSize: 14,
+              color: '#FA7C7C',
+              fontWeight: '400',
+              margin: 5,
+              textAlign: 'center',
+            }}
+          >
             Call Scheduled at
             <AppText style={{ fontWeight: 'bold' }}>
               {dayjs(item.extraInfo).format('hh:mm A')}
@@ -533,12 +871,23 @@ const CallPendingScreen = ({ navigation }) => {
               {dayjs(item.extraInfo).format('DD/MM/YYYY')}
             </AppText>
           </AppText>
+
           <AppButton title='Join Now' onPress={() => handleVideo(item)} />
           {/* {dayjs().isSameOrAfter(dayjs(item.extraInfo)) && (
 
           )} */}
         </>
       )}
+      <View
+        style={{
+          height: 1,
+          borderBottomWidth: 0.5,
+          borderColor: 'grey',
+          width: '90%',
+          alignSelf: 'center',
+          marginTop: 5,
+        }}
+      />
     </View>
   )
 
@@ -579,6 +928,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginVertical: 10,
     borderRadius: 10,
+    marginBottom: 40,
+  },
+  text2: {
+    color: '#FA7C7C',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  text3: {
+    color: '#37CF86',
+    fontSize: 12,
+    fontWeight: '400',
   },
 })
 
