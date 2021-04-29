@@ -148,7 +148,7 @@ const PetLobby = () => {
             </Text>
           </TouchableWithoutFeedback>
         </View>
-        <View>
+        {/* <View>
           {active === "medication" ? <ActiveStyle /> : <View />}
           <TouchableWithoutFeedback onPress={() => handleActive("medication")}>
             <Text
@@ -160,7 +160,7 @@ const PetLobby = () => {
               Pet Medication
             </Text>
           </TouchableWithoutFeedback>
-        </View>
+        </View> */}
       </View>
       {active === "vetcalls" && (
         <View>
@@ -281,7 +281,7 @@ const PetLobby = () => {
       {active === "prescriptions" && <PetPrescriptionScreen />}
       {active === "reminders" && <ReminderScreen />}
       {active === "history" && <MedicalHistory />}
-      {active === "medication" && <PetVaccination />}
+      {/* {active === "medication" && <PetVaccination />} */}
     </View>
   );
 };
