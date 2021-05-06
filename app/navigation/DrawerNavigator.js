@@ -13,6 +13,8 @@ import PendingNavigator from "./PendingNavigator";
 
 import BottomTab from "../navigation/BottomTab";
 
+import RadioButtonPets from "../screens/RadioButton";
+
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => (
@@ -65,7 +67,7 @@ const DrawerNavigator = () => (
     />
     <Drawer.Screen
       name="PendingCalls"
-      component={PendingNavigator}
+      component={RadioButtonPets}
       options={{
         drawerIcon: ({ color, size }) => (
           <Feather name="phone-off" size={size} color={color} />

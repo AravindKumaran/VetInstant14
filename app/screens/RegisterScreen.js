@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -69,67 +69,114 @@ const RegisterScreen = ({ navigation }) => {
           Register
         </AppText> */}
 
-        {error && <ErrorMessage error={error} visible={!loading} />}
+        <View style={{ marginTop: 60, marginHorizontal: 30 }}>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#F6F6F6",
+              borderRadius: 75,
+              justifyContent: "center",
+              alignItems: "center",
+              alignContent: "center",
+              alignSelf: "center",
+              padding: 10,
+              width: 320,
+              height: 60,
+              marginBottom: 20,
+            }}
+          >
+            <Image source={require("../../assets/google.png")} />
+          </TouchableOpacity>
 
-        <Formik
-          initialValues={{ email: "", password: "", name: "" }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          {() => (
-            <>
-              <AppFormField
-                icon="account"
-                autoCapitalize="none"
-                autoCorrect={false}
-                name="name"
-                placeholder="Name"
-              />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+          >
+            <View
+              style={{
+                marginLeft: "17%",
+                flex: 1,
+                height: 1,
+                backgroundColor: "#47687F",
+              }}
+            />
+            <View>
+              <Text style={styles.text1}>OR</Text>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                height: 1,
+                backgroundColor: "#47687F",
+                marginRight: "17%",
+              }}
+            />
+          </View>
 
-              <AppFormField
-                icon="email"
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="email-address"
-                name="email"
-                placeholder="Email ID"
-              />
+          {error && <ErrorMessage error={error} visible={!loading} />}
 
-              <AppFormField
-                autoCapitalize="none"
-                autoCorrect={false}
-                icon="lock"
-                name="password"
-                secureTextEntry
-                placeholder="Password"
-              />
+          <Formik
+            initialValues={{ email: "", password: "", name: "" }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            {() => (
+              <>
+                <AppFormField
+                  icon="account"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  name="name"
+                  placeholder="Name"
+                />
 
-              <AppFormField
-                autoCapitalize="none"
-                autoCorrect={false}
-                icon="lock"
-                name="cnfPassword"
-                secureTextEntry
-                placeholder="Confirm Password"
-              />
+                <AppFormField
+                  icon="email"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  name="email"
+                  placeholder="Email ID"
+                />
 
-              <TouchableOpacity
-                style={{ alignSelf: "center", paddingTop: 5 }}
-                onPress={() => navigation.navigate("Login")}
-              >
-                <Text style={{ fontSize: 14, fontWeight: "700" }}>
-                  <Text style={{ color: "#47687F" }}>
-                    Already have an account?
-                  </Text>{" "}
-                  <Text style={{ color: "#49D491" }}>Sign In</Text>
-                </Text>
-              </TouchableOpacity>
-              <View style={{ top: 50 }}>
-                <SubmitButton title="Get Started" />
-              </View>
-            </>
-          )}
-        </Formik>
+                <AppFormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  icon="lock"
+                  name="password"
+                  secureTextEntry
+                  placeholder="Password"
+                />
+
+                <AppFormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  icon="lock"
+                  name="cnfPassword"
+                  secureTextEntry
+                  placeholder="Confirm Password"
+                />
+
+                <TouchableOpacity
+                  style={{ alignSelf: "center", paddingTop: 5 }}
+                  onPress={() => navigation.navigate("Login")}
+                >
+                  <Text style={{ fontSize: 14, fontWeight: "700" }}>
+                    <Text style={{ color: "#47687F" }}>
+                      Already have an account?
+                    </Text>{" "}
+                    <Text style={{ color: "#49D491" }}>Sign In</Text>
+                  </Text>
+                </TouchableOpacity>
+                <View style={{ top: 50 }}>
+                  <SubmitButton title="Get Started" />
+                </View>
+              </>
+            )}
+          </Formik>
+        </View>
       </View>
     </>
   );
@@ -138,9 +185,18 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    marginHorizontal: 30,
-    marginTop: 60,
+    marginHorizontal: 0,
+    backgroundColor: "#E5E5E5",
+    // justifyContent: "center",
+  },
+  text1: {
+    color: "#47687F",
+    fontFamily: "Proxima Nova",
+    fontWeight: "700",
+    fontSize: 12,
+    textAlign: "center",
+    paddingRight: "5%",
+    paddingLeft: "5%",
   },
 });
 
