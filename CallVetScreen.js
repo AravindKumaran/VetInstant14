@@ -70,11 +70,11 @@ const Feces1 = [
 ];
 
 const Urine = [
-  { id: 1, name: "Normal" },
-  { id: 2, name: "Not Observed" },
-  { id: 3, name: "Abnormal Colour" },
-  { id: 4, name: "Abnormal Odour" },
-  { id: 5, name: "Worms" },
+  { label: "Normal", name: "Normal" },
+  { label: "Not Observed", name: "Not Observed" },
+  { label: "Abnormal Colour", name: "Abnormal Colour" },
+  { label: "Abnormal Odour", name: "Abnormal Odour" },
+  { label: "Worms", name: "Worms" },
 ];
 
 const Eyes = [
@@ -179,10 +179,10 @@ const validationSchema = Yup.object().shape({
   day: Yup.number().required().label("Day"),
   comment: Yup.string().required("Please enter comment"),
 
-  feces_comment: Yup.string().nullable(),
-  urine_comment: Yup.string().nullable(),
-  skin_comment: Yup.string().nullable(),
-  general_comment: Yup.string().nullable(),
+  feces_comment: Yup.string().required("Please enter feces comment"),
+  urine_comment: Yup.string().required("Please enter urine comment"),
+  skin_comment: Yup.string().required("Please enter skin comment"),
+  general_comment: Yup.string().required("Please enter general comment"),
 
   appetite: Yup.string().nullable().required("Please select a appetite"),
   behaviour: Yup.string().nullable().required("Please select a behaviour"),
@@ -191,11 +191,10 @@ const validationSchema = Yup.object().shape({
   mucous: Yup.string().nullable().required("Please select a mucous"),
   gait: Yup.string().nullable().required("Please select a gait"),
   eyes: Yup.string().required("Please select a eyes"),
-  nose: Yup.string().required("Please select a nose"),
 
   ears: Yup.array().required().min(1).label("Ears"),
   skin: Yup.array().required().min(1).label("Skin"),
-  feces: Yup.array().required().min(1).label("Feces"),
+  faces: Yup.array().required().min(1).label("Faces"),
   urine: Yup.array().required().min(1).label("Urine"),
 });
 
@@ -271,7 +270,7 @@ const CallVetScreen = ({ navigation, route }) => {
     form.append("Appetite", values.appetite);
     form.append("Behaviour", values.behaviour);
     form.append("Activity", values.activity);
-    values.feces.forEach((fc) => {
+    values.faces.forEach((fc) => {
       form.append("Feces", fc);
     });
     form.append("feces_comment", values.feces_comment);
@@ -391,7 +390,7 @@ const CallVetScreen = ({ navigation, route }) => {
             appetite: "",
             behaviour: "",
             activity: "",
-            feces: [],
+            faces: [],
             feces_comment: "",
             urine: [],
             urine_comment: "",
@@ -468,27 +467,27 @@ const CallVetScreen = ({ navigation, route }) => {
 
                 <Text style={styles.text1}>Appetite</Text>
                 <RadioButtons
-                  items={Appetite}
+                  radio_props={Appetite}
                   label="Appetite"
                   name="appetite"
                 />
 
                 <Text style={styles.text1}>General Behaviour</Text>
                 <RadioButtons
-                  items={Behaviour}
+                  radio_props={Behaviour}
                   label="Behaviour"
                   name="behaviour"
                 />
 
                 <Text style={styles.text1}>Activity</Text>
                 <RadioButtons
-                  items={Activity}
+                  radio_props={Activity}
                   label="Activity"
                   name="activity"
                 />
 
                 <Text style={styles.text1}>Feces</Text>
-                <CheckList items={Feces1} label="Feces" name="feces" />
+                <CheckList listItems={Feces1} label="Feces" name="feces" />
                 <Text style={styles.text2}>Comments</Text>
                 <AppFormField
                   label="Comments"
@@ -500,7 +499,7 @@ const CallVetScreen = ({ navigation, route }) => {
                 />
 
                 <Text style={styles.text1}>Urine</Text>
-                <CheckList items={Urine} label="Urine" name="urine" />
+                <RadioButtons radio_props={Urine} label="Urine" name="urine" />
 
                 <Text style={styles.text2}>Comments</Text>
                 <AppFormField
@@ -513,23 +512,27 @@ const CallVetScreen = ({ navigation, route }) => {
                 />
 
                 <Text style={styles.text1}>Eyes</Text>
-                <RadioButtons items={Eyes} label="Eyes" name="eyes" />
+                <RadioButtons radio_props={Eyes} label="Eyes" name="eyes" />
 
                 <Text style={styles.text1}>Mucous Membrane of the Eye</Text>
                 <Text style={styles.text3}>
                   Gently pull down a lower eyellabel with a finger and note its
                   colour. Choose the most appropriate colour description below.
                 </Text>
-                <RadioButtons items={Mucous} label="Mucous" name="mucous" />
+                <RadioButtons
+                  radio_props={Mucous}
+                  label="Mucous"
+                  name="mucous"
+                />
 
                 <Text style={styles.text1}>Ears</Text>
-                <CheckList items={Ears1} label="Ears" name="ears" />
+                <CheckList listItems={Ears1} label="Ears" name="ears" />
 
                 <Text style={styles.text1}>Nose</Text>
-                <RadioButtons items={Nose} label="Nose" name="nose" />
+                <RadioButtons radio_props={Nose} label="Nose" name="nose" />
 
                 <Text style={styles.text1}>Skin and Coats</Text>
-                <CheckList items={Skin1} label="Skin" name="skin" />
+                <CheckList listItems={Skin1} label="Skin" name="skin" />
 
                 <Text style={styles.text2}>Comments</Text>
                 <AppFormField
@@ -542,7 +545,7 @@ const CallVetScreen = ({ navigation, route }) => {
                 />
 
                 <Text style={styles.text1}>Gait</Text>
-                <RadioButtons items={Gait} label="Gait" name="gait" />
+                <RadioButtons radio_props={Gait} label="Gait" name="gait" />
 
                 <Text style={styles.text1}>General Comments</Text>
                 <AppFormField

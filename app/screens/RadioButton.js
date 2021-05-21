@@ -200,7 +200,22 @@ const RadioButtonPets = () => {
       />
       <Formik
         initialValues={{
-          pet: "",
+          problems: "",
+          photo: null,
+          videoCall: true,
+          images: [],
+          time: "",
+          comment: "",
+          appetite: "",
+          behaviour: "",
+          activity: "",
+          faces: [],
+          urine: [],
+          eyes: "",
+          mucous: "",
+          ears: [],
+          skin: [],
+          gait: "",
         }}
       >
         <>
@@ -419,39 +434,43 @@ const RadioButtonPets = () => {
           </View>
         </>
       </Formik>
-      <AppButton
-        title="Start a video call"
-        onPress={() => refRBSheet.current.open()}
-      />
-      <RBSheet
-        ref={refRBSheet}
-        height={Dimensions.get("window").height - 500}
-        animationType="fade"
-        closeOnDragDown={false}
-        customStyles={{
-          wrapper: {
-            backgroundColor: "rgba(0,0,0,.6)",
-          },
-          draggableIcon: {
-            backgroundColor: "#C4C4C4",
-          },
-          container: {
-            backgroundColor: "#FFFFFF",
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20,
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            bottom: "40%",
-            width: "95%",
-            alignSelf: "center",
-          },
-        }}
-      >
-        <VideoAuthentication />
-      </RBSheet>
-      <Text style={styles.text4}>(Video calls applies consultation fees)</Text>
+      <View style={{ marginBottom: 70 }}>
+        <AppButton
+          title="Start a video call"
+          onPress={() => refRBSheet.current.open()}
+        />
+        <RBSheet
+          ref={refRBSheet}
+          height={Dimensions.get("window").height - 500}
+          animationType="fade"
+          closeOnDragDown={false}
+          customStyles={{
+            wrapper: {
+              backgroundColor: "rgba(0,0,0,.6)",
+            },
+            draggableIcon: {
+              backgroundColor: "#C4C4C4",
+            },
+            container: {
+              backgroundColor: "#FFFFFF",
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              bottom: "40%",
+              width: "95%",
+              alignSelf: "center",
+            },
+          }}
+        >
+          <VideoAuthentication />
+        </RBSheet>
+        <Text style={styles.text4}>
+          (Video calls applies consultation fees)
+        </Text>
+      </View>
     </ScrollView>
   );
 };

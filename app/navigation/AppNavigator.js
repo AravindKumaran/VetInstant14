@@ -13,6 +13,7 @@ import OnlineVetScreen from "../screens/OnlineVetScreen";
 import PetProblemScreen from "../screens/PetProblemsScreen";
 import PetPrescriptionScreen from "../screens/PetPrescription";
 import ReminderScreen from "../screens/ReminderScreen";
+import RadioButtonPets from "../screens/RadioButton";
 
 import { Feather } from "@expo/vector-icons";
 
@@ -91,6 +92,8 @@ const AppNavigator = ({ navigation }) => {
         }}
       />
       <Stack.Screen name="CallVet" component={CallVetScreen} />
+      <Stack.Screen name="RadioButton" component={RadioButtonPets} />
+
       <Stack.Screen
         name="PetProblems"
         component={PetProblemScreen}
@@ -98,6 +101,7 @@ const AppNavigator = ({ navigation }) => {
           title: "Pet Problems",
         }}
       />
+
       <Stack.Screen
         name="PetPrescription"
         component={PetPrescriptionScreen}

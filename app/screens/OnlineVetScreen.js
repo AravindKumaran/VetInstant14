@@ -1,35 +1,35 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useState, useEffect, useContext } from "react";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import doctorsApi from '../api/doctors'
-import AppText from '../components/AppText'
-import AppButton from '../components/AppButton'
-import LoadingIndicator from '../components/LoadingIndicator'
-import AuthContext from '../context/authContext'
+import doctorsApi from "../api/doctors";
+import AppText from "../components/AppText";
+import AppButton from "../components/AppButton";
+import LoadingIndicator from "../components/LoadingIndicator";
+import AuthContext from "../context/authContext";
 
 const OnlineVetScreen = ({ navigation }) => {
-  const { user } = useContext(AuthContext)
-  const [doctors, setDoctors] = useState([])
-  const [value, setValue] = useState()
-  const [loading, setLoading] = useState(false)
+  const { user } = useContext(AuthContext);
+  const [doctors, setDoctors] = useState([]);
+  const [value, setValue] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getOnlineAvailableDoctors = async () => {
-      setLoading(true)
-      const res = await doctorsApi.getOnlineDoctors()
+      setLoading(true);
+      const res = await doctorsApi.getOnlineDoctors();
       if (!res.ok) {
-        console.log(res)
-        setLoading(false)
-        return
+        console.log(res);
+        setLoading(false);
+        return;
       }
       const dc = res.data.doctors.filter(
         (doc) => doc.user?.isOnline === true && doc.user._id !== user.doctorId
-      )
-      setDoctors(dc)
-      setLoading(false)
-    }
-    getOnlineAvailableDoctors()
-  }, [])
+      );
+      setDoctors(dc);
+      setLoading(false);
+    };
+    getOnlineAvailableDoctors();
+  }, []);
 
   return (
     <>
@@ -39,7 +39,7 @@ const OnlineVetScreen = ({ navigation }) => {
         <View style={styles.container}>
           {doctors.length > 0 ? (
             <>
-              <AppText style={{ textAlign: 'center', fontSize: 22 }}>
+              <AppText style={{ textAlign: "center", fontSize: 22 }}>
                 Choose From Available Online Vets
               </AppText>
               <ScrollView style={styles.wrapper}>
@@ -49,7 +49,7 @@ const OnlineVetScreen = ({ navigation }) => {
                     onPress={() => setValue(doc)}
                     style={[
                       styles.card,
-                      value?.user.name === doc.user.name ? styles.active : '',
+                      value?.user.name === doc.user.name ? styles.active : "",
                     ]}
                   >
                     <AppText style={styles.text}>{doc.user.name}</AppText>
@@ -58,9 +58,9 @@ const OnlineVetScreen = ({ navigation }) => {
               </ScrollView>
               {value && (
                 <AppButton
-                  title='Continue'
+                  title="Continue"
                   onPress={() =>
-                    navigation.navigate('CallVet', {
+                    navigation.navigate("CallVet", {
                       doc: value,
                     })
                   }
@@ -69,7 +69,7 @@ const OnlineVetScreen = ({ navigation }) => {
             </>
           ) : (
             <AppText
-              style={{ textAlign: 'center', fontSize: 22, marginTop: 100 }}
+              style={{ textAlign: "center", fontSize: 22, marginTop: 100 }}
             >
               No Vet is Available Right Now. Please Try Again After Few Minutes.
             </AppText>
@@ -77,37 +77,37 @@ const OnlineVetScreen = ({ navigation }) => {
         </View>
       )}
     </>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 30,
     marginHorizontal: 20,
   },
   text: {
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderWidth: 2,
-    borderColor: '#e5ffe5',
-    width: '100%',
+    borderColor: "#e5ffe5",
+    width: "100%",
     padding: 10,
     borderRadius: 8,
     marginVertical: 20,
   },
   active: {
-    borderColor: 'blue',
+    borderColor: "blue",
   },
   wrapper: {
-    width: '100%',
+    width: "100%",
     marginHorizontal: 15,
     height: 10,
   },
-})
+});
 
-export default OnlineVetScreen
+export default OnlineVetScreen;

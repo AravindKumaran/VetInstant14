@@ -174,6 +174,12 @@ const ChooseVetScreen = ({ navigation, route }) => {
                   })
                 }
               />
+              <AppButton
+                title="Video Call"
+                btnStyle={{ padding: 16 }}
+                txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
+                onPress={() => navigation.navigate("CallVet")}
+              />
             </>
           </Formik>
         </ScrollView>

@@ -396,11 +396,13 @@ const HomeScreen = ({ navigation, route }) => {
           ))}
         </View>
 
-        <AppText style={{ textAlign: "center" }}>
-          {user ? user.emailID || user.email : ""}
-        </AppText>
-        <AppButton title="Logout" onPress={handleLogout} />
-        {/* <AppButton title='Token' onPress={sendPushToken} /> */}
+        <View style={{ marginBottom: 50 }}>
+          <AppText style={{ textAlign: "center" }}>
+            {user ? user.emailID || user.email : ""}
+          </AppText>
+          <AppButton title="Logout" onPress={handleLogout} />
+          {/* <AppButton title='Token' onPress={sendPushToken} /> */}
+        </View>
       </View>
     </ScrollView>
   );
