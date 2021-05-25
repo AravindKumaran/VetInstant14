@@ -33,6 +33,7 @@ import {
 import RBSheet from "react-native-raw-bottom-sheet";
 import ChooseVetScreen from "../screens/ChooseVetScreen";
 import MyVetScreen from "../screens/MyVetScreen";
+import ScheduledCallScreen from "../screens/ScheduledCallScreen";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -46,6 +47,7 @@ const HomeScreen = ({ navigation, route }) => {
   const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [pets, setPets] = useState([]);
+  const [vets, setVets] = useState([]);
   const [rmr, setRmr] = useState([]);
   const [todayReminders, setTodayReminders] = useState([]);
   const [upcomingReminders, setUpcomingReminders] = useState([]);
@@ -204,9 +206,13 @@ const HomeScreen = ({ navigation, route }) => {
   ];
 
   return (
-    <ScrollView vertical={true}>
+    <ScrollView
+      vertical={true}
+      showsVerticalScrollIndicator={false}
+      style={styles.container}
+    >
       <LoadingIndicator visible={loading} />
-      <View style={styles.container}>
+      <View style={styles.container1}>
         <View
           style={{
             flexDirection: "row",
@@ -228,7 +234,7 @@ const HomeScreen = ({ navigation, route }) => {
 
           <TouchableOpacity
             onPress={() => handleActive("vet")}
-            onPress={() => refRBSheet.current.open()}
+            // onPress={() => refRBSheet.current.open()}
           >
             <AppText
               style={{
@@ -263,100 +269,205 @@ const HomeScreen = ({ navigation, route }) => {
             <MyVetScreen />
           </RBSheet>
         </View>
-        <View style={styles.addPetContainer}>
-          {loading ? (
-            <LoadingIndicator visible={loading} />
-          ) : (
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              {pets.length > 0 &&
-                pets.map((pet) => (
+
+        {active === "pet" && (
+          <>
+            <View style={styles.addPetContainer}>
+              {loading ? (
+                <LoadingIndicator visible={loading} />
+              ) : (
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  {pets.length > 0 &&
+                    pets.map((pet) => (
+                      <AddPetButton
+                        key={pet._id}
+                        name={pet.name}
+                        img={pet.photo}
+                        onPress={() =>
+                          navigation.navigate("ChooseVet", { pet })
+                        }
+                      />
+                    ))}
+
                   <AddPetButton
-                    key={pet._id}
-                    name={pet.name}
-                    img={pet.photo}
-                    onPress={() => navigation.navigate("ChooseVet", { pet })}
+                    title="+"
+                    onPress={() => navigation.navigate("AddPet")}
                   />
-                ))}
+                </ScrollView>
+              )}
+            </View>
 
-              <AddPetButton
-                title="+"
-                onPress={() => navigation.navigate("AddPet")}
-              />
-            </ScrollView>
-          )}
-        </View>
+            {pets.length > 0 ? (
+              <></>
+            ) : (
+              <AppText
+                style={{ fontSize: 20, color: "#47687F", textAlign: "center" }}
+              >
+                Add your vet
+              </AppText>
+            )}
 
-        <AppText
-          style={{ fontSize: 20, color: "#47687F", textAlign: "center" }}
-        >
-          Add your pet
-        </AppText>
-
-        <View
-          style={{
-            height: 1,
-            width: "95%",
-            borderWidth: 1,
-            borderColor: "#DCE1E7",
-            alignSelf: "center",
-            marginVertical: 20,
-          }}
-        />
-
-        {/* <View style={styles.rmdText}>
-          <AppText style={{ fontSize: 25 }}>Your Reminders</AppText>
-          <TouchableOpacity
-            style={styles.editWrapper}
-            onPress={() => navigation.navigate("Reminder")}
-          >
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                height: 1,
+                width: "95%",
+                borderWidth: 1,
+                borderColor: "#DCE1E7",
+                alignSelf: "center",
+                marginVertical: 20,
               }}
-            >
-              <Feather name="edit" size={24} color="#000" />
-              <AppText style={{ fontSize: 16 }}>EDIT</AppText>
+            />
+            <View style={styles.rmdText}>
+              <AppText style={{ fontSize: 20 }}>Reminders</AppText>
+              <TouchableOpacity
+                style={styles.editWrapper}
+                onPress={() => navigation.navigate("Reminder")}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Feather name="edit" size={24} color="#47687F" />
+                  <AppText style={{ fontSize: 16 }}>EDIT</AppText>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View> */}
 
-        {/* {upcomingReminders.length === 0 && todayReminders.length === 0 && (
-          <AppText style={{ textAlign: "center" }}>No Reminders Found</AppText>
-        )}
-        {todayReminders.length > 0 && (
-          <>
-            <View style={styles.rmrCard}>
-              <AppText style={{ fontSize: 20, color: "#606770" }}>
-                Today's Reminders
+            {upcomingReminders.length === 0 && todayReminders.length === 0 && (
+              <AppText style={{ textAlign: "center", fontSize: 20 }}>
+                No Reminders Found
               </AppText>
-              {todayReminders.map((rmr, i) => (
-                <AppText key={rmr.identifier} style={styles.rmrText}>
-                  {i + 1}).{rmr.reminder}
-                </AppText>
-              ))}
-            </View>
+            )}
+            {todayReminders.length > 0 && (
+              <>
+                <View style={styles.rmrCard}>
+                  <AppText style={{ fontSize: 20, color: "#606770" }}>
+                    Today's Reminders
+                  </AppText>
+                  {todayReminders.map((rmr, i) => (
+                    <AppText key={rmr.identifier} style={styles.rmrText}>
+                      {i + 1}) {rmr.reminder}
+                    </AppText>
+                  ))}
+                </View>
+              </>
+            )}
+            {upcomingReminders.length > 0 && (
+              <>
+                <View style={styles.rmrCard}>
+                  <AppText style={{ fontSize: 20, color: "#606770" }}>
+                    Upcoming Reminders
+                  </AppText>
+                  {upcomingReminders.map((rmr, i) => (
+                    <AppText key={rmr.identifier} style={styles.rmrText}>
+                      {i + 1}) {rmr.reminder}
+                    </AppText>
+                  ))}
+                </View>
+              </>
+            )}
           </>
         )}
-        {upcomingReminders.length > 0 && (
-          <>
-            <View style={styles.rmrCard}>
-              <AppText style={{ fontSize: 20, color: "#606770" }}>
-                Upcoming Reminders
-              </AppText>
-              {upcomingReminders.map((rmr, i) => (
-                <AppText key={rmr.identifier} style={styles.rmrText}>
-                  {i + 1}).{rmr.reminder}
-                </AppText>
-              ))}
-            </View>
-          </>
-        )} */}
 
-        <View style={{ paddingTop: 10 }}>
+        {active === "vet" && (
+          <>
+            <View style={styles.addPetContainer}>
+              {loading ? (
+                <LoadingIndicator visible={loading} />
+              ) : (
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  {vets.length > 0 &&
+                    vets.map((vet) => (
+                      <AddPetButton
+                        key={vet._id}
+                        name={vet.name}
+                        img={vet.photo}
+                        onPress={() =>
+                          navigation.navigate("ChooseVet", { vet })
+                        }
+                      />
+                    ))}
+
+                  <AddPetButton
+                    title="+"
+                    onPress={() => navigation.navigate("MyVet")}
+                  />
+                </ScrollView>
+              )}
+            </View>
+
+            {vets.length > 0 ? (
+              <></>
+            ) : (
+              <AppText
+                style={{ fontSize: 20, color: "#47687F", textAlign: "center" }}
+              >
+                Add your vet
+              </AppText>
+            )}
+
+            <View
+              style={{
+                height: 1,
+                width: "95%",
+                borderWidth: 1,
+                borderColor: "#DCE1E7",
+                alignSelf: "center",
+                marginVertical: 20,
+              }}
+            />
+            <ScheduledCallScreen />
+            {/* <View style={{ paddingTop: 10 }}>
+              {doctors.map((c, i) => (
+                <>
+                  <View key={`${c.name}-${i}`} style={styles.catItem}>
+                    <Image
+                      source={c.src}
+                      size={15}
+                      style={{
+                        height: 100,
+                        width: 100,
+                        borderRadius: 50,
+                        borderWidth: 10,
+                        borderColor: "#FFFFFF",
+                        // resizeMode: "contain",
+                      }}
+                    />
+                    <Text style={[styles.catItemText, { marginTop: -10 }]}>
+                      {c.name}
+                    </Text>
+                    <View style={styles.Rectangle}>
+                      <TouchableOpacity>
+                        <Text style={styles.text1}>Proceed</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      height: 1,
+                      width: "95%",
+                      borderWidth: 1,
+                      borderColor: "#DCE1E7",
+                      alignSelf: "center",
+                      marginVertical: 15,
+                      bottom: 20,
+                    }}
+                  />
+                </>
+              ))}
+            </View> */}
+          </>
+        )}
+
+        {/* <View style={{ paddingTop: 10 }}>
           {doctors.map((c, i) => (
             <>
               <View key={`${c.name}-${i}`} style={styles.catItem}>
@@ -394,15 +505,15 @@ const HomeScreen = ({ navigation, route }) => {
               />
             </>
           ))}
-        </View>
+        </View> */}
 
-        <View style={{ marginBottom: 50 }}>
+        {/* <View style={{ marginBottom: 50 }}>
           <AppText style={{ textAlign: "center" }}>
             {user ? user.emailID || user.email : ""}
           </AppText>
           <AppButton title="Logout" onPress={handleLogout} />
-          {/* <AppButton title='Token' onPress={sendPushToken} /> */}
-        </View>
+          <AppButton title='Token' onPress={sendPushToken} />
+        </View> */}
       </View>
     </ScrollView>
   );
@@ -410,8 +521,13 @@ const HomeScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  container1: {
     paddingHorizontal: 20,
     paddingVertical: 20,
+    marginBottom: 50,
   },
   addPetContainer: {
     width: "100%",
@@ -431,19 +547,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
   },
   editWrapper: {
-    backgroundColor: "#f3f3f3",
+    backgroundColor: "#FFFFFF",
     justifyContent: "center",
     borderRadius: 10,
     paddingLeft: 10,
     elevation: 5,
   },
   rmrCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 6,
     marginVertical: 15,
-    elevation: 0.5,
+    elevation: 10,
   },
   rmrText: {
     fontSize: 16,

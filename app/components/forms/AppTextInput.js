@@ -25,7 +25,7 @@ const AppTextInput = ({ icon, numberOfLines = 1, width, value, ...rest }) => {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#fff',
+    // backgroundColor: '#FFFFFF',
     borderRadius: 50,
     flexDirection: 'row',
     alignItems: 'center',

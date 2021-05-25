@@ -8,7 +8,7 @@ const ErrorMessage = ({ error, visible }) => {
   return <AppText style={styles.error}>{error}</AppText>;
 };
 const styles = StyleSheet.create({
-  error: { color: "red", alignSelf: "flex-start" },
+  error: { color: "red", alignSelf: "center", fontSize: 15, padding: 5 },
 });
 
 export default ErrorMessage;

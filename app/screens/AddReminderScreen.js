@@ -145,8 +145,8 @@ const AddReminderScreen = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={styles.container1}>
         <Formik
           enableReinitialize
           initialValues={{
@@ -213,7 +213,7 @@ const AddReminderScreen = ({ navigation, route }) => {
                   <Feather
                     name="clock"
                     size={25}
-                    color="#6e6969"
+                    color="#47687F"
                     style={styles.icon}
                   />
                   <AppText style={styles.text}>
@@ -222,10 +222,14 @@ const AddReminderScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <AppText
-                  style={{ fontSize: 15, marginBottom: 15, color: "#DC143C" }}
+                  style={{
+                    fontSize: 15,
+                    marginBottom: 15,
+                    color: "#DC143C",
+                    textAlign: "center",
+                  }}
                 >
-                  *Time must be greater than current time for successful
-                  reminder
+                  Time must be greater than current time for successful reminder
                 </AppText>
 
                 <AppText>Choose Date</AppText>
@@ -236,7 +240,7 @@ const AddReminderScreen = ({ navigation, route }) => {
                   <Feather
                     name="calendar"
                     size={25}
-                    color="#6e6969"
+                    color="#47687F"
                     style={styles.icon}
                   />
                   <AppText style={styles.text}>
@@ -279,18 +283,22 @@ const AddReminderScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  container1: {
     marginHorizontal: 25,
     marginVertical: 30,
-    marginBottom: 50,
+    marginBottom: 80,
   },
   dateTime: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     marginVertical: 10,
     padding: 15,
     borderRadius: 10,
+    elevation: 10,
   },
   icon: {
     marginRight: 20,
@@ -298,7 +306,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    color: "#0c0c0c",
+    color: "#47687F",
     flex: 1,
   },
 });

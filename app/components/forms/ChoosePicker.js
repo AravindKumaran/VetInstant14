@@ -19,6 +19,8 @@ const ChoosePicker = ({ label, items, name, placeholder }) => {
         style={pickerSelectStyles}
         items={items}
         value={values[name]}
+        placeholder={placeholder}
+        placeholderTextColor="red"
         Icon={() => (
           <MaterialCommunityIcons
             name="chevron-down"
@@ -31,9 +33,9 @@ const ChoosePicker = ({ label, items, name, placeholder }) => {
         style={{
           left: 50,
           position: "absolute",
-          color: "#B9C4CF",
-          fontWeight: "400",
-          backgroundColor: "white",
+          color: "#25C578",
+          fontWeight: "700",
+          backgroundColor: "#FFFFFF",
         }}
       >
         {label}
@@ -46,7 +48,6 @@ const ChoosePicker = ({ label, items, name, placeholder }) => {
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    backgroundColor: "#fff",
     fontSize: 18,
     padding: 18,
     borderRadius: 10,
@@ -57,7 +58,6 @@ const pickerSelectStyles = StyleSheet.create({
     paddingRight: 30,
   },
   inputAndroid: {
-    backgroundColor: "white",
     fontSize: 18,
     padding: 15,
     borderRadius: 30,
@@ -67,8 +67,8 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: "#B9C4CF",
     width: "90%",
     alignSelf: "center",
-    // borderTopWidth: 0,
     top: 10,
+    marginBottom: 10,
   },
   iconContainer: {
     top: 30,

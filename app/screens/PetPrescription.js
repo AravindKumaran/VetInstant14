@@ -67,7 +67,7 @@ const PetPrescriptionScreen = ({ route }) => {
   }, []);
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <LoadingIndicator visible={loading} />
         {petPrescriptions.length === 0 ? (
@@ -80,7 +80,12 @@ const PetPrescriptionScreen = ({ route }) => {
                 pet: "",
               }}
             >
-              <ChoosePicker items={pet} label="Choose your pet" name="pet" />
+              <ChoosePicker
+                items={pet}
+                label="Choose your pet"
+                name="pet"
+                placeholder="Choose your pet"
+              />
             </Formik>
             <View
               style={{
@@ -148,7 +153,6 @@ const PetPrescriptionScreen = ({ route }) => {
                 borderRadius: 20,
                 height: 200,
                 marginVertical: 80,
-                backgroundColor: "#FFFFFF",
                 width: "90%",
                 alignSelf: "center",
               }}
@@ -249,6 +253,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // marginVertical: 30,
     // marginHorizontal: 20,
+    backgroundColor: "#FFFFFF",
   },
   card: {
     backgroundColor: "red",

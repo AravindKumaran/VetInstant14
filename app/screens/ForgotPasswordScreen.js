@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 30,
     marginTop: 80,
+    backgroundColor: "#FFFFFF",
   },
 })
 

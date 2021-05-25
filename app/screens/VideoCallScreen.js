@@ -273,7 +273,7 @@ const VideoCallScreen = ({ navigation, route }) => {
             <MaterialIcons
               name='call-end'
               size={56}
-              color='#fff'
+              color='#FFFFFF'
               onPress={_onEndButtonPress}
               style={{
                 backgroundColor: '#ff0055',
@@ -337,7 +337,7 @@ const VideoCallScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f2f3f3',
+    backgroundColor: "#FFFFFF",
   },
   callContainer: {
     flex: 1,
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     borderRadius: 100 / 2,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     right: 50,
     width: 60,
     height: 60,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     padding: 20,
     borderRadius: 30,
     zIndex: 1,

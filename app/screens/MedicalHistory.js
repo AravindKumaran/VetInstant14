@@ -27,13 +27,18 @@ const pet = [
 
 const MedicalHistory = () => {
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Formik
         initialValues={{
           pet: "",
         }}
       >
-        <ChoosePicker items={pet} label="Choose your pet" name="pet" />
+        <ChoosePicker
+          items={pet}
+          label="Choose your pet"
+          name="pet"
+          placeholder="Choose your pet"
+        />
       </Formik>
       <TouchableOpacity>
         <Feather
@@ -41,7 +46,6 @@ const MedicalHistory = () => {
           size={50}
           color={"#41CE8A"}
           style={{
-            backgroundColor: "white",
             alignSelf: "center",
             borderRadius: 50,
             marginVertical: 50,

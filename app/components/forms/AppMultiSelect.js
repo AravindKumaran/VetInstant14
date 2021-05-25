@@ -51,7 +51,7 @@ const AppMultiSelect = ({ label, items, name }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     fontSize: 18,
     paddingHorizontal: 2,
     paddingTop: 5,

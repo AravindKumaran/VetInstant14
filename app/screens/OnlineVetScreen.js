@@ -86,13 +86,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 30,
     marginHorizontal: 20,
+    backgroundColor: "#FFFFFF",
   },
   text: {
     fontSize: 20,
     textAlign: "center",
   },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     borderWidth: 2,
     borderColor: "#e5ffe5",
     width: "100%",

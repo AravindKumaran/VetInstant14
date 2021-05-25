@@ -2,6 +2,10 @@ import React, { useState, useContext } from "react";
 import { StyleSheet, View, TouchableOpacity, Text, Image } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-community/google-signin";
 
 import AppText from "../components/AppText";
 import AppFormField from "../components/forms/AppFormField";
@@ -52,6 +56,47 @@ const LoginScreen = ({ navigation }) => {
     setLoading(false);
   };
 
+  const signIn = async () => {
+    await GoogleSignin.configure({
+      androidClientId:
+        "320113619885-drs735a38tcvfq000k0psg7t60c8nfff.apps.googleusercontent.com",
+    });
+    try {
+      setLoading(true);
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      // console.log('User', userInfo.user)
+      const password = userInfo.user.id + Date.now();
+      const res = await authApi.saveGoogleUser(
+        userInfo.user.name,
+        userInfo.user.email,
+        password
+      );
+      if (!res.ok) {
+        setLoading(false);
+        // setError(res.data.msg);
+        console.log(res);
+        return;
+      }
+      authStorage.storeToken(res.data.token);
+      const userRes = await usersApi.getLoggedInUser();
+      setUser(userRes.data.user);
+
+      setLoading(false);
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("e 1");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("e 2");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("e 3");
+      } else {
+        console.log("Eror", error);
+      }
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <LoadingIndicator visible={loading} />
@@ -68,7 +113,7 @@ const LoginScreen = ({ navigation }) => {
         </AppText> */}
 
         <View style={{ marginTop: 60, marginHorizontal: 30 }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={signIn}>
             <LinearGradient
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -83,6 +128,8 @@ const LoginScreen = ({ navigation }) => {
                 width: 320,
                 height: 60,
                 marginBottom: 20,
+                borderWidth: 0.5,
+                borderColor: "#15385F",
               }}
             >
               <Image source={require("../../assets/google.png")} />
@@ -182,7 +229,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 0,
-    backgroundColor: "#E5E5E5",
+    backgroundColor: "#FFFFFF",
     // justifyContent: "center",
   },
   text1: {

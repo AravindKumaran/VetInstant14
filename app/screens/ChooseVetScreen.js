@@ -112,28 +112,28 @@ const ChooseVetScreen = ({ navigation, route }) => {
   return (
     <>
       <LoadingIndicator visible={loading} />
-      <View style={styles.container}>
-        <AppText
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        // style={{
+        //   borderWidth: 2,
+        //   borderColor: "#B9C4CF",
+        //   borderRadius: 25,
+        //   bottom: 20,
+        // }}
+      >
+        <View style={styles.container1}>
+          {/* <AppText
           style={{
             textAlign: "center",
             fontSize: 20,
-            marginBottom: 50,
-            marginTop: 0,
+            marginBottom: 20,
+            marginTop: 20,
             color: "#47687F",
           }}
         >
           Choose your vet
-        </AppText>
-
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{
-            borderWidth: 2,
-            borderColor: "#B9C4CF",
-            borderRadius: 25,
-            bottom: 20,
-          }}
-        >
+        </AppText> */}
           <Formik
             initialValues={{
               reminder: "",
@@ -182,8 +182,8 @@ const ChooseVetScreen = ({ navigation, route }) => {
               />
             </>
           </Formik>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </>
   );
 };
@@ -191,9 +191,10 @@ const ChooseVetScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+  },
+  container1: {
     marginHorizontal: 20,
-    marginTop: 20,
   },
 });
 

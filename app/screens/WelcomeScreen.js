@@ -10,13 +10,10 @@ const WelcomeScreen = ({ navigation }) => {
       <Text style={styles.text1}>Find Doctors</Text>
       <Text style={styles.text2}>with a touch.</Text>
       <View style={styles.container1}>
-        <AppButton
-          title="Login"
-          onPress={() => navigation.navigate("Auth", { title: "Login" })}
-        />
+        <AppButton title="Login" onPress={() => navigation.navigate("Login")} />
         <AppButton
           title="Sign up"
-          onPress={() => navigation.navigate("Auth", { title: "Register" })}
+          onPress={() => navigation.navigate("Register")}
         />
         <Image source={require("../components/assets/images/petimage.png")} />
       </View>
@@ -30,6 +27,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // padding: 15,
     paddingTop: 50,
+    backgroundColor: "#FFFFFF",
   },
   container1: {
     justifyContent: "center",

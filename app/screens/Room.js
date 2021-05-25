@@ -220,7 +220,7 @@ export default PetLobby;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E5E5E5",
+    backgroundColor: "#FFFFFF",
   },
   choose: {
     flexDirection: "row",

@@ -356,7 +356,7 @@ const CallVetScreen = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView nestedScrollEnabled={true} style={styles.container}>
+    <ScrollView nestedScrollEnabled={true} style={styles.container} showsVerticalScrollIndicator={false}>
       <LoadingIndicator visible={loading} />
       <View style={styles.btnWrapper}>
         <AppButton

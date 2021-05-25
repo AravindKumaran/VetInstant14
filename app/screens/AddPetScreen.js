@@ -139,7 +139,7 @@ const AddPetScreen = ({ navigation, route }) => {
   return (
     <>
       <LoadingIndicator visible={loading} />
-      <ScrollView vertical={true}>
+      <ScrollView vertical={true} showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           {error && <ErrorMessage error={error} visible={!loading} />}
 
@@ -292,7 +292,7 @@ const AddPetScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#FFFFFF",
   },
   wrapper: {
     flexDirection: "row",

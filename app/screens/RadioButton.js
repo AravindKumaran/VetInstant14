@@ -194,7 +194,7 @@ const RadioButtonPets = () => {
           style: { color: "#476880", fontSize: 20, fontWeight: "700", top: 0 },
         }}
         containerStyle={{
-          backgroundColor: "#ffffff",
+          backgroundColor: "#FFFFFF",
           height: 80,
         }}
       />

@@ -19,6 +19,8 @@ const ChooseVetPicker = ({ label, items, name, placeholder }) => {
         style={pickerSelectStyles}
         items={items}
         value={values[name]}
+        placeholder={placeholder}
+        placeholderTextColor="red"
         Icon={() => (
           <MaterialCommunityIcons
             name="chevron-down"

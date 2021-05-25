@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-import {
-  StyleSheet,
-  ScrollView,
-  View,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { StyleSheet, ScrollView, View, TouchableOpacity } from "react-native";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 import { Feather } from "@expo/vector-icons";
@@ -59,8 +52,8 @@ const ReminderScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+      <View style={styles.container1}>
         {/* {todayReminders.length === 0 && upcomingReminders.length === 0 && (
           <AppText>There's no reminders found!</AppText>
         )} */}
@@ -69,10 +62,15 @@ const ReminderScreen = ({ navigation }) => {
             pet: "",
           }}
         >
-          <ChoosePicker items={pet} label="Choose your pet" name="pet" />
+          <ChoosePicker
+            items={pet}
+            label="Choose your pet"
+            name="pet"
+            placeholder="Choose your pet"
+          />
         </Formik>
         <TouchableOpacity
-          style={{ paddingTop: 30, alignSelf: "flex-end", right: 50 }}
+          style={{ paddingTop: 30, marginBottom: 10 }}
           onPress={() => refRBSheet.current.open()}
           onPress={() =>
             navigation.navigate("AddReminder", {
@@ -85,13 +83,12 @@ const ReminderScreen = ({ navigation }) => {
             size={50}
             color={"#41CE8A"}
             style={{
-              backgroundColor: "white",
               alignSelf: "center",
               borderRadius: 50,
             }}
           />
         </TouchableOpacity>
-        <View>
+        {/* <View>
           <View style={{ flexDirection: "row", paddingLeft: 30 }}>
             <Feather
               name={"calendar"}
@@ -115,7 +112,6 @@ const ReminderScreen = ({ navigation }) => {
                   height: 60,
                   width: 150,
                   alignSelf: "center",
-
                   justifyContent: "center",
                 }}
               >
@@ -144,7 +140,7 @@ const ReminderScreen = ({ navigation }) => {
               >
                 <AppText
                   style={{
-                    color: "#ffffff",
+                    color: "#FFFFFF",
                     alignSelf: "center",
                     fontSize: 12,
                     fontWeight: "700",
@@ -225,7 +221,7 @@ const ReminderScreen = ({ navigation }) => {
               </View>
             </View>
           </View>
-        </View>
+        </View> */}
 
         {todayReminders.length > 0 && (
           <>
@@ -237,7 +233,7 @@ const ReminderScreen = ({ navigation }) => {
                   <Feather
                     name="trash-2"
                     size={22}
-                    color="#6e6969"
+                    color="red"
                     style={styles.icon}
                     onPress={async () => {
                       await Notifications.cancelScheduledNotificationAsync(
@@ -265,15 +261,15 @@ const ReminderScreen = ({ navigation }) => {
               <View key={index} style={styles.card}>
                 <AppText style={{ fontSize: 15 }}>
                   {rmr.endDate
-                    ? rmr.endDate.split("T")[0]
-                    : rmr.date.split("T")[0]}
+                    ? rmr?.endDate?.split("T")[0]
+                    : rmr?.date?.split("T")[0]}
                 </AppText>
                 <View style={styles.innerCard}>
                   <AppText style={{ flex: 1 }}>{rmr.reminder}</AppText>
                   <Feather
                     name="trash-2"
                     size={22}
-                    color="#6e6969"
+                    color="red"
                     style={styles.icon}
                     onPress={async () => {
                       await Notifications.cancelScheduledNotificationAsync(
@@ -301,15 +297,20 @@ const ReminderScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // marginHorizontal: 25,
-    // marginVertical: 30,
+    backgroundColor: "#FFFFFF",
+  },
+  container1: {
+    marginHorizontal: 25,
+    marginVertical: 30,
+    marginBottom: 80,
   },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     paddingVertical: 20,
     paddingHorizontal: 30,
     marginVertical: 10,
     borderRadius: 10,
+    elevation: 10,
   },
   innerCard: {
     flexDirection: "row",
