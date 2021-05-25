@@ -20,6 +20,7 @@ const AppFormPicker = ({ label, items, name, placeholder }) => {
         style={pickerSelectStyles}
         items={items}
         value={values[name]}
+        placeholder={placeholder}
         Icon={() => (
           <MaterialCommunityIcons
             name="chevron-down"

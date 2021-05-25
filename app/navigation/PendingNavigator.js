@@ -14,9 +14,10 @@ const PendingNavigator = ({ navigation }) => {
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: "#d8d8d8", //Set Header color
+          backgroundColor: "#FFFFFF", //Set Header color
         },
         headerTitleAlign: "center",
+        headerTintColor: "#47687F",
       }}
     >
       <Stack.Screen
@@ -24,7 +25,7 @@ const PendingNavigator = ({ navigation }) => {
         component={CallPendingScreen}
         options={{
           title: "Pending Calls", //Set Header Title
-          headerTintColor: "black", //Set Header text color
+          headerTintColor: "#47687F", //Set Header text color
           headerTitleStyle: {
             fontSize: 20,
           },

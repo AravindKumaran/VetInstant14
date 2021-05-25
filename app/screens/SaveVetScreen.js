@@ -134,6 +134,7 @@ const SaveVetScreen = ({ navigation, route }) => {
                     items={hospitals}
                     label="Select Hospital Name"
                     name="hospname"
+                    placeholder="Select Hospital Name"
                   />
                   {doctors.length > 0 && (
                     <AppFormPicker
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
   },
-  container: {
+  container1: {
     marginHorizontal: 30,
     marginTop: 20,
   },

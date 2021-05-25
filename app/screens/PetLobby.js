@@ -36,7 +36,7 @@ const MyCustomLeftComponent = ({ navigation }) => {
           bottom: 0,
         }}
         name={"arrow-left"}
-        size={45}
+        size={25}
       />
     </TouchableOpacity>
   );
@@ -89,11 +89,12 @@ const PetLobby = () => {
         leftComponent={<MyCustomLeftComponent />}
         centerComponent={{
           text: "Pet Lobby",
-          style: { color: "#476880", fontSize: 20, fontWeight: "700", top: 10 },
+          style: { color: "#476880", fontSize: 20, fontWeight: "700", top: 0 },
         }}
         containerStyle={{
           backgroundColor: "#FFFFFF",
-          height: 90,
+          height: 80,
+          elevation: 5,
         }}
       />
       <View style={styles.container}>

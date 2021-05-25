@@ -111,48 +111,50 @@ const MyVetScreen = () => {
 
   return (
     <>
-      {loading ? (
-        <LoadingIndicator visible={loading} />
-      ) : (
-        <View style={styles.container}>
-          {docDetail && hospDetail ? (
-            <>
-              <View style={styles.card}>
-                <AppText style={{ fontSize: 14, color: "#606770" }}>
-                  Hospital Name :
+      <View style={styles.container}>
+        {loading ? (
+          <LoadingIndicator visible={loading} />
+        ) : (
+          <View style={styles.container1}>
+            {docDetail && hospDetail ? (
+              <>
+                <View style={styles.card}>
+                  <AppText style={{ fontSize: 14, color: "#606770" }}>
+                    Hospital Name :
+                  </AppText>
+                  <AppText>{hospDetail.name}</AppText>
+                </View>
+                <View style={styles.card}>
+                  <AppText style={{ fontSize: 14, color: "#606770" }}>
+                    Doctor Name :
+                  </AppText>
+                  <AppText>{docDetail.user.name}</AppText>
+                </View>
+                <AppButton
+                  title="Change Vet"
+                  onPress={() =>
+                    navigation.navigate("SaveVet", {
+                      hosp: hospDetail,
+                      doc: docDetail,
+                      title: "Edit Vet Details",
+                    })
+                  }
+                />
+              </>
+            ) : (
+              <>
+                <AppText style={{ fontSize: 20, marginVertical: 30 }}>
+                  You haven't added any vet
                 </AppText>
-                <AppText>{hospDetail.name}</AppText>
-              </View>
-              <View style={styles.card}>
-                <AppText style={{ fontSize: 14, color: "#606770" }}>
-                  Doctor Name :
-                </AppText>
-                <AppText>{docDetail.user.name}</AppText>
-              </View>
-              <AppButton
-                title="Change Vet"
-                onPress={() =>
-                  navigation.navigate("SaveVet", {
-                    hosp: hospDetail,
-                    doc: docDetail,
-                    title: "Edit Vet Details",
-                  })
-                }
-              />
-            </>
-          ) : (
-            <>
-              <AppText style={{ fontSize: 22, marginVertical: 30 }}>
-                You haven't added any vet
-              </AppText>
-              <AppButton
-                title="Add Vet"
-                onPress={() => navigation.navigate("SaveVet")}
-              />
-            </>
-          )}
-        </View>
-      )}
+                <AppButton
+                  title="Add Vet"
+                  onPress={() => navigation.navigate("SaveVet")}
+                />
+              </>
+            )}
+          </View>
+        )}
+      </View>
     </>
   );
 };
@@ -161,9 +163,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    backgroundColor: "#FFFFFF",
+  },
+  container1: {
     alignItems: "center",
     marginHorizontal: 20,
-    backgroundColor: "#FFFFFF",
   },
   card: {
     backgroundColor: "#FFFFFF",

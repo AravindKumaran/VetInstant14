@@ -25,6 +25,7 @@ const DrawerNavigator = () => (
         paddingLeft: 20,
       },
       headerTitleAlign: "center",
+      headerTintColor: "#47687F",
     }}
     backBehavior={"order"}
     drawerContentOptions={{

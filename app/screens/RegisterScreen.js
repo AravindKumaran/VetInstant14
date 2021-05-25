@@ -128,8 +128,7 @@ const RegisterScreen = ({ navigation }) => {
               width: 320,
               height: 60,
               marginBottom: 20,
-              borderWidth: 0.5,
-              borderColor: "#15385F",
+              elevation: 10,
             }}
           >
             <Image source={require("../../assets/google.png")} />
