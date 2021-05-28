@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
-import { GiftedChat, Bubble, Send } from "react-native-gifted-chat";
+import {
+  GiftedChat,
+  Bubble,
+  Send,
+  Actions,
+  ActionsProps,
+} from "react-native-gifted-chat";
 
 import AuthContext from "../context/authContext";
 import LoadingIndicator from "../components/LoadingIndicator";
@@ -9,16 +15,18 @@ import chatsApi from "../api/chats";
 import socket from "../components/utils/socket";
 import Feather from "react-native-vector-icons/Feather";
 import { IconButton } from "react-native-paper";
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 
 const ChatScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState("");
   const [loading, setLoading] = useState(false);
+  const [handlePickImage, sethandlePickImage] = useState([]);
 
   useEffect(() => {
     const newRoom = async () => {
-      setLoading(true);
+      setLoading(false);
       const res = await roomsApi.createRoom({
         name: `${user._id}-${route.params?.doc?.user?._id}`,
         senderName: user.name,
@@ -72,36 +80,8 @@ const ChatScreen = ({ navigation, route }) => {
     };
 
     newRoom();
-    navigation.setOptions({ title: route.params?.doc?.user?.name });
+    navigation?.setOptions({ title: route.params?.doc?.user?.name });
   }, []);
-
-  const renderBubble = (props) => {
-    return (
-      <Bubble
-        {...props}
-        wrapperStyle={{
-          left: {
-            backgroundColor: "#F1F1F1",
-          },
-          right: {
-            backgroundColor: "#41CE8A",
-          },
-        }}
-        textStyle={{
-          left: {
-            color: "#47687F",
-            fontSize: 12,
-            fontWeight: "400",
-          },
-          right: {
-            color: "#FFFFFF",
-            fontSize: 12,
-            fontWeight: "400",
-          },
-        }}
-      />
-    );
-  };
 
   // const onSend = async (newMsg) => {
   //   newMsg[0].roomName = room.name;
@@ -141,9 +121,39 @@ const ChatScreen = ({ navigation, route }) => {
           name: "React Native",
           avatar: "https://placeimg.com/140/140/any",
         },
+        // image: "https://facebook.github.io/react/img/logo_og.png",
+        // video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
       },
     ]);
   }, []);
+
+  const renderBubble = (props) => {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          left: {
+            backgroundColor: "#F1F1F1",
+          },
+          right: {
+            backgroundColor: "#41CE8A",
+          },
+        }}
+        textStyle={{
+          left: {
+            color: "#47687F",
+            fontSize: 12,
+            fontWeight: "400",
+          },
+          right: {
+            color: "#FFFFFF",
+            fontSize: 12,
+            fontWeight: "400",
+          },
+        }}
+      />
+    );
+  };
 
   const onSend = useCallback((messages = []) => {
     setMessages((previousMessages) =>
@@ -153,16 +163,67 @@ const ChatScreen = ({ navigation, route }) => {
 
   function renderSend(props) {
     return (
-      <Send {...props}>
-        <IconButton
-          icon="send-circle"
-          size={40}
-          color="#51DA98"
-          style={{ top: 13 }}
-        />
-      </Send>
+      <>
+        <Send {...props}>
+          <IconButton
+            icon="send-circle"
+            size={40}
+            color="#51DA98"
+            style={{ top: 10, right: 20 }}
+          />
+        </Send>
+      </>
     );
   }
+
+  const renderInputToolbar = (props) => {
+    return (
+      <>
+        <View style={{ flexDirection: "row" }}>
+          <TextInput
+            style={{
+              width: "90%",
+              borderColor: "#B9C4CF",
+              borderWidth: 1.5,
+              borderRadius: 30,
+              alignSelf: "center",
+              backgroundColor: "red",
+            }}
+          />
+          <TouchableOpacity style={{ zIndex: 1, right: 50 }} onPress={onSend}>
+            <IconButton icon="send-circle" size={45} color="#51DA98" />
+          </TouchableOpacity>
+        </View>
+      </>
+    );
+  };
+
+  const renderActions = (props) => {
+    return (
+      <Actions
+        {...props}
+        options={{
+          ["Send Files"]: handlePickImage,
+        }}
+        icon={() => (
+          <Feather
+            name={"plus"}
+            size={35}
+            color={"#41CE8A"}
+            style={{
+              left: 0,
+              width: 35,
+              bottom: 5,
+              borderRadius: 30,
+              backgroundColor: "#FFFFFF",
+              elevation: 10,
+            }}
+          />
+        )}
+        onSend={(args) => console.log(args)}
+      />
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -176,10 +237,20 @@ const ChatScreen = ({ navigation, route }) => {
         renderBubble={renderBubble}
         showUserAvatar
         isTyping
-        placeholder="Type your message here..."
+        placeholder="Type a message"
         renderSend={renderSend}
-        messagesContainerStyle={{ color: "red", borderColor: "red" }}
         alwaysShowSend
+        wrapInSafeArea={true}
+        textInputProps={{
+          borderColor: "#B9C4CF",
+          borderWidth: 1.5,
+          borderRadius: 30,
+          alignSelf: "center",
+          left: 40,
+          height: 45,
+        }}
+        renderActions={renderActions}
+        // renderInputToolbar={renderInputToolbar}
       />
     </View>
   );
@@ -188,7 +259,7 @@ const ChatScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    bottom: 100,
+    bottom: 0,
     backgroundColor: "#FFFFFF",
   },
 });

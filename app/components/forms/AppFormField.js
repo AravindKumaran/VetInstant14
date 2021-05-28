@@ -11,7 +11,6 @@ const AppFormField = ({ name, label, numberOfLines, contStyle, ...rest }) => {
     useFormikContext();
   return (
     <View style={[styles.container, contStyle]}>
-      {/* {label && <AppText>{label}</AppText>} */}
       <AppTextInput
         onBlur={() => setFieldTouched(name)}
         onChangeText={handleChange(name)}
@@ -19,6 +18,21 @@ const AppFormField = ({ name, label, numberOfLines, contStyle, ...rest }) => {
         value={values[name]}
         {...rest}
       />
+      {label && (
+        <AppText
+          style={{
+            left: 40,
+            top: -6,
+            fontSize: 14,
+            position: "absolute",
+            color: "#25C578",
+            fontWeight: "700",
+            backgroundColor: "#FFFFFF",
+          }}
+        >
+          {label}
+        </AppText>
+      )}
 
       <ErrorMessage error={errors[name]} visible={touched[name]} />
     </View>

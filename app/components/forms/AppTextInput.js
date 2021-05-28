@@ -1,6 +1,6 @@
-import React from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import React from "react";
+import { StyleSheet, TextInput, View } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const AppTextInput = ({ icon, numberOfLines = 1, width, value, ...rest }) => {
   return (
@@ -20,33 +20,34 @@ const AppTextInput = ({ icon, numberOfLines = 1, width, value, ...rest }) => {
         {...rest}
       />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderRadius: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 5,
     marginVertical: 10,
     marginRight: 5,
-    overflow: 'hidden',
+    overflow: "hidden",
     borderWidth: 1,
-    borderColor: 'rgba(21, 56, 95, 0.3)'
+    borderColor: "rgba(21, 56, 95, 0.3)",
   },
   icon: {
     marginRight: 10,
   },
   textInput: {
-    fontSize: 12,
-    color: '#47687F',
+    fontSize: 15,
+    color: "#47687F",
     flex: 1,
-    textAlignVertical: 'center',
-    width: '100%',
+    textAlignVertical: "center",
+    width: "100%",
+    backgroundColor: "#FFFFFF",
   },
-})
+});
 
-export default AppTextInput
+export default AppTextInput;

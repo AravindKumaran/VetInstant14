@@ -6,7 +6,10 @@ import AddPetScreen from "../screens/AddPetScreen";
 import AddReminderScreen from "../screens/AddReminderScreen";
 import CallVetScreen from "../screens/CallVetScreen";
 import ChatScreen from "../screens/ChatScreen";
+import VideoCallScreen from "../screens/VideoCallScreen";
 import ChooseVetScreen from "../screens/ChooseVetScreen";
+import PetProfile from "../screens/PetProfile";
+import PetScreen from "../screens/PetScreen";
 
 import HomeScreen from "../screens/HomeScreen";
 import OnlineVetScreen from "../screens/OnlineVetScreen";
@@ -111,6 +114,9 @@ const AppNavigator = ({ navigation }) => {
       />
       <Stack.Screen name="OnlineVet" component={OnlineVetScreen} />
       <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="Video" component={VideoCallScreen} />
+      <Stack.Screen name="PetProfile" component={PetProfile} />
+      <Stack.Screen name="PetScreen" component={PetScreen} />
     </Stack.Navigator>
   );
 };

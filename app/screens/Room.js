@@ -13,6 +13,7 @@ import {
 import Feather from "react-native-vector-icons/Feather";
 import { Header } from "react-native-elements";
 import ChatScreen from "./ChatScreen";
+import VideoCallScreen from "./VideoCallScreen";
 import AppButton from "../components/AppButton";
 
 const MyCustomLeftComponent = ({ navigation }) => {
@@ -70,7 +71,7 @@ const doctors = [
   // },
 ];
 
-const PetLobby = () => {
+const PetLobby = ({ navigation }) => {
   const [active, setActive] = useState("videocall");
 
   const handleActive = (value) => {
@@ -91,7 +92,6 @@ const PetLobby = () => {
           elevation: 5,
         }}
       />
-
       <View>
         <View style={styles.catItem2}>
           <Image
@@ -163,7 +163,9 @@ const PetLobby = () => {
             <Text
               style={[
                 styles.text1,
-                { color: active === "sharableassets" ? "#41CE8A" : "#476880" },
+                {
+                  color: active === "sharableassets" ? "#41CE8A" : "#476880",
+                },
               ]}
             >
               Sharable Assets
@@ -171,6 +173,14 @@ const PetLobby = () => {
           </TouchableWithoutFeedback>
         </View>
       </View>
+
+      <View
+        style={{
+          height: 0.5,
+          backgroundColor: "#47687F",
+          elevation: 5,
+        }}
+      />
       {active === "videocall" && (
         <View style={{ alignItems: "center", padding: 30 }}>
           <Text
@@ -207,11 +217,12 @@ const PetLobby = () => {
           </Text>
           <AppButton
             title="Join Video Call"
-            // onPress={() => navigation.navigate("SaveVet")}
+            onPress={() => navigation.navigate("Video")}
           />
         </View>
       )}
-      {/* {active === "chat" && <ChatScreen />} */}
+      {active === "chat" && <ChatScreen />}
+      {active === "sharableassets" && <ChatScreen />}
     </View>
   );
 };

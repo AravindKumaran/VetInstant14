@@ -180,6 +180,12 @@ const ChooseVetScreen = ({ navigation, route }) => {
                 txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
                 onPress={() => navigation.navigate("CallVet")}
               />
+              <AppButton
+                title="Pet Profile"
+                btnStyle={{ padding: 16 }}
+                txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
+                onPress={() => navigation.navigate("PetProfile")}
+              />
             </>
           </Formik>
         </View>
@@ -195,6 +201,7 @@ const styles = StyleSheet.create({
   },
   container1: {
     marginHorizontal: 20,
+    marginBottom: 50,
   },
 });
 
