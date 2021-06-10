@@ -459,7 +459,7 @@ const CallPendingScreen = ({ navigation }) => {
           }}
         >
           <Image
-            source={require("../../assets/doctor1.png")}
+            source={require("../components/assets/images/doctor1.png")}
             size={15}
             style={{
               height: 50,
@@ -471,7 +471,7 @@ const CallPendingScreen = ({ navigation }) => {
             }}
           />
           <Image
-            source={require("../../assets/doctor2.png")}
+            source={require("../components/assets/images/doctor2.png")}
             size={15}
             style={{
               height: 50,

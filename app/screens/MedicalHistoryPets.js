@@ -9,7 +9,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+
 import Feather from "react-native-vector-icons/Feather";
 import { Header } from "react-native-elements";
 import ReminderScreen from "./ReminderScreen";
@@ -26,49 +26,9 @@ const pet = [
   { label: "Drogon", value: "Drogon" },
 ];
 
-const MedicalHistory = () => {
-  const navigation = useNavigation();
-
+const MedicalHistoryPets = () => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <Formik
-        initialValues={{
-          pet: "",
-        }}
-      >
-        <ChoosePicker
-          items={pet}
-          label="Choose your pet"
-          name="pet"
-          placeholder="Choose your pet"
-        />
-      </Formik>
-      <View
-        style={{
-          flexDirection: "row",
-          width: "85%",
-          justifyContent: "center",
-          alignItems: "center",
-          alignContent: "center",
-          alignSelf: "center",
-          marginVertical: 10,
-        }}
-      >
-        <Searchbar />
-        <TouchableOpacity>
-          <Feather
-            name={"plus"}
-            size={40}
-            color={"#41CE8A"}
-            style={{
-              alignSelf: "center",
-              borderRadius: 50,
-              elevation: 10,
-              backgroundColor: "#FFFFFF",
-            }}
-          />
-        </TouchableOpacity>
-      </View>
       <View
         style={{
           flexDirection: "row",
@@ -81,6 +41,7 @@ const MedicalHistory = () => {
           elevation: 10,
           backgroundColor: "#FFFFFF",
           marginBottom: 10,
+          marginTop: 10,
         }}
       >
         <View
@@ -108,21 +69,47 @@ const MedicalHistory = () => {
             Treated by Dr. Kumar at Global Veteneriary Hospitals
           </Text>
         </View>
-        <View style={{ right: 120 }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("MedicalHistoryPets")}
-          >
-            <Text style={{ color: "#41CE8A", fontWeight: "700", fontSize: 14 }}>
-              VIEW
-            </Text>
-          </TouchableOpacity>
-        </View>
       </View>
+      <View
+        style={{
+          height: 1,
+          width: "90%",
+          alignSelf: "center",
+          marginBottom: 10,
+          marginTop: 10,
+          borderWidth: 1,
+          borderColor: "#DCE1E7",
+        }}
+      />
+      <Text
+        style={{
+          color: "#47687F",
+          fontSize: 14,
+          fontWeight: "700",
+          margin: 10,
+        }}
+      >
+        Uploads from user
+      </Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          height: 105,
+          width: "95%",
+          alignSelf: "center",
+          borderRadius: 20,
+          padding: 10,
+          elevation: 10,
+          backgroundColor: "#FFFFFF",
+          marginBottom: 10,
+        }}
+      />
     </ScrollView>
   );
 };
 
-export default MedicalHistory;
+export default MedicalHistoryPets;
 
 const styles = StyleSheet.create({
   container: {

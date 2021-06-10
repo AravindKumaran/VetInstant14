@@ -99,7 +99,7 @@ const BottomTab = ({ navigation }) => {
             <>
               {!didKeyboardShow && (
                 <Image
-                  source={require("../../assets/center.png")}
+                  source={require("../components/assets/images/center.png")}
                   style={{
                     width: 60,
                     height: 60,

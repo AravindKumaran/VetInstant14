@@ -188,19 +188,19 @@ const HomeScreen = ({ navigation, route }) => {
 
   const doctors = [
     {
-      src: require("../../assets/doctor1.png"),
+      src: require("../components/assets/images/doctor1.png"),
       name: "Video call from Dr. Kumar has been scheduled at 07:00pm today.",
     },
     {
-      src: require("../../assets/doctor2.png"),
+      src: require("../components/assets/images/doctor2.png"),
       name: "Your chat with Dr. R. Vijayashanthini has ended.",
     },
     {
-      src: require("../../assets/doctor1.png"),
+      src: require("../components/assets/images/doctor1.png"),
       name: "Video call from Dr. Kumar has been scheduled at 07:00pm today.",
     },
     {
-      src: require("../../assets/doctor2.png"),
+      src: require("../components/assets/images/doctor2.png"),
       name: "Your chat with Dr. R. Vijayashanthini has ended.",
     },
   ];

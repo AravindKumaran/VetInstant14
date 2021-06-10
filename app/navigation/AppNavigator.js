@@ -17,6 +17,7 @@ import PetProblemScreen from "../screens/PetProblemsScreen";
 import PetPrescriptionScreen from "../screens/PetPrescription";
 import ReminderScreen from "../screens/ReminderScreen";
 import RadioButtonPets from "../screens/RadioButton";
+import MedicalHistoryPets from "../screens/MedicalHistoryPets";
 
 import { Feather } from "@expo/vector-icons";
 
@@ -58,7 +59,7 @@ const AppNavigator = ({ navigation }) => {
           ),
           headerRight: () => (
             <Image
-              source={require("../../assets/doctor1.png")}
+              source={require("../components/assets/images/doctor1.png")}
               style={{
                 height: 40,
                 width: 40,
@@ -117,6 +118,13 @@ const AppNavigator = ({ navigation }) => {
       <Stack.Screen name="Video" component={VideoCallScreen} />
       <Stack.Screen name="PetProfile" component={PetProfile} />
       <Stack.Screen name="PetScreen" component={PetScreen} />
+      <Stack.Screen
+        name="MedicalHistoryPets"
+        component={MedicalHistoryPets}
+        options={{
+          title: "Medical History",
+        }}
+      />
     </Stack.Navigator>
   );
 };

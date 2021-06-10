@@ -131,7 +131,7 @@ const LoginScreen = ({ navigation }) => {
                 elevation: 10,
               }}
             >
-              <Image source={require("../../assets/google.png")} />
+              <Image source={require("../components/assets/images/google.png")} />
             </LinearGradient>
           </TouchableOpacity>
 

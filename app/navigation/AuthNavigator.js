@@ -53,6 +53,7 @@ const AuthNavigator = () => (
     />
     <Stack.Screen
       options={{
+        title: "Forgot Password",
         headerTitleStyle: {
           color: "#476880",
         },

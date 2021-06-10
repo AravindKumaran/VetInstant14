@@ -59,19 +59,19 @@ const ActiveStyle = () => (
 
 const doctors = [
   {
-    src: require("../../assets/doctor1.png"),
+    src: require("../components/assets/images/doctor1.png"),
     name: "Video call from Dr. Kumar has been scheduled at 07:00pm today.",
   },
   // {
-  //   src: require("../../assets/doctor2.png"),
+  //   src: require("../components/assets/images/doctor2.png"),
   //   name: "Your chat with Dr. R. Vijayashanthini has ended.",
   // },
   // {
-  //   src: require("../../assets/doctor1.png"),
+  //   src: require("../components/assets/images/doctor1.png"),
   //   name: "Video call from Dr. Kumar has been scheduled at 07:00pm today.",
   // },
   // {
-  //   src: require("../../assets/doctor2.png"),
+  //   src: require("../components/assets/images/doctor2.png"),
   //   name: "Your chat with Dr. R. Vijayashanthini has ended.",
   // },
 ];
@@ -99,11 +99,7 @@ const PetLobby = () => {
       />
       <View style={styles.container}>
         <View style={styles.container1}>
-          <ScrollView
-            style={styles.choose}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          >
+          <View style={styles.choose}>
             <View>
               {active === "vetcalls" ? <ActiveStyle /> : <View />}
               <TouchableWithoutFeedback
@@ -164,7 +160,7 @@ const PetLobby = () => {
                 </Text>
               </TouchableWithoutFeedback>
             </View>
-          </ScrollView>
+          </View>
           {/* <View>
           {active === "medication" ? <ActiveStyle /> : <View />}
           <TouchableWithoutFeedback onPress={() => handleActive("medication")}>
@@ -182,7 +178,7 @@ const PetLobby = () => {
         {active === "vetcalls" && <CallPendingScreen />}
         {active === "prescriptions" && <PetPrescriptionScreen />}
         {active === "reminders" && <ReminderScreen />}
-        {active === "history" && <PetProblemScreen />}
+        {active === "history" && <MedicalHistory />}
         {/* {active === "medication" && <PetVaccination />} */}
       </View>
     </>
@@ -199,10 +195,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   choose: {
-    // flexDirection: 'row',
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    marginVertical: 20,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
   },
   catItem1: {
     // flexDirection: "column",
@@ -215,6 +211,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#47687F",
     paddingHorizontal: 20,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
   text2: {
     color: "#FA7C7C",

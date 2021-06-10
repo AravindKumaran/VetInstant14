@@ -31,8 +31,8 @@ const time = [
 
 const doctors = [
   {
-    src: require("../../assets/doctor1.png"),
-    srcc: require("../../assets/doctor2.png"),
+    src: require("../components/assets/images/doctor1.png"),
+    srcc: require("../components/assets/images/doctor2.png"),
     name: "Dr. Bottowski",
     time: "11th April 07:00 pm",
     hospital: "PetCare Veteneriary Hospital",

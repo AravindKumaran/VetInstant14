@@ -29,7 +29,7 @@ const reminders = [
 
 const sdoctors = [
   {
-    src: require("../../assets/doctor1.png"),
+    src: require("../components/assets/images/doctor1.png"),
     name: "Dr. Bottowski",
     hospital: "PetCare Veteneriary Hospital",
     amount: "$20",
@@ -83,26 +83,26 @@ const MyVetScreen = () => {
 
   const doctors = [
     {
-      src: require("../../assets/doctor1.png"),
-      src: require("../../assets/doctor1.png"),
+      src: require("../components/assets/images/doctor1.png"),
+      src: require("../components/assets/images/doctor1.png"),
       name: "Dr. Bottowski",
       hospital: "PetCare Veteneriary Hospital",
       amount: "$20",
     },
     {
-      src: require("../../assets/doctor2.png"),
+      src: require("../components/assets/images/doctor2.png"),
       name: "Dr. Bottowski",
       hospital: "VetPlus Veteneriary Hospital",
       amount: "$30",
     },
     {
-      src: require("../../assets/doctor1.png"),
+      src: require("../components/assets/images/doctor1.png"),
       name: "Dr. Bottowski",
       hospital: "PetCare Veteneriary Hospital",
       amount: "$40",
     },
     {
-      src: require("../../assets/doctor2.png"),
+      src: require("../components/assets/images/doctor2.png"),
       name: "Dr. Bottowski",
       hospital: "VetPlus Veteneriary Hospital",
       amount: "$50",
