@@ -26,7 +26,7 @@ const ActiveStyle = () => (
   ></View>
 );
 
-const PetProfile = ({ navigation }) => {
+const PetProfile = ({ navigation, route }) => {
   const [active, setActive] = useState("Profile");
 
   const handleActive = (value) => {
@@ -86,9 +86,15 @@ const PetProfile = ({ navigation }) => {
                 justifyContent: "center",
                 alignSelf: "center",
               }}
-              onPress={() => {
-                navigation.navigate("PetScreen");
-              }}
+              // onPress={() => {
+              //   navigation.navigate("PetScreen");
+              // }}
+              onPress={() =>
+                navigation.navigate("AddPet", {
+                  pet: route.params?.pet,
+                  editPet: true,
+                })
+              }
             >
               <Text
                 style={{
