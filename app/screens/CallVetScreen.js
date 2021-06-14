@@ -432,7 +432,7 @@ const CallVetScreen = ({ navigation, route }) => {
                   autoCorrect={false}
                   name="problems"
                   numberOfLines={3}
-                  placeholder="Describe the problem..."
+                  // placeholder="Describe the problem..."
                 />
 
                 <Text style={styles.text1}>
@@ -496,7 +496,7 @@ const CallVetScreen = ({ navigation, route }) => {
                   autoCorrect={false}
                   name="feces_comment"
                   numberOfLines={3}
-                  placeholder="Describe the problem..."
+                  // placeholder="Describe the problem..."
                 />
 
                 <Text style={styles.text1}>Urine</Text>
@@ -509,7 +509,7 @@ const CallVetScreen = ({ navigation, route }) => {
                   autoCorrect={false}
                   name="urine_comment"
                   numberOfLines={3}
-                  placeholder="Describe the problem..."
+                  // placeholder="Describe the problem..."
                 />
 
                 <Text style={styles.text1}>Eyes</Text>
@@ -538,7 +538,7 @@ const CallVetScreen = ({ navigation, route }) => {
                   autoCorrect={false}
                   name="skin_comment"
                   numberOfLines={3}
-                  placeholder="Describe the problem..."
+                  // placeholder="Describe the problem..."
                 />
 
                 <Text style={styles.text1}>Gait</Text>
@@ -551,7 +551,7 @@ const CallVetScreen = ({ navigation, route }) => {
                   autoCorrect={false}
                   name="general_comment"
                   numberOfLines={3}
-                  placeholder="Describe the problem..."
+                  // placeholder="Describe the problem..."
                 />
               </View>
 

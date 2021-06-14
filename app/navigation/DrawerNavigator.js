@@ -1,18 +1,15 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-
 import AppNavigator from "./AppNavigator";
 import VetNavigator from "./VetNavigator";
 import CallLogScreen from "../screens/CallLogScreen";
-
+import VetProfile from "../screens/VetProfile";
+import AddVet from "../screens/AddVet";
 import DrawerContent from "../components/DrawerContent";
 import ScheduledCallScreen from "../screens/ScheduledCallScreen";
-
 import PendingNavigator from "./PendingNavigator";
-
 import BottomTab from "../navigation/BottomTab";
-
 import RadioButtonPets from "../screens/RadioButton";
 
 const Drawer = createDrawerNavigator();
@@ -89,7 +86,7 @@ const DrawerNavigator = () => (
       }}
     />
     <Drawer.Screen
-      name="ScheduledCall"
+      name="ScheduledCallScreen"
       component={ScheduledCallScreen}
       options={{
         drawerIcon: ({ color, size }) => (

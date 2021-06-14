@@ -197,14 +197,14 @@ const AddPetScreen = ({ navigation, route }) => {
                       autoCapitalize="none"
                       autoCorrect={false}
                       name="name"
-                      placeholder="Enter your pet name"
+                      // placeholder="Enter your pet name"
                     />
                     <AppFormField
                       label="Breed"
                       autoCapitalize="none"
                       autoCorrect={false}
                       name="breed"
-                      placeholder="Enter your pet breed"
+                      // placeholder="Enter your pet breed"
                     />
 
                     <View
@@ -247,12 +247,12 @@ const AddPetScreen = ({ navigation, route }) => {
                     </View>
 
                     <AppFormField
-                      label="Weight"
+                      label="Weight(kgs)"
                       autoCapitalize="none"
                       autoCorrect={false}
                       name="weight"
                       keyboardType="numeric"
-                      placeholder="Enter your pet weight in kgs"
+                      // placeholder="Enter your pet weight in kgs"
                       maxLength={5}
                     />
                   </View>
