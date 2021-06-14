@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -16,6 +16,7 @@ import AppImageListPicker from "../components/forms/AppImageListPicker";
 import AppText from "../components/AppText";
 
 import ChoosePicker from "../components/forms/ChoosePicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -52,6 +53,29 @@ const AddPetScreen = ({ navigation, route }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   // console.log('AddRoutes', route?.params?.pet?.photo)
+
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
+  };
 
   const editValues = {
     name: route?.params?.pet?.name,
@@ -206,47 +230,78 @@ const AddPetScreen = ({ navigation, route }) => {
                       name="breed"
                       // placeholder="Enter your pet breed"
                     />
-
-                    <View
-                      style={{
-                        paddingBottom: 20,
-                        width: "110%",
-                        alignSelf: "center",
-                      }}
-                    >
-                      <AppText style={{ paddingLeft: 15 }}>
-                        Choose pet's gender
-                      </AppText>
-                      <ChoosePicker
-                        items={genders}
-                        name="gender"
-                        placeholder="Choose pet's gender"
-                      />
-                    </View>
-
-                    <AppText>Age</AppText>
-
-                    <View style={styles.wrapper}>
-                      <AppFormField
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        name="years"
-                        keyboardType="numeric"
-                        placeholder="Years"
-                        maxLength={3}
-                      />
-
-                      <AppFormField
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        name="months"
-                        keyboardType="numeric"
-                        placeholder="Months"
-                        maxLength={2}
-                      />
-                    </View>
-
                     <AppFormField
+                      label="Description"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      name="description"
+                      // placeholder="Enter your pet breed"
+                    />
+
+                    <View style={styles.wrapper1}>
+                      <View
+                        style={{
+                          height: 60,
+                          borderWidth: 1,
+                          borderColor: "rgba(21, 56, 95, 0.3)",
+                          borderRadius: 60,
+                          justifyContent: "center",
+                          top: 5,
+                          width: "45%",
+                        }}
+                      >
+                        <AppText
+                          style={{
+                            left: 30,
+                            top: -15,
+                            fontSize: 14,
+                            position: "absolute",
+                            color: "#25C578",
+                            fontWeight: "700",
+                            backgroundColor: "#FFFFFF",
+                          }}
+                        >
+                          D.O.B
+                        </AppText>
+                        <TouchableOpacity
+                          onPress={showDatepicker}
+                          style={{
+                            alignContent: "center",
+                            paddingLeft: 10,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: "#47687F",
+                              fontWeight: "400",
+                              fontSize: 18,
+                            }}
+                          >
+                            {date.toLocaleDateString()}
+                          </Text>
+                        </TouchableOpacity>
+                        {show && (
+                          <DateTimePicker
+                            testID="dateTimePicker"
+                            value={date}
+                            mode={mode}
+                            is24Hour={true}
+                            display="default"
+                            onChange={onChange}
+                          />
+                        )}
+                      </View>
+                      <View style={{ width: "50%" }}>
+                        <ChoosePicker
+                          items={genders}
+                          name="gender"
+                          label="Gender"
+                          placeholder="Choose gender"
+                        />
+                      </View>
+                    </View>
+
+                    {/* <AppFormField
                       label="Weight(kgs)"
                       autoCapitalize="none"
                       autoCorrect={false}
@@ -254,7 +309,7 @@ const AddPetScreen = ({ navigation, route }) => {
                       keyboardType="numeric"
                       // placeholder="Enter your pet weight in kgs"
                       maxLength={5}
-                    />
+                    /> */}
                   </View>
 
                   {!route?.params?.editPet && (
@@ -297,6 +352,12 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: "row",
     width: "50%",
+  },
+  wrapper1: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
   },
 });
 
