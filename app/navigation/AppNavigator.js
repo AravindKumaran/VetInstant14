@@ -10,6 +10,8 @@ import VideoCallScreen from "../screens/VideoCallScreen";
 import ChooseVetScreen from "../screens/ChooseVetScreen";
 import PetProfile from "../screens/PetProfile";
 import PetScreen from "../screens/PetScreen";
+import PetMedication from "../screens/PetMedication";
+import PetVaccination from "../screens/PetVaccination";
 
 import HomeScreen from "../screens/HomeScreen";
 import OnlineVetScreen from "../screens/OnlineVetScreen";
@@ -41,6 +43,11 @@ const AppNavigator = ({ navigation }) => {
           headerTintColor: "#41CE8A", //Set Header text color
           headerTitleStyle: {
             fontSize: 20,
+          },
+          headerStyle: {
+            elevation: 5,
+            borderBottomStartRadius: 15,
+            borderBottomEndRadius: 15,
           },
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -118,6 +125,8 @@ const AppNavigator = ({ navigation }) => {
       <Stack.Screen name="Video" component={VideoCallScreen} />
       <Stack.Screen name="PetProfile" component={PetProfile} />
       <Stack.Screen name="PetScreen" component={PetScreen} />
+      <Stack.Screen name="PetMedication" component={PetMedication} />
+      <Stack.Screen name="PetVaccination" component={PetVaccination} />
       <Stack.Screen
         name="MedicalHistoryPets"
         component={MedicalHistoryPets}

@@ -15,6 +15,9 @@ const VetNavigator = ({ navigation }) => {
       screenOptions={{
         headerStyle: {
           backgroundColor: "#FFFFFF", //Set Header color
+          elevation: 5,
+          borderBottomStartRadius: 15,
+          borderBottomEndRadius: 15,
         },
         headerTitleAlign: "center",
         headerTintColor: "#47687F",

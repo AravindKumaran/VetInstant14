@@ -12,7 +12,17 @@ import AddPetScreen from "../screens/AddPetScreen";
 const Stack = createStackNavigator();
 
 const AuthNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#FFFFFF", //Set Header color
+        elevation: 5,
+        borderBottomStartRadius: 15,
+        borderBottomEndRadius: 15,
+      },
+      headerTitleAlign: "center",
+    }}
+  >
     <Stack.Screen
       options={{
         headerShown: false,

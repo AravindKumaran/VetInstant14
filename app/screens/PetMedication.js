@@ -76,178 +76,201 @@ const PetMedication = () => {
         }}
       >
         <>
-          <AppText
-            style={{
-              alignSelf: "center",
-              color: "#47687F",
-              size: 14,
-              fontWeight: "400",
-            }}
-          >
-            Add Medication
-          </AppText>
-          <AppFormField
-            label="Medicing name"
-            autoCapitalize="none"
-            autoCorrect={false}
-            name="Medicing name"
-            placeholder="Medicing name"
-          />
-          <AppFormField
-            label="Doze"
-            autoCapitalize="none"
-            autoCorrect={false}
-            name="Doze"
-            placeholder="Doze"
-          />
-
-          <View
-            style={{
-              top: 0,
-              width: "80%",
-              alignSelf: "center",
-              flexDirection: "row",
-              justifyContent: "center",
-              paddingTop: 10,
-            }}
-          >
-            <TouchableOpacity
-              onPress={showDatepicker}
+          <View style={styles.container1}>
+            <AppText
               style={{
-                marginHorizontal: 20,
-                borderColor: "rgba(21, 56, 95, 0.3)",
-                borderWidth: 1,
-                marginBottom: 18,
-                borderRadius: 40,
-                height: 60,
-                width: 150,
                 alignSelf: "center",
-                justifyContent: "center",
+                color: "#47687F",
+                size: 14,
+                fontWeight: "400",
+                marginBottom: 20,
               }}
             >
-              <AppText
-                style={{ color: "#47687F", fontSize: 14, alignSelf: "center" }}
-              >
-                From
-              </AppText>
-              <Text
-                style={{
-                  color: "rgba(21, 56, 95, 0.3)",
-                  fontSize: 16,
-                  padding: 2,
-                  alignSelf: "center",
-                }}
-              >
-                {date.toLocaleDateString()}
-              </Text>
-            </TouchableOpacity>
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={"date"}
-                onChange={onChange}
-                neutralButtonLabel="clear"
-                placeholder="From"
-              />
-            )}
-            <TouchableOpacity
-              onPress={showDatepicker}
+              Add Medication
+            </AppText>
+            <AppFormField
+              label="Medicing name"
+              autoCapitalize="none"
+              autoCorrect={false}
+              name="Medicing name"
+              // placeholder="Medicing name"
+            />
+            <AppFormField
+              label="Doze"
+              autoCapitalize="none"
+              autoCorrect={false}
+              name="Doze"
+              // placeholder="Doze"
+            />
+
+            <View
               style={{
-                marginHorizontal: 20,
-                borderColor: "rgba(21, 56, 95, 0.3)",
-                borderWidth: 1,
-                marginBottom: 18,
-                borderRadius: 40,
-                height: 60,
-                width: 150,
+                top: 0,
+                width: "80%",
+                alignSelf: "center",
+                flexDirection: "row",
                 justifyContent: "center",
+                paddingTop: 10,
               }}
             >
-              <AppText
-                style={{ color: "#47687F", fontSize: 14, alignSelf: "center" }}
-              >
-                To
-              </AppText>
-              <Text
+              <TouchableOpacity
+                onPress={showDatepicker}
                 style={{
-                  color: "rgba(21, 56, 95, 0.3)",
-                  fontSize: 16,
-                  padding: 2,
+                  marginHorizontal: 20,
+                  borderColor: "rgba(21, 56, 95, 0.3)",
+                  borderWidth: 1,
+                  marginBottom: 18,
+                  borderRadius: 40,
+                  height: 60,
+                  width: 150,
                   alignSelf: "center",
+                  justifyContent: "center",
                 }}
               >
-                {date.toLocaleDateString()}
-              </Text>
-            </TouchableOpacity>
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={"date"}
-                onChange={onChange}
-                neutralButtonLabel="clear"
-                placeholder="To"
+                <AppText
+                  style={{
+                    color: "#47687F",
+                    fontSize: 14,
+                    alignSelf: "center",
+                  }}
+                >
+                  From
+                </AppText>
+                <Text
+                  style={{
+                    color: "rgba(21, 56, 95, 0.3)",
+                    fontSize: 16,
+                    padding: 2,
+                    alignSelf: "center",
+                    fontWeight: "700",
+                  }}
+                >
+                  {date.toLocaleDateString()}
+                </Text>
+              </TouchableOpacity>
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={"date"}
+                  onChange={onChange}
+                  neutralButtonLabel="clear"
+                  placeholder="From"
+                />
+              )}
+              <TouchableOpacity
+                onPress={showDatepicker}
+                style={{
+                  marginHorizontal: 20,
+                  borderColor: "rgba(21, 56, 95, 0.3)",
+                  borderWidth: 1,
+                  marginBottom: 18,
+                  borderRadius: 40,
+                  height: 60,
+                  width: 150,
+                  justifyContent: "center",
+                }}
+              >
+                <AppText
+                  style={{
+                    color: "#47687F",
+                    fontSize: 14,
+                    alignSelf: "center",
+                  }}
+                >
+                  To
+                </AppText>
+                <Text
+                  style={{
+                    color: "rgba(21, 56, 95, 0.3)",
+                    fontSize: 16,
+                    padding: 2,
+                    alignSelf: "center",
+                    fontWeight: "700",
+                  }}
+                >
+                  {date.toLocaleDateString()}
+                </Text>
+              </TouchableOpacity>
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={"date"}
+                  onChange={onChange}
+                  neutralButtonLabel="clear"
+                  placeholder="To"
+                />
+              )}
+            </View>
+            <AppText
+              style={{
+                color: "#47687F",
+                size: 14,
+                fontWeight: "400",
+              }}
+            >
+              Duration
+            </AppText>
+            <View
+              style={{
+                alignSelf: "center",
+                flexDirection: "row",
+                paddingTop: 10,
+                marginHorizontal: 20,
+              }}
+            >
+              <Feather
+                name={"sun"}
+                size={20}
+                color={"#B9C4CF"}
+                style={{ right: 20 }}
               />
-            )}
+              <Feather
+                name={"plus-circle"}
+                size={20}
+                color={"#B9C4CF"}
+                style={{}}
+              />
+              <Feather
+                name={"moon"}
+                size={20}
+                color={"#B9C4CF"}
+                style={{ left: 20 }}
+              />
+            </View>
+            <View
+              style={{
+                alignItems: "center",
+                alignSelf: "center",
+                alignContent: "center",
+                paddingLeft: 10,
+                marginTop: 20,
+              }}
+            >
+              <RadioForm
+                radio_props={time}
+                initial={null}
+                formHorizontal={true}
+                labelHorizontal={true}
+                labelColor={"white"}
+                animation={true}
+                onPress={setisSelected}
+                buttonColor={"#B9C4CF"}
+                selectedButtonColor={"#60E6A6"}
+                buttonStyle={{ margin: 20 }}
+              />
+            </View>
+            <View style={{ marginTop: 20 }}>
+              <AppFormField
+                label="Duration"
+                autoCapitalize="none"
+                autoCorrect={false}
+                name="Duration"
+                // placeholder="Duration"
+              />
+            </View>
           </View>
-          <AppText style={{ color: "#47687F", fontSize: 14 }}>
-            Duration:
-          </AppText>
-          <View
-            style={{
-              alignSelf: "center",
-              flexDirection: "row",
-              paddingTop: 10,
-            }}
-          >
-            <Feather
-              name={"sun"}
-              size={20}
-              color={"#B9C4CF"}
-              style={{ right: 100 }}
-            />
-            <Feather
-              name={"plus-circle"}
-              size={20}
-              color={"#B9C4CF"}
-              style={{}}
-            />
-            <Feather
-              name={"moon"}
-              size={20}
-              color={"#B9C4CF"}
-              style={{ left: 100 }}
-            />
-          </View>
-          <View
-            style={{
-              alignItems: "center",
-              alignSelf: "center",
-              alignContent: "center",
-              paddingLeft: 10,
-              marginTop: 20,
-            }}
-          >
-            <RadioForm
-              radio_props={time}
-              initial={null}
-              formHorizontal={true}
-              labelHorizontal={true}
-              labelColor={"white"}
-              animation={true}
-              onPress={setisSelected}
-              buttonColor={"#B9C4CF"}
-              selectedButtonColor={"#60E6A6"}
-            />
-          </View>
-          <AppFormField
-            label="Duration"
-            autoCapitalize="none"
-            autoCorrect={false}
-            name="Duration"
-            placeholder="Duration"
-          />
         </>
       </Formik>
       <AppButton title="Proceed to pay" />
@@ -260,7 +283,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    margin: 20,
+  },
+  container1: {
+    marginHorizontal: 30,
+    marginTop: 20,
   },
   choose: {
     flexDirection: "row",

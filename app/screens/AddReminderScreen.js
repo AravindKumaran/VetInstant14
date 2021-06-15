@@ -163,16 +163,18 @@ const AddReminderScreen = ({ navigation, route }) => {
                   items={reminders}
                   label="Type Of Reminder"
                   name="reminder"
+                  placeholder="Enter medicine name"
                 />
 
                 {values.reminder === "Medicine" && (
                   <>
+                    <View style={{ marginTop: 10 }}></View>
                     <AppFormField
                       label="Medicine Name"
                       autoCapitalize="none"
                       autoCorrect={false}
                       name="medicine"
-                      placeholder="Enter medicine name"
+                      // placeholder="Enter medicine name"
                     />
                     <AppText>Choose End Date</AppText>
                     <TouchableOpacity
@@ -261,14 +263,16 @@ const AddReminderScreen = ({ navigation, route }) => {
                   />
                 )}
 
-                <AppFormField
-                  label="Notes (optional)"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  name="notes"
-                  numberOfLines={4}
-                  placeholder="Max(50) characters."
-                />
+                <View style={{ marginTop: 10 }}>
+                  <AppFormField
+                    label="Notes (optional)"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    name="notes"
+                    // numberOfLines={4}
+                    // placeholder="Max(50) characters."
+                  />
+                </View>
 
                 <SubmitButton title="Add Reminder" />
               </>

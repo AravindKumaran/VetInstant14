@@ -140,11 +140,11 @@ const ChooseVetScreen = ({ navigation, route }) => {
             }}
           >
             <>
-              <ChooseVetPicker
+              {/* <ChooseVetPicker
                 items={reminders}
                 label="Type Of Reminder"
                 name="reminder"
-              />
+              /> */}
               <AppButton
                 title="My Vet (Waiting Time - 24 hrs)"
                 btnStyle={{ padding: 18, marginBottom: 0 }}
@@ -186,6 +186,18 @@ const ChooseVetScreen = ({ navigation, route }) => {
                 txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
                 onPress={() => navigation.navigate("PetProfile")}
               />
+              <AppButton
+                title="Pet Medication"
+                btnStyle={{ padding: 16 }}
+                txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
+                onPress={() => navigation.navigate("PetMedication")}
+              />
+              <AppButton
+                title="Pet Vaccination"
+                btnStyle={{ padding: 16 }}
+                txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
+                onPress={() => navigation.navigate("PetVaccination")}
+              />
             </>
           </Formik>
         </View>
@@ -201,7 +213,7 @@ const styles = StyleSheet.create({
   },
   container1: {
     marginHorizontal: 20,
-    marginBottom: 50,
+    marginBottom: 80,
   },
 });
 

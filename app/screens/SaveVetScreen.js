@@ -13,6 +13,7 @@ import AuthContext from "../context/authContext";
 
 import hospitalsApi from "../api/hospitals";
 import usersApi from "../api/users";
+import AppImagePicker from "../components/forms/AppImagePicker";
 
 const validationSchema = Yup.object().shape({
   hospname: Yup.string().nullable().required("Please select a hospital"),
@@ -108,7 +109,7 @@ const SaveVetScreen = ({ navigation, route }) => {
       >
         <View style={styles.container1}>
           <AppText
-            style={{ fontSize: 22, textAlign: "center", marginVertical: 30 }}
+            style={{ fontSize: 22, textAlign: "center", marginBottom: 10 }}
           >
             {route.params?.title || "Select Vet Details"}
           </AppText>
@@ -130,6 +131,9 @@ const SaveVetScreen = ({ navigation, route }) => {
               }, [values.hospname]);
               return (
                 <>
+                  <View style={{ alignSelf: "center", marginBottom: 20 }}>
+                    <AppImagePicker name="photo" />
+                  </View>
                   <AppFormPicker
                     items={hospitals}
                     label="Select Hospital Name"

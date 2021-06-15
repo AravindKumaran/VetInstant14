@@ -20,7 +20,7 @@ const MyCustomLeftComponent = ({ navigation }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.goBack();
+        navigation?.goBack();
       }}
     >
       <Feather
@@ -90,6 +90,8 @@ const PetLobby = ({ navigation }) => {
           backgroundColor: "white",
           height: 80,
           elevation: 5,
+          borderBottomStartRadius: 15,
+          borderBottomEndRadius: 15,
         }}
       />
       <View>

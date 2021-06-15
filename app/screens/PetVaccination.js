@@ -76,88 +76,96 @@ const PetVaccination = () => {
         }}
       >
         <>
-          <AppText
-            style={{
-              alignSelf: "center",
-              color: "#47687F",
-              size: 14,
-              fontWeight: "400",
-            }}
-          >
-            Add Vaccination
-          </AppText>
-          <AppFormField
-            label="Vaccine name"
-            autoCapitalize="none"
-            autoCorrect={false}
-            name="Vaccine name"
-            placeholder="Vaccine name"
-          />
-
-          <View
-            style={{
-              top: 0,
-              width: "80%",
-              alignSelf: "center",
-              flexDirection: "row",
-              justifyContent: "center",
-              paddingTop: 10,
-            }}
-          >
-            <TouchableOpacity
-              onPress={showDatepicker}
+          <View style={styles.container1}>
+            <AppText
               style={{
-                borderColor: "rgba(21, 56, 95, 0.3)",
-                borderWidth: 1,
-                marginBottom: 10,
-                borderRadius: 40,
-                height: 60,
-                width: "125%",
                 alignSelf: "center",
-                justifyContent: "center",
+                color: "#47687F",
+                size: 14,
+                fontWeight: "400",
+                marginBottom: 20,
               }}
             >
-              <AppText
-                style={{ color: "#47687F", fontSize: 14, alignSelf: "center" }}
-              >
-                Add Vaccination Date
-              </AppText>
-              <Text
+              Add Vaccination
+            </AppText>
+            <AppFormField
+              label="Vaccine name"
+              autoCapitalize="none"
+              autoCorrect={false}
+              name="Vaccine name"
+              // placeholder="Vaccine name"
+            />
+
+            <View
+              style={{
+                top: 0,
+                width: "80%",
+                alignSelf: "center",
+                flexDirection: "row",
+                justifyContent: "center",
+                paddingTop: 10,
+              }}
+            >
+              <TouchableOpacity
+                onPress={showDatepicker}
                 style={{
-                  color: "rgba(21, 56, 95, 0.3)",
-                  fontSize: 16,
-                  padding: 2,
+                  borderColor: "rgba(21, 56, 95, 0.3)",
+                  borderWidth: 1,
+                  marginBottom: 10,
+                  borderRadius: 40,
+                  height: 60,
+                  width: "125%",
                   alignSelf: "center",
+                  justifyContent: "center",
                 }}
               >
-                {date.toLocaleDateString()}
-              </Text>
-            </TouchableOpacity>
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={"date"}
-                onChange={onChange}
-                neutralButtonLabel="clear"
-                placeholder="From"
-              />
-            )}
+                <AppText
+                  style={{
+                    color: "#47687F",
+                    fontSize: 14,
+                    alignSelf: "center",
+                  }}
+                >
+                  Add Vaccination Date
+                </AppText>
+                <Text
+                  style={{
+                    color: "rgba(21, 56, 95, 0.3)",
+                    fontSize: 16,
+                    padding: 2,
+                    alignSelf: "center",
+                    fontWeight: "700",
+                  }}
+                >
+                  {date.toLocaleDateString()}
+                </Text>
+              </TouchableOpacity>
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={"date"}
+                  onChange={onChange}
+                  neutralButtonLabel="clear"
+                  placeholder="From"
+                />
+              )}
+            </View>
+            <AppFormField
+              label="Description"
+              autoCapitalize="none"
+              autoCorrect={false}
+              name="Description"
+              // placeholder="Description"
+            />
+            <AppFormField
+              label="Quantity"
+              autoCapitalize="none"
+              autoCorrect={false}
+              name="Quantity"
+              // placeholder="Quantity"
+            />
           </View>
-          <AppFormField
-            label="Description"
-            autoCapitalize="none"
-            autoCorrect={false}
-            name="Description"
-            placeholder="Description"
-          />
-          <AppFormField
-            label="Quantity"
-            autoCapitalize="none"
-            autoCorrect={false}
-            name="Quantity"
-            placeholder="Quantity"
-          />
         </>
       </Formik>
       <AppButton title="Proceed to pay" />
@@ -170,7 +178,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    margin: 20,
+  },
+  container1: {
+    marginHorizontal: 30,
+    marginTop: 20,
   },
   choose: {
     flexDirection: "row",

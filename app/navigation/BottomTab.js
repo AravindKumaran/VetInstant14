@@ -52,9 +52,11 @@ const BottomTab = ({ navigation }) => {
       tabBarOptions={{
         keyboardHidesTabBar: true,
         tabStyle: {
-          backgroundColor: "white",
+          backgroundColor: "#FFFFFF",
           height: 50,
           bottom: 10,
+          borderTopStartRadius: 15,
+          borderTopEndRadius: 15,
         },
         inactiveTintColor: "#FFFFFF",
         activeTintColor: "#21FFFC",
@@ -64,7 +66,7 @@ const BottomTab = ({ navigation }) => {
           opacity: 0.2,
         },
         style: {
-          backgroundColor: "white",
+          backgroundColor: "#FFFFFF",
           position: "absolute",
           bottom: 0,
           padding: 10,

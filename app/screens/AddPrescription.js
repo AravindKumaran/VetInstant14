@@ -81,6 +81,7 @@ const AddPrescription = () => {
                 items={time}
                 label="Choose when to take"
                 name="time"
+                placeholder="Choose when to take"
               />
             </View>
             <AppFormField
@@ -88,14 +89,14 @@ const AddPrescription = () => {
               autoCapitalize="none"
               autoCorrect={false}
               name="Medicing name"
-              placeholder="Medicing name"
+              // placeholder="Medicing name"
             />
             <AppFormField
               label="Quantity"
               autoCapitalize="none"
               autoCorrect={false}
               name="Quantity"
-              placeholder="Quantity"
+              // placeholder="Quantity"
             />
             <View
               style={{
@@ -133,6 +134,7 @@ const AddPrescription = () => {
                     fontSize: 16,
                     padding: 2,
                     alignSelf: "center",
+                    fontWeight: "700",
                   }}
                 >
                   {date.toLocaleDateString()}
@@ -177,6 +179,7 @@ const AddPrescription = () => {
                     fontSize: 16,
                     padding: 2,
                     alignSelf: "center",
+                    fontWeight: "700",
                   }}
                 >
                   {date.toLocaleTimeString()}

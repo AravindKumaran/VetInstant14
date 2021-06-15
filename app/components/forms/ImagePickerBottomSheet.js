@@ -159,12 +159,15 @@ const ImagePickerBottomSheet = ({ imageUri, onChangeImage, imageList }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 15,
+    borderRadius: 150,
     justifyContent: "center",
     alignItems: "center",
     height: 150,
     overflow: "hidden",
     width: 150,
+    borderWidth: 5,
+    borderColor: "white",
+    elevation: 10,
   },
   image: {
     width: "100%",

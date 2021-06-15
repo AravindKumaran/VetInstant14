@@ -19,7 +19,9 @@ const DrawerNavigator = () => (
     screenOptions={{
       headerStyle: {
         backgroundColor: "#FFFFFF",
-        paddingLeft: 20,
+        elevation: 5,
+        borderBottomStartRadius: 15,
+        borderBottomEndRadius: 15,
       },
       headerTitleAlign: "center",
       headerTintColor: "#47687F",

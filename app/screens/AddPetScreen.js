@@ -195,7 +195,12 @@ const AddPetScreen = ({ navigation, route }) => {
               return (
                 <>
                   <View style={{ margin: 20 }}>
-                    <View style={{ alignSelf: "center" }}>
+                    <View
+                      style={{
+                        alignSelf: "center",
+                        marginBottom: 10,
+                      }}
+                    >
                       <AppImagePicker name="photo" />
                     </View>
 
@@ -312,7 +317,7 @@ const AddPetScreen = ({ navigation, route }) => {
                     /> */}
                   </View>
 
-                  {!route?.params?.editPet && (
+                  {/* {!route?.params?.editPet && (
                     <>
                       <View
                         style={{
@@ -327,8 +332,8 @@ const AddPetScreen = ({ navigation, route }) => {
                         <AppImageListPicker name="images" />
                       </View>
                     </>
-                  )}
-
+                  )} */}
+                  
                   <View style={{ height: 170 }}>
                     <SubmitButton
                       title={route?.params?.editPet ? "Update Pet" : "Save Pet"}

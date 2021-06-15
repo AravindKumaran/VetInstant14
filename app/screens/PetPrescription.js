@@ -67,8 +67,8 @@ const PetPrescriptionScreen = ({ route }) => {
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={styles.container1}>
         <LoadingIndicator visible={loading} />
         {petPrescriptions.length === 0 ? (
           // <AppText style={{ textAlign: "center" }}>
@@ -251,9 +251,11 @@ const PetPrescriptionScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // marginVertical: 30,
-    // marginHorizontal: 20,
     backgroundColor: "#FFFFFF",
+  },
+  container1: {
+    marginVertical: 30,
+    marginHorizontal: 20,
   },
   card: {
     backgroundColor: "red",
