@@ -63,12 +63,13 @@ const MedicalHistory = () => {
         <View
           style={{
             flexDirection: "row",
-            width: "85%",
+            width: "90%",
             justifyContent: "center",
             alignItems: "center",
             alignContent: "center",
             alignSelf: "center",
             marginVertical: 10,
+            marginRight: 10,
           }}
         >
           <Searchbar />
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
   },
   container1: {
     marginVertical: 30,
-    marginHorizontal: 20,
+    marginHorizontal: 0,
   },
   choose: {
     flexDirection: "row",

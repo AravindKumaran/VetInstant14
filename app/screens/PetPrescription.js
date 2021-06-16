@@ -16,6 +16,11 @@ import AppFormField from "../components/forms/AppFormField";
 import AppButton from "../components/AppButton";
 import AddPrescription from "../screens/AddPrescription";
 import AddReminderScreen from "../screens/AddReminderScreen";
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from "react-native-simple-radio-button";
 
 const pet = [
   { label: "Bruno", value: "Bruno" },
@@ -27,6 +32,12 @@ const time = [
   { label: "Morning", value: "Morning" },
   { label: "Afternoon", value: "Afternoon" },
   { label: "Night", value: "Night" },
+];
+
+const times = [
+  { value: "Morning" },
+  { value: "Afternoon" },
+  { value: "Evening" },
 ];
 
 const doctors = [
@@ -44,6 +55,7 @@ const PetPrescriptionScreen = ({ route }) => {
   const [petPrescriptions, setPetPrescriptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const [isSelected, setisSelected] = useState(false);
 
   const refRBSheet = useRef();
 
@@ -93,9 +105,10 @@ const PetPrescriptionScreen = ({ route }) => {
                 borderColor: "#B9C4CF",
                 borderRadius: 20,
                 height: 110,
-                top: 40,
-                width: "90%",
+                width: "95%",
                 alignSelf: "center",
+                padding: 10,
+                marginVertical: 20,
               }}
             >
               <AppText
@@ -107,13 +120,14 @@ const PetPrescriptionScreen = ({ route }) => {
               </AppText>
               <TouchableOpacity onPress={() => refRBSheet.current.open()}>
                 <Feather
-                  name={"plus-circle"}
-                  size={50}
+                  name={"plus"}
+                  size={40}
                   color={"#41CE8A"}
                   style={{
-                    backgroundColor: "white",
                     alignSelf: "center",
                     borderRadius: 50,
+                    elevation: 10,
+                    backgroundColor: "#FFFFFF",
                   }}
                 />
               </TouchableOpacity>
@@ -140,24 +154,24 @@ const PetPrescriptionScreen = ({ route }) => {
               </RBSheet>
               <View
                 style={{
-                  borderWidth: 0.5,
+                  borderWidth: 1,
                   borderColor: "#DCE1E7",
-                  top: 20,
+                  marginTop: 15,
                 }}
               />
             </View>
             <View
               style={{
-                borderWidth: 1,
-                borderColor: "#B9C4CF",
                 borderRadius: 20,
                 height: 200,
-                marginVertical: 80,
-                width: "90%",
+                marginVertical: 40,
+                width: "95%",
                 alignSelf: "center",
+                elevation: 10,
+                backgroundColor: "#FFFFFF",
               }}
             >
-              <View style={{ top: 25 }}>
+              <View style={{ marginTop: 15 }}>
                 {doctors.map((c, i) => (
                   <>
                     <View key={`${c.name}-${i}`} style={styles.catItem}>
@@ -199,17 +213,89 @@ const PetPrescriptionScreen = ({ route }) => {
                   </>
                 ))}
               </View>
-              <View style={{ paddingVertical: 60 }}>
-                <AppText
-                  style={{ color: "#47687F", fontWeight: "400", fontSize: 12 }}
-                >
-                  Intas Eazypet
-                </AppText>
-                <AppText
-                  style={{ color: "#47687F", fontWeight: "400", fontSize: 12 }}
-                >
-                  Himalaya Digyton Dr...
-                </AppText>
+              <View style={{ paddingVertical: 30 }}>
+                <View style={{ flexDirection: "row", marginVertical: 10 }}>
+                  <AppText
+                    style={{
+                      color: "#47687F",
+                      fontWeight: "400",
+                      fontSize: 12,
+                      marginLeft: 10,
+                    }}
+                  >
+                    Intas Eazypet
+                  </AppText>
+                  <View
+                    style={{
+                      marginLeft: 150,
+                      position: "absolute",
+                    }}
+                  >
+                    <RadioForm
+                      radio_props={times}
+                      initial={null}
+                      formHorizontal={true}
+                      labelHorizontal={true}
+                      labelColor={"white"}
+                      animation={true}
+                      onPress={setisSelected}
+                      buttonColor={"#B9C4CF"}
+                      selectedButtonColor={"#60E6A6"}
+                      buttonSize={10}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      marginLeft: 250,
+                      position: "absolute",
+                    }}
+                  >
+                    <Text style={{ color: "#47687F", fontWeight: "400" }}>
+                      1 No.
+                    </Text>
+                  </View>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <AppText
+                    style={{
+                      color: "#47687F",
+                      fontWeight: "400",
+                      fontSize: 12,
+                      marginLeft: 10,
+                    }}
+                  >
+                    Himalaya Digyton Dr...
+                  </AppText>
+                  <View
+                    style={{
+                      marginLeft: 150,
+                      position: "absolute",
+                    }}
+                  >
+                    <RadioForm
+                      radio_props={times}
+                      initial={null}
+                      formHorizontal={true}
+                      labelHorizontal={true}
+                      labelColor={"white"}
+                      animation={true}
+                      onPress={setisSelected}
+                      buttonColor={"#B9C4CF"}
+                      selectedButtonColor={"#60E6A6"}
+                      buttonSize={10}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      marginLeft: 250,
+                      position: "absolute",
+                    }}
+                  >
+                    <Text style={{ color: "#47687F", fontWeight: "400" }}>
+                      10 ml
+                    </Text>
+                  </View>
+                </View>
               </View>
             </View>
           </View>
@@ -255,7 +341,6 @@ const styles = StyleSheet.create({
   },
   container1: {
     marginVertical: 30,
-    marginHorizontal: 20,
   },
   card: {
     backgroundColor: "red",

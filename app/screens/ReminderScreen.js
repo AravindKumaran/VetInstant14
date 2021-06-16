@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, ScrollView, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+} from "react-native";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 import { Feather } from "@expo/vector-icons";
@@ -69,159 +76,327 @@ const ReminderScreen = ({ navigation }) => {
             placeholder="Choose your pet"
           />
         </Formik>
-        <TouchableOpacity
-          style={{ paddingTop: 30, marginBottom: 10 }}
-          onPress={() => refRBSheet.current.open()}
-          onPress={() =>
-            navigation.navigate("AddReminder", {
-              rmr: todayReminders,
-            })
-          }
-        >
-          <Feather
-            name={"plus-circle"}
-            size={50}
-            color={"#41CE8A"}
-            style={{
-              alignSelf: "center",
-              borderRadius: 50,
-            }}
-          />
-        </TouchableOpacity>
-        {/* <View>
-          <View style={{ flexDirection: "row", paddingLeft: 30 }}>
-            <Feather
-              name={"calendar"}
-              size={50}
-              color={"white"}
-              style={{
-                backgroundColor: "#60E6A6",
-                borderRadius: 50,
-                height: 70,
-                width: 70,
-                alignContent: "center",
-              }}
-            />
-            <View style={{ flexDirection: "column" }}>
+        <View>
+          <View>
+            <View style={{ flexDirection: "row", marginTop: 20 }}>
               <View
                 style={{
-                  borderColor: "rgba(21, 56, 95, 0.3)",
-                  borderWidth: 1,
-                  marginBottom: 18,
-                  borderRadius: 40,
-                  height: 60,
-                  width: 150,
-                  alignSelf: "center",
+                  backgroundColor: "#60E6A6",
+                  borderRadius: 50,
+                  height: 70,
+                  width: 70,
                   justifyContent: "center",
+                  left: 20,
+                  bottom: 5,
+                  elevation: 10,
                 }}
               >
-                <AppText
+                <Feather
+                  name={"calendar"}
+                  size={35}
+                  color={"white"}
                   style={{
-                    color: "#47687F",
                     alignSelf: "center",
-                    fontSize: 14,
+                  }}
+                />
+              </View>
+              <View style={{ flexDirection: "column" }}>
+                <View
+                  style={{
+                    borderColor: "#B9C4CF",
+                    borderWidth: 1,
+                    marginBottom: 18,
+                    borderRadius: 40,
+                    height: 50,
+                    width: 150,
                   }}
                 >
-                  April 11th, 2021
-                </AppText>
+                  <AppText
+                    style={{
+                      color: "#47687F",
+                      alignSelf: "center",
+                      fontSize: 14,
+                    }}
+                  >
+                    April 11th, 2021
+                  </AppText>
+                </View>
+                <View
+                  style={{
+                    borderColor: "#60E6A6",
+                    borderWidth: 1,
+                    marginBottom: 0,
+                    borderRadius: 40,
+                    height: 50,
+                    width: 200,
+                    justifyContent: "center",
+                    backgroundColor: "#60E6A6",
+                    flexDirection: "row",
+                    elevation: 10,
+                    bottom: 40,
+                  }}
+                >
+                  <View style={{ flexDirection: "column" }}>
+                    <AppText
+                      style={{
+                        color: "#FFFFFF",
+                        alignSelf: "center",
+                        fontSize: 12,
+                        fontWeight: "700",
+                      }}
+                    >
+                      Vaccination Day
+                    </AppText>
+                    <AppText
+                      style={{
+                        color: "#47687F",
+                        alignSelf: "center",
+                        fontSize: 14,
+                        fontWeight: "400",
+                        bottom: 10,
+                      }}
+                    >
+                      Canine Distemper.
+                    </AppText>
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      borderRadius: 50,
+                      height: 40,
+                      width: 40,
+                      justifyContent: "center",
+                      elevation: 10,
+                      opacity: 0.6,
+                      left: 5,
+                      top: 4,
+                    }}
+                  >
+                    <Image
+                      source={require("../components/assets/images/Vaccine.png")}
+                      style={{
+                        alignSelf: "center",
+                      }}
+                    />
+                  </View>
+                </View>
+              </View>
+              <View>
+                <TouchableOpacity
+                  style={{
+                    paddingTop: 0,
+                    marginBottom: 0,
+                    marginHorizontal: 20,
+                  }}
+                  onPress={() => refRBSheet.current.open()}
+                  onPress={() =>
+                    navigation.navigate("AddReminder", {
+                      rmr: todayReminders,
+                    })
+                  }
+                >
+                  <Feather
+                    name={"plus"}
+                    size={40}
+                    color={"#41CE8A"}
+                    style={{
+                      alignSelf: "center",
+                      borderRadius: 50,
+                      elevation: 10,
+                      backgroundColor: "#FFFFFF",
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <Image
+              source={require("../components/assets/images/Dotline.png")}
+              style={{ height: 50, left: 40 }}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                alignSelf: "center",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "column",
+                  alignSelf: "center",
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: "#60E6A6",
+                    borderRadius: 50,
+                    height: 25,
+                    width: 25,
+                    justifyContent: "center",
+                    elevation: 10,
+                    borderWidth: 5,
+                    borderColor: "#FFFFFF",
+                    alignSelf: "center",
+                    margin: 5,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: "#47687F",
+                    fontSize: 14,
+                    fontWeightL: "400",
+                    alignSelf: "center",
+                  }}
+                >
+                  10:00 am
+                </Text>
               </View>
               <View
                 style={{
-                  borderColor: "rgba(21, 56, 95, 0.3)",
+                  borderColor: "#FFFFFF",
                   borderWidth: 1,
-                  marginBottom: 0,
-                  borderRadius: 40,
-                  height: 50,
+                  marginBottom: 18,
+                  borderRadius: 20,
+                  height: 70,
                   width: 250,
                   alignSelf: "center",
                   justifyContent: "center",
-                  backgroundColor: "#60E6A6",
+                  backgroundColor: "#FFFFFF",
+                  margin: 10,
+                  elevation: 10,
                 }}
               >
-                <AppText
-                  style={{
-                    color: "#FFFFFF",
-                    alignSelf: "center",
-                    fontSize: 12,
-                    fontWeight: "700",
-                  }}
-                >
-                  Vaccination Day
-                </AppText>
-                <AppText
-                  style={{
-                    color: "#47687F",
-                    alignSelf: "center",
-                    fontSize: 14,
-                    fontWeight: "400",
-                  }}
-                >
-                  Canine Distemper
-                </AppText>
-              </View>
-            </View>
-          </View>
-          <View style={{ flexDirection: "row", alignSelf: "center" }}>
-            <Text
-              style={{
-                color: "#47687F",
-                fontSize: 14,
-                fontWeightL: "400",
-                alignSelf: "center",
-              }}
-            >
-              10:00 am
-            </Text>
-            <View
-              style={{
-                borderColor: "rgba(21, 56, 95, 0.3)",
-                borderWidth: 1,
-                marginBottom: 18,
-                borderRadius: 20,
-                height: 70,
-                width: 250,
-                alignSelf: "center",
-                justifyContent: "center",
-                backgroundColor: "#FFFFFF",
-                margin: 10,
-              }}
-            >
-              <View style={{ flexDirection: "row" }}>
-                <View style={{ flexDirection: "column", marginLeft: 15 }}>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flexDirection: "column", marginLeft: 15 }}>
+                    <Text
+                      style={{
+                        color: "#47687F",
+                        fontSize: 14,
+                        fontWeightL: "400",
+                      }}
+                    >
+                      Intas Eazypet
+                    </Text>
+                    <Text
+                      style={{
+                        color: "#B9C4CF",
+                        fontSize: 11,
+                        fontWeightL: "400",
+                      }}
+                    >
+                      After Breakfast
+                    </Text>
+                  </View>
+
                   <Text
                     style={{
-                      color: "#47687F",
-                      fontSize: 14,
-                      fontWeightL: "400",
+                      color: "#41CE8A",
+                      fontSize: 18,
+                      fontWeight: "700",
+                      flex: 1,
+                      textAlign: "right",
+                      marginRight: 15,
                     }}
                   >
-                    Intas Eazypet
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#B9C4CF",
-                      fontSize: 11,
-                      fontWeightL: "400",
-                    }}
-                  >
-                    After Breakfast
+                    1 No.
                   </Text>
                 </View>
-
+              </View>
+            </View>
+            <Image
+              source={require("../components/assets/images/Dotline.png")}
+              style={{ height: 50, left: 40 }}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                alignSelf: "center",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "column",
+                  alignSelf: "center",
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: "#60E6A6",
+                    borderRadius: 50,
+                    height: 25,
+                    width: 25,
+                    justifyContent: "center",
+                    elevation: 10,
+                    borderWidth: 5,
+                    borderColor: "#FFFFFF",
+                    alignSelf: "center",
+                    margin: 5,
+                  }}
+                />
                 <Text
                   style={{
-                    marginLeft: 100,
-                    color: "#41CE8A",
-                    fontSize: 18,
-                    fontWeight: "700",
+                    color: "#47687F",
+                    fontSize: 14,
+                    fontWeightL: "400",
+                    alignSelf: "center",
                   }}
                 >
-                  1 No
+                  09:30 pm
                 </Text>
+              </View>
+              <View
+                style={{
+                  borderColor: "#FFFFFF",
+                  borderWidth: 1,
+                  marginBottom: 18,
+                  borderRadius: 20,
+                  height: 70,
+                  width: 250,
+                  alignSelf: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#FFFFFF",
+                  margin: 10,
+                  elevation: 10,
+                }}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flexDirection: "column", marginLeft: 15 }}>
+                    <Text
+                      style={{
+                        color: "#47687F",
+                        fontSize: 14,
+                        fontWeightL: "400",
+                      }}
+                    >
+                      Himalaya Digyton Drop
+                    </Text>
+                    <Text
+                      style={{
+                        color: "#B9C4CF",
+                        fontSize: 11,
+                        fontWeightL: "400",
+                      }}
+                    >
+                      After Breakfast
+                    </Text>
+                  </View>
+
+                  <Text
+                    style={{
+                      color: "#41CE8A",
+                      fontSize: 18,
+                      fontWeight: "700",
+                      flex: 1,
+                      textAlign: "right",
+                      marginRight: 15,
+                    }}
+                  >
+                    10ml
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
-        </View> */}
+        </View>
 
         {todayReminders.length > 0 && (
           <>
@@ -300,7 +475,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   container1: {
-    marginHorizontal: 25,
     marginVertical: 30,
     marginBottom: 80,
   },

@@ -104,7 +104,38 @@ const MedicalHistoryPets = () => {
           backgroundColor: "#FFFFFF",
           marginBottom: 10,
         }}
-      />
+      >
+        <View
+          style={{
+            height: 80,
+            width: 80,
+            borderRadius: 20,
+            elevation: 10,
+            backgroundColor: "#FFFFFF",
+          }}
+        />
+        <Text style={{ color: "#47687F", marginHorizontal: 30 }}>
+          Digestion report.img
+        </Text>
+        <TouchableOpacity>
+          <Feather
+            name={"arrow-down-circle"}
+            size={20}
+            color={"#41CE8A"}
+            style={{ marginHorizontal: 10 }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Feather
+            name={"eye"}
+            size={20}
+            color={"#41CE8A"}
+            style={{
+              marginHorizontal: 10,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
