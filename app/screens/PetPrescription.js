@@ -112,7 +112,7 @@ const PetPrescriptionScreen = ({ route }) => {
               }}
             >
               <AppText
-                style={{ textAlign: "center", fontSize: 14, color: "#47687F" }}
+                style={{ textAlign: "center", fontSize: 12, color: "#47687F" }}
               >
                 Prescriptions from the vets coming through VetInstant would be
                 automatically updated here but for prescriptions from externall

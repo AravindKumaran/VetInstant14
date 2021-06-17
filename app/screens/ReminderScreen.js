@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -9,18 +9,18 @@ import {
 } from "react-native";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
-import { Feather } from "@expo/vector-icons";
+import Feather from "react-native-vector-icons/Feather";
 import * as Notifications from "expo-notifications";
-
 import {
   getObjectData,
   getAllKeys,
   clearAll,
   removeValue,
 } from "../components/utils/reminderStorage";
-
 import ChoosePicker from "../components/forms/ChoosePicker";
 import { Formik } from "formik";
+import RBSheet from "react-native-raw-bottom-sheet";
+import LobbyReminder from "./LobbyReminder";
 
 const pet = [
   { label: "Bruno", value: "Bruno" },
@@ -31,6 +31,7 @@ const pet = [
 const ReminderScreen = ({ navigation }) => {
   const [todayReminders, setTodayReminders] = useState([]);
   const [upcomingReminders, setUpcomingReminders] = useState([]);
+  const refRBSheet = useRef();
 
   const getReminders = async () => {
     const data = await getAllKeys();
@@ -189,11 +190,11 @@ const ReminderScreen = ({ navigation }) => {
                     marginHorizontal: 20,
                   }}
                   onPress={() => refRBSheet.current.open()}
-                  onPress={() =>
-                    navigation.navigate("AddReminder", {
-                      rmr: todayReminders,
-                    })
-                  }
+                  // onPress={() =>
+                  //   navigation.navigate("AddReminder", {
+                  //     rmr: todayReminders,
+                  //   })
+                  // }
                 >
                   <Feather
                     name={"plus"}
@@ -207,6 +208,32 @@ const ReminderScreen = ({ navigation }) => {
                     }}
                   />
                 </TouchableOpacity>
+                <RBSheet
+                  ref={refRBSheet}
+                  animationType="fade"
+                  customStyles={{
+                    wrapper: {
+                      backgroundColor: "rgba(255, 255, 255, 0.92)",
+                    },
+                    draggableIcon: {
+                      backgroundColor: "#000",
+                    },
+                    container: {
+                      width: "90%",
+                      height: "80%",
+                      borderRadius: 25,
+                      backgroundColor: "#FFFFFF",
+                      elevation: 10,
+                      justifyContent: "center",
+                      alignSelf: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                      bottom: 50,
+                    },
+                  }}
+                >
+                  <LobbyReminder />
+                </RBSheet>
               </View>
             </View>
             <Image

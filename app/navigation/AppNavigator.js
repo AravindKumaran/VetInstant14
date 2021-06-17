@@ -20,6 +20,10 @@ import PetPrescriptionScreen from "../screens/PetPrescription";
 import ReminderScreen from "../screens/ReminderScreen";
 import RadioButtonPets from "../screens/RadioButton";
 import MedicalHistoryPets from "../screens/MedicalHistoryPets";
+import PetReminder from "../screens/PetReminder";
+import AddVet from "../screens/AddVet";
+import VetProfile from "../screens/VetProfile";
+import ServiceScreen from "../screens/ServiceScreen";
 
 import { Feather } from "@expo/vector-icons";
 
@@ -127,6 +131,10 @@ const AppNavigator = ({ navigation }) => {
       <Stack.Screen name="PetScreen" component={PetScreen} />
       <Stack.Screen name="PetMedication" component={PetMedication} />
       <Stack.Screen name="PetVaccination" component={PetVaccination} />
+      <Stack.Screen name="PetReminder" component={PetReminder} />
+      <Stack.Screen name="AddVet" component={AddVet} />
+      <Stack.Screen name="VetProfile" component={VetProfile} />
+      <Stack.Screen name="ServiceScreen" component={ServiceScreen} />
       <Stack.Screen
         name="MedicalHistoryPets"
         component={MedicalHistoryPets}

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import ReminderScreen from "./ReminderScreen";
+import PetReminder from "./PetReminder";
 
 const ActiveStyle = () => (
   <View
@@ -159,7 +160,8 @@ const PetProfile = ({ navigation, route }) => {
                 </View>
               </View>
             )}
-            {active === "Reminders" && <ReminderScreen />}
+            {/* {active === "Reminders" && <ReminderScreen />} */}
+            {active === "Reminders" && <PetReminder />}
           </View>
         </>
       </Formik>

@@ -1,8 +1,19 @@
-import React from "react";
-import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
+import React, { useRef } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Dimensions,
+} from "react-native";
 import { Formik } from "formik";
+import AppButton from "../components/AppButton";
+import RBSheet from "react-native-raw-bottom-sheet";
+import ServiceScreen from "./ServiceScreen";
 
 const VetProfile = () => {
+  const refRBSheet = useRef();
   return (
     <ScrollView style={styles.container}>
       <Formik
@@ -35,7 +46,7 @@ const VetProfile = () => {
                 M.B.B.S., M.D.
               </Text>
             </Text>
-            <View>
+            <View style={{ marginVertical: 50 }}>
               <View style={styles.box}>
                 <Text style={styles.text3}>Hospital</Text>
                 <Text style={styles.text4}>PetCare Chennai Clinic</Text>
@@ -48,6 +59,32 @@ const VetProfile = () => {
                 <Text style={styles.text3}>Hospital Contact</Text>
                 <Text style={styles.text4}>+91 1234567890</Text>
               </View>
+            </View>
+            <View>
+              <AppButton
+                title="Call Vet"
+                onPress={() => refRBSheet.current.open()}
+              />
+              <RBSheet
+                ref={refRBSheet}
+                height={Dimensions.get("window").height - 200}
+                animationType="fade"
+                customStyles={{
+                  wrapper: {
+                    backgroundColor: "rgba(0,0,0,.6)",
+                  },
+                  draggableIcon: {
+                    backgroundColor: "#C4C4C4",
+                  },
+                  container: {
+                    backgroundColor: "#FFFFFF",
+                    borderTopRightRadius: 25,
+                    borderTopLeftRadius: 25,
+                  },
+                }}
+              >
+                <ServiceScreen />
+              </RBSheet>
             </View>
           </View>
         </>

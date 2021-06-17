@@ -198,6 +198,18 @@ const ChooseVetScreen = ({ navigation, route }) => {
                 txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
                 onPress={() => navigation.navigate("PetVaccination")}
               />
+              <AppButton
+                title="AddVet"
+                btnStyle={{ padding: 16 }}
+                txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
+                onPress={() => navigation.navigate("AddVet")}
+              />
+              <AppButton
+                title="VetProfile"
+                btnStyle={{ padding: 16 }}
+                txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
+                onPress={() => navigation.navigate("VetProfile")}
+              />
             </>
           </Formik>
         </View>

@@ -46,7 +46,7 @@ const MedicalHistory = () => {
           <>
             <ChoosePicker
               items={pet}
-              label="Choose your pet"
+              label="Pet name"
               name="pet"
               placeholder="Choose your pet"
             />

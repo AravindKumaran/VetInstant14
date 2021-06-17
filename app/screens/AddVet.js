@@ -15,7 +15,7 @@ const AddVet = () => {
       >
         <>
           <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
-            <View style={{ alignSelf: "center" }}>
+            <View style={{ alignSelf: "center", marginVertical: 20 }}>
               <AppImagePicker name="photo" />
             </View>
             <AppFormField

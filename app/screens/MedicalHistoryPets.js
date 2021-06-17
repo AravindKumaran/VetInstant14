@@ -38,8 +38,6 @@ const MedicalHistoryPets = () => {
           alignSelf: "center",
           borderRadius: 20,
           padding: 10,
-          elevation: 10,
-          backgroundColor: "#FFFFFF",
           marginBottom: 10,
           marginTop: 10,
         }}
@@ -99,22 +97,17 @@ const MedicalHistoryPets = () => {
           width: "95%",
           alignSelf: "center",
           borderRadius: 20,
-          padding: 10,
+          padding: 0,
           elevation: 10,
           backgroundColor: "#FFFFFF",
           marginBottom: 10,
         }}
       >
-        <View
-          style={{
-            height: 80,
-            width: 80,
-            borderRadius: 20,
-            elevation: 10,
-            backgroundColor: "#FFFFFF",
-          }}
+        <Image
+          source={require("../components/assets/images/document.png")}
+          style={{ height: 100, width: 100 }}
         />
-        <Text style={{ color: "#47687F", marginHorizontal: 30 }}>
+        <Text style={{ color: "#47687F", marginHorizontal: 15 }}>
           Digestion report.img
         </Text>
         <TouchableOpacity>
@@ -122,7 +115,7 @@ const MedicalHistoryPets = () => {
             name={"arrow-down-circle"}
             size={20}
             color={"#41CE8A"}
-            style={{ marginHorizontal: 10 }}
+            style={{ marginHorizontal: 15 }}
           />
         </TouchableOpacity>
         <TouchableOpacity>

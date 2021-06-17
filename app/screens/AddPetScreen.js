@@ -222,24 +222,24 @@ const AddPetScreen = ({ navigation, route }) => {
                     </View>
 
                     <AppFormField
-                      label="Name"
+                      label="Pet Name"
                       autoCapitalize="none"
                       autoCorrect={false}
                       name="name"
                       // placeholder="Enter your pet name"
                     />
                     <AppFormField
+                      label="Tell Us About Your Pet"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      name="description"
+                      // placeholder="Enter your pet breed"
+                    />
+                    <AppFormField
                       label="Breed"
                       autoCapitalize="none"
                       autoCorrect={false}
                       name="breed"
-                      // placeholder="Enter your pet breed"
-                    />
-                    <AppFormField
-                      label="Description"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      name="description"
                       // placeholder="Enter your pet breed"
                     />
 
@@ -333,10 +333,12 @@ const AddPetScreen = ({ navigation, route }) => {
                       </View>
                     </>
                   )} */}
-                  
+
                   <View style={{ height: 170 }}>
                     <SubmitButton
-                      title={route?.params?.editPet ? "Update Pet" : "Save Pet"}
+                      title={
+                        route?.params?.editPet ? "Save Changes" : "Save Pet"
+                      }
                     />
                   </View>
                 </>

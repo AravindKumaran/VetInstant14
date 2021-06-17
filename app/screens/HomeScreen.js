@@ -425,7 +425,7 @@ const HomeScreen = ({ navigation, route }) => {
               }}
             />
             <ScheduledCallScreen />
-            {/* <View style={{ paddingTop: 10 }}>
+            <View style={{ paddingTop: 10 }}>
               {doctors.map((c, i) => (
                 <>
                   <View key={`${c.name}-${i}`} style={styles.catItem}>
@@ -463,7 +463,7 @@ const HomeScreen = ({ navigation, route }) => {
                   />
                 </>
               ))}
-            </View> */}
+            </View>
           </>
         )}
 
@@ -581,7 +581,7 @@ const styles = StyleSheet.create({
   Rectangle: {
     width: 80,
     height: 30,
-    backgroundColor: "#f3f3f3",
+    backgroundColor: "#FFFFFF",
     borderRadius: 20,
     right: 170,
     justifyContent: "center",

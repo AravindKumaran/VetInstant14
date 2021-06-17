@@ -360,7 +360,7 @@ const CallVetScreen = ({ navigation, route }) => {
     <ScrollView nestedScrollEnabled={true} style={styles.container}>
       <LoadingIndicator visible={loading} />
       <View style={styles.btnWrapper}>
-        <AppButton
+        {/* <AppButton
           title="Pet History"
           btnStyle={{ marginTop: 30 }}
           onPress={() =>
@@ -375,7 +375,7 @@ const CallVetScreen = ({ navigation, route }) => {
               id: route?.params?.pet._id,
             })
           }
-        />
+        /> */}
       </View>
 
       <View style={styles.container1}>
