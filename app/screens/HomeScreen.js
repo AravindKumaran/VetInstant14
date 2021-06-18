@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import AppText from "../components/AppText";
 import AppButton from "../components/AppButton";
@@ -34,6 +34,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import ChooseVetScreen from "../screens/ChooseVetScreen";
 import MyVetScreen from "../screens/MyVetScreen";
 import ScheduledCallScreen from "../screens/ScheduledCallScreen";
+import { Header } from "react-native-elements";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -43,7 +44,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const HomeScreen = ({ navigation, route }) => {
+const HomeScreen = ({ route }) => {
   const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [pets, setPets] = useState([]);
@@ -54,6 +55,43 @@ const HomeScreen = ({ navigation, route }) => {
   const [ispet, setPet] = useState(true);
   const [isvet, setVet] = useState(false);
   const [active, setActive] = useState("pet");
+
+  const navigation = useNavigation();
+
+  const MyCustomLeftComponent = () => {
+    return (
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Feather
+          name="bar-chart"
+          size={25}
+          color="#47687F"
+          style={{
+            marginLeft: 10,
+            paddingLeft: 20,
+            top: 15,
+            transform: [{ scaleX: -1 }, { rotate: "270deg" }],
+          }}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const MyCustomRightComponent = () => {
+    return (
+      <Image
+        source={require("../components/assets/images/doctor1.png")}
+        style={{
+          height: 40,
+          width: 40,
+          borderRadius: 50,
+          borderWidth: 2.5,
+          borderColor: "#6ADFA7",
+          marginRight: 10,
+          paddingRight: 20,
+        }}
+      />
+    );
+  };
 
   const refRBSheet = useRef();
 
@@ -206,268 +244,292 @@ const HomeScreen = ({ navigation, route }) => {
   ];
 
   return (
-    <ScrollView
-      vertical={true}
-      showsVerticalScrollIndicator={false}
-      style={styles.container}
-    >
-      <LoadingIndicator visible={loading} />
-      <View style={styles.container1}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignSelf: "center",
-            marginHorizontal: 60,
-          }}
-        >
-          <TouchableOpacity onPress={() => handleActive("pet")}>
-            <AppText
-              style={{
-                fontWeight: "500",
-                fontSize: 16,
-                color: active === "pet" ? "#41CE8A" : "#476880",
-              }}
-            >
-              Pets
-            </AppText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => handleActive("vet")}
-            // onPress={() => refRBSheet.current.open()}
-          >
-            <AppText
-              style={{
-                fontWeight: "500",
-                fontSize: 16,
-                color: active === "vet" ? "#41CE8A" : "#476880",
-              }}
-            >
-              Vet
-            </AppText>
-          </TouchableOpacity>
-
-          <RBSheet
-            ref={refRBSheet}
-            height={Dimensions.get("window").height - 200}
-            animationType="fade"
-            closeOnDragDown={true}
-            customStyles={{
-              wrapper: {
-                backgroundColor: "rgba(0,0,0,.6)",
-              },
-              draggableIcon: {
-                backgroundColor: "#C4C4C4",
-              },
-              container: {
-                backgroundColor: "#EBEBEB",
-                borderTopRightRadius: 25,
-                borderTopLeftRadius: 25,
-              },
+    <>
+      <Header
+        leftComponent={<MyCustomLeftComponent />}
+        rightComponent={<MyCustomRightComponent />}
+        centerComponent={{
+          text: "VetInstant",
+          style: { color: "#41CE8A", fontSize: 20, fontWeight: "700", top: 5 },
+        }}
+        containerStyle={{
+          backgroundColor: "#FFFFFF",
+          elevation: 5,
+          borderBottomStartRadius: 15,
+          borderBottomEndRadius: 15,
+        }}
+      />
+      <ScrollView
+        vertical={true}
+        showsVerticalScrollIndicator={false}
+        style={styles.container}
+      >
+        <LoadingIndicator visible={loading} />
+        <View style={styles.container1}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignSelf: "center",
+              marginHorizontal: 60,
             }}
           >
-            <MyVetScreen />
-          </RBSheet>
-        </View>
-
-        {active === "pet" && (
-          <>
-            <View style={styles.addPetContainer}>
-              {loading ? (
-                <LoadingIndicator visible={loading} />
-              ) : (
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                >
-                  {pets.length > 0 &&
-                    pets.map((pet) => (
-                      <AddPetButton
-                        key={pet._id}
-                        name={pet.name}
-                        img={pet.photo}
-                        onPress={() =>
-                          navigation.navigate("ChooseVet", { pet })
-                        }
-                      />
-                    ))}
-
-                  <AddPetButton
-                    title="+"
-                    onPress={() => navigation.navigate("AddPet")}
-                  />
-                </ScrollView>
-              )}
-            </View>
-
-            {pets.length > 0 ? (
-              <></>
-            ) : (
+            <TouchableOpacity onPress={() => handleActive("pet")}>
               <AppText
-                style={{ fontSize: 20, color: "#47687F", textAlign: "center" }}
+                style={{
+                  fontWeight: "500",
+                  fontSize: 16,
+                  color: active === "pet" ? "#41CE8A" : "#476880",
+                }}
               >
-                Add your vet
+                Pets
               </AppText>
-            )}
+            </TouchableOpacity>
 
-            <View
-              style={{
-                height: 1,
-                width: "95%",
-                borderWidth: 1,
-                borderColor: "#DCE1E7",
-                alignSelf: "center",
-                marginVertical: 20,
-              }}
-            />
-            <View style={styles.rmdText}>
-              <AppText style={{ fontSize: 20 }}>Reminders</AppText>
-              <TouchableOpacity
-                style={styles.editWrapper}
-                onPress={() => navigation.navigate("Reminder")}
+            <TouchableOpacity
+              onPress={() => handleActive("vet")}
+              // onPress={() => refRBSheet.current.open()}
+            >
+              <AppText
+                style={{
+                  fontWeight: "500",
+                  fontSize: 16,
+                  color: active === "vet" ? "#41CE8A" : "#476880",
+                }}
               >
-                <View
+                Vet
+              </AppText>
+            </TouchableOpacity>
+
+            <RBSheet
+              ref={refRBSheet}
+              height={Dimensions.get("window").height - 200}
+              animationType="fade"
+              closeOnDragDown={true}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "rgba(0,0,0,.6)",
+                },
+                draggableIcon: {
+                  backgroundColor: "#C4C4C4",
+                },
+                container: {
+                  backgroundColor: "#EBEBEB",
+                  borderTopRightRadius: 25,
+                  borderTopLeftRadius: 25,
+                },
+              }}
+            >
+              <MyVetScreen />
+            </RBSheet>
+          </View>
+
+          {active === "pet" && (
+            <>
+              <View style={styles.addPetContainer}>
+                {loading ? (
+                  <LoadingIndicator visible={loading} />
+                ) : (
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                  >
+                    {pets.length > 0 &&
+                      pets.map((pet) => (
+                        <AddPetButton
+                          key={pet._id}
+                          name={pet.name}
+                          img={pet.photo}
+                          onPress={() =>
+                            navigation.navigate("ChooseVet", { pet })
+                          }
+                        />
+                      ))}
+
+                    <AddPetButton
+                      title="+"
+                      onPress={() => navigation.navigate("AddPet")}
+                    />
+                  </ScrollView>
+                )}
+              </View>
+
+              {pets.length > 0 ? (
+                <></>
+              ) : (
+                <AppText
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
+                    fontSize: 20,
+                    color: "#47687F",
+                    textAlign: "center",
                   }}
                 >
-                  <Feather name="edit" size={24} color="#47687F" />
-                  <AppText style={{ fontSize: 16 }}>EDIT</AppText>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            {upcomingReminders.length === 0 && todayReminders.length === 0 && (
-              <AppText style={{ textAlign: "center", fontSize: 20 }}>
-                No Reminders Found
-              </AppText>
-            )}
-            {todayReminders.length > 0 && (
-              <>
-                <View style={styles.rmrCard}>
-                  <AppText style={{ fontSize: 20, color: "#606770" }}>
-                    Today's Reminders
-                  </AppText>
-                  {todayReminders.map((rmr, i) => (
-                    <AppText key={rmr.identifier} style={styles.rmrText}>
-                      {i + 1}) {rmr.reminder}
-                    </AppText>
-                  ))}
-                </View>
-              </>
-            )}
-            {upcomingReminders.length > 0 && (
-              <>
-                <View style={styles.rmrCard}>
-                  <AppText style={{ fontSize: 20, color: "#606770" }}>
-                    Upcoming Reminders
-                  </AppText>
-                  {upcomingReminders.map((rmr, i) => (
-                    <AppText key={rmr.identifier} style={styles.rmrText}>
-                      {i + 1}) {rmr.reminder}
-                    </AppText>
-                  ))}
-                </View>
-              </>
-            )}
-          </>
-        )}
-
-        {active === "vet" && (
-          <>
-            <View style={styles.addPetContainer}>
-              {loading ? (
-                <LoadingIndicator visible={loading} />
-              ) : (
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                >
-                  {vets.length > 0 &&
-                    vets.map((vet) => (
-                      <AddPetButton
-                        key={vet._id}
-                        name={vet.name}
-                        img={vet.photo}
-                        onPress={() =>
-                          navigation.navigate("ChooseVet", { vet })
-                        }
-                      />
-                    ))}
-
-                  <AddPetButton
-                    title="+"
-                    onPress={() => navigation.navigate("MyVet")}
-                  />
-                </ScrollView>
+                  Add your vet
+                </AppText>
               )}
-            </View>
 
-            {vets.length > 0 ? (
-              <></>
-            ) : (
-              <AppText
-                style={{ fontSize: 20, color: "#47687F", textAlign: "center" }}
-              >
-                Add your vet
-              </AppText>
-            )}
-
-            <View
-              style={{
-                height: 1,
-                width: "95%",
-                borderWidth: 1,
-                borderColor: "#DCE1E7",
-                alignSelf: "center",
-                marginVertical: 20,
-              }}
-            />
-            <ScheduledCallScreen />
-            <View style={{ paddingTop: 10 }}>
-              {doctors.map((c, i) => (
-                <>
-                  <View key={`${c.name}-${i}`} style={styles.catItem}>
-                    <Image
-                      source={c.src}
-                      size={15}
-                      style={{
-                        height: 100,
-                        width: 100,
-                        borderRadius: 50,
-                        borderWidth: 10,
-                        borderColor: "#FFFFFF",
-                        // resizeMode: "contain",
-                      }}
-                    />
-                    <Text style={[styles.catItemText, { marginTop: -10 }]}>
-                      {c.name}
-                    </Text>
-                    <View style={styles.Rectangle}>
-                      <TouchableOpacity>
-                        <Text style={styles.text1}>Proceed</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
+              <View
+                style={{
+                  height: 1,
+                  width: "95%",
+                  borderWidth: 1,
+                  borderColor: "#DCE1E7",
+                  alignSelf: "center",
+                  marginVertical: 20,
+                }}
+              />
+              <View style={styles.rmdText}>
+                <AppText style={{ fontSize: 20 }}>Reminders</AppText>
+                <TouchableOpacity
+                  style={styles.editWrapper}
+                  onPress={() => navigation.navigate("Reminder")}
+                >
                   <View
                     style={{
-                      height: 1,
-                      width: "95%",
-                      borderWidth: 1,
-                      borderColor: "#DCE1E7",
-                      alignSelf: "center",
-                      marginVertical: 15,
-                      bottom: 20,
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
-                  />
-                </>
-              ))}
-            </View>
-          </>
-        )}
+                  >
+                    <Feather name="edit" size={24} color="#47687F" />
+                    <AppText style={{ fontSize: 16 }}>EDIT</AppText>
+                  </View>
+                </TouchableOpacity>
+              </View>
 
-        {/* <View style={{ paddingTop: 10 }}>
+              {upcomingReminders.length === 0 &&
+                todayReminders.length === 0 && (
+                  <AppText style={{ textAlign: "center", fontSize: 20 }}>
+                    No Reminders Found
+                  </AppText>
+                )}
+              {todayReminders.length > 0 && (
+                <>
+                  <View style={styles.rmrCard}>
+                    <AppText style={{ fontSize: 20, color: "#606770" }}>
+                      Today's Reminders
+                    </AppText>
+                    {todayReminders.map((rmr, i) => (
+                      <AppText key={rmr.identifier} style={styles.rmrText}>
+                        {i + 1}) {rmr.reminder}
+                      </AppText>
+                    ))}
+                  </View>
+                </>
+              )}
+              {upcomingReminders.length > 0 && (
+                <>
+                  <View style={styles.rmrCard}>
+                    <AppText style={{ fontSize: 20, color: "#606770" }}>
+                      Upcoming Reminders
+                    </AppText>
+                    {upcomingReminders.map((rmr, i) => (
+                      <AppText key={rmr.identifier} style={styles.rmrText}>
+                        {i + 1}) {rmr.reminder}
+                      </AppText>
+                    ))}
+                  </View>
+                </>
+              )}
+            </>
+          )}
+
+          {active === "vet" && (
+            <>
+              <View style={styles.addPetContainer}>
+                {loading ? (
+                  <LoadingIndicator visible={loading} />
+                ) : (
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                  >
+                    {vets.length > 0 &&
+                      vets.map((vet) => (
+                        <AddPetButton
+                          key={vet._id}
+                          name={vet.name}
+                          img={vet.photo}
+                          onPress={() =>
+                            navigation.navigate("ChooseVet", { vet })
+                          }
+                        />
+                      ))}
+
+                    <AddPetButton
+                      title="+"
+                      onPress={() => navigation.navigate("MyVet")}
+                    />
+                  </ScrollView>
+                )}
+              </View>
+
+              {vets.length > 0 ? (
+                <></>
+              ) : (
+                <AppText
+                  style={{
+                    fontSize: 20,
+                    color: "#47687F",
+                    textAlign: "center",
+                  }}
+                >
+                  Add your vet
+                </AppText>
+              )}
+
+              <View
+                style={{
+                  height: 1,
+                  width: "95%",
+                  borderWidth: 1,
+                  borderColor: "#DCE1E7",
+                  alignSelf: "center",
+                  marginVertical: 20,
+                }}
+              />
+              <ScheduledCallScreen />
+              <View style={{ paddingTop: 10 }}>
+                {doctors.map((c, i) => (
+                  <>
+                    <View key={`${c.name}-${i}`} style={styles.catItem}>
+                      <Image
+                        source={c.src}
+                        size={15}
+                        style={{
+                          height: 100,
+                          width: 100,
+                          borderRadius: 50,
+                          borderWidth: 10,
+                          borderColor: "#FFFFFF",
+                          // resizeMode: "contain",
+                        }}
+                      />
+                      <Text style={[styles.catItemText, { marginTop: -10 }]}>
+                        {c.name}
+                      </Text>
+                      <View style={styles.Rectangle}>
+                        <TouchableOpacity>
+                          <Text style={styles.text1}>Proceed</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        height: 1,
+                        width: "95%",
+                        borderWidth: 1,
+                        borderColor: "#DCE1E7",
+                        alignSelf: "center",
+                        marginVertical: 15,
+                        bottom: 20,
+                      }}
+                    />
+                  </>
+                ))}
+              </View>
+            </>
+          )}
+
+          {/* <View style={{ paddingTop: 10 }}>
           {doctors.map((c, i) => (
             <>
               <View key={`${c.name}-${i}`} style={styles.catItem}>
@@ -507,15 +569,16 @@ const HomeScreen = ({ navigation, route }) => {
           ))}
         </View> */}
 
-        {/* <View style={{ marginBottom: 50 }}>
+          {/* <View style={{ marginBottom: 50 }}>
           <AppText style={{ textAlign: "center" }}>
             {user ? user.emailID || user.email : ""}
           </AppText>
           <AppButton title="Logout" onPress={handleLogout} />
           <AppButton title='Token' onPress={sendPushToken} />
         </View> */}
-      </View>
-    </ScrollView>
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

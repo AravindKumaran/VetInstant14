@@ -1,5 +1,12 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, View, TouchableOpacity, Text, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  ScrollView,
+} from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import {
@@ -98,9 +105,9 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <>
-      <LoadingIndicator visible={loading} />
-      <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <>
+        <LoadingIndicator visible={loading} />
         {/* <AppText
           style={{
             textAlign: 'center',
@@ -131,7 +138,9 @@ const LoginScreen = ({ navigation }) => {
                 elevation: 10,
               }}
             >
-              <Image source={require("../components/assets/images/google.png")} />
+              <Image
+                source={require("../components/assets/images/google.png")}
+              />
             </LinearGradient>
           </TouchableOpacity>
 
@@ -212,24 +221,22 @@ const LoginScreen = ({ navigation }) => {
                     <Text style={{ color: "#49D491" }}>Sign Up</Text>
                   </Text>
                 </TouchableOpacity>
-                <View style={{ top: 150 }}>
+                <View style={{ top: 0 }}>
                   <SubmitButton title="Login" />
                 </View>
               </>
             )}
           </Formik>
         </View>
-      </View>
-    </>
+      </>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 0,
     backgroundColor: "#FFFFFF",
-    // justifyContent: "center",
   },
   text1: {
     color: "#47687F",

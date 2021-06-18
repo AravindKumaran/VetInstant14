@@ -43,46 +43,49 @@ const AppNavigator = ({ navigation }) => {
         name="Home"
         component={HomeScreen}
         options={{
-          title: "VetInstant", //Set Header Title
-          headerTintColor: "#41CE8A", //Set Header text color
-          headerTitleStyle: {
-            fontSize: 20,
-          },
-          headerStyle: {
-            elevation: 5,
-            borderBottomStartRadius: 15,
-            borderBottomEndRadius: 15,
-          },
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Feather
-                name="bar-chart"
-                size={25}
-                color="#47687F"
-                style={{
-                  marginLeft: 10,
-                  paddingLeft: 20,
-                  top: 10,
-                  transform: [{ scaleX: -1 }, { rotate: "270deg" }],
-                }}
-              />
-            </TouchableOpacity>
-          ),
-          headerRight: () => (
-            <Image
-              source={require("../components/assets/images/doctor1.png")}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: 50,
-                borderWidth: 2.5,
-                borderColor: "#6ADFA7",
-                marginRight: 10,
-                paddingRight: 20,
-              }}
-            />
-          ),
+          headerShown: false,
         }}
+        // options={{
+        //   title: "VetInstant", //Set Header Title
+        //   headerTintColor: "#41CE8A", //Set Header text color
+        //   headerTitleStyle: {
+        //     fontSize: 20,
+        //   },
+        //   headerStyle: {
+        //     elevation: 5,
+        //     borderBottomStartRadius: 15,
+        //     borderBottomEndRadius: 15,
+        //   },
+        //   headerLeft: () => (
+        //     <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        //       <Feather
+        //         name="bar-chart"
+        //         size={25}
+        //         color="#47687F"
+        //         style={{
+        //           marginLeft: 10,
+        //           paddingLeft: 20,
+        //           top: 10,
+        //           transform: [{ scaleX: -1 }, { rotate: "270deg" }],
+        //         }}
+        //       />
+        //     </TouchableOpacity>
+        //   ),
+        //   headerRight: () => (
+        //     <Image
+        //       source={require("../components/assets/images/doctor1.png")}
+        //       style={{
+        //         height: 40,
+        //         width: 40,
+        //         borderRadius: 50,
+        //         borderWidth: 2.5,
+        //         borderColor: "#6ADFA7",
+        //         marginRight: 10,
+        //         paddingRight: 20,
+        //       }}
+        //     />
+        //   ),
+        // }}
       />
       <Stack.Screen
         name="AddPet"

@@ -15,6 +15,8 @@ const WelcomeScreen = ({ navigation }) => {
           title="Sign up"
           onPress={() => navigation.navigate("Register")}
         />
+      </View>
+      <View style={{ flex: 1, justifyContent: "flex-end" }}>
         <Image source={require("../components/assets/images/petimage.png")} />
       </View>
     </View>
@@ -25,15 +27,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    // padding: 15,
-    paddingTop: 50,
     backgroundColor: "#FFFFFF",
+    paddingTop: 50,
   },
   container1: {
+    flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    padding: 40,
-    paddingTop: 80,
+    margin: 40,
   },
   text1: {
     color: "#49D491",

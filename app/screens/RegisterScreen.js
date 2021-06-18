@@ -1,5 +1,12 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import {
@@ -100,9 +107,9 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   return (
-    <>
-      <LoadingIndicator visible={loading} />
-      <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <>
+        <LoadingIndicator visible={loading} />
         {/* <AppText
           style={{
             textAlign: 'center',
@@ -217,24 +224,22 @@ const RegisterScreen = ({ navigation }) => {
                     <Text style={{ color: "#49D491" }}>Sign In</Text>
                   </Text>
                 </TouchableOpacity>
-                <View style={{ top: 50 }}>
+                <View style={{ top: 0 }}>
                   <SubmitButton title="Get Started" />
                 </View>
               </>
             )}
           </Formik>
         </View>
-      </View>
-    </>
+      </>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 0,
     backgroundColor: "#FFFFFF",
-    // justifyContent: "center",
   },
   text1: {
     color: "#47687F",

@@ -10,7 +10,6 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from "react-native";
-
 import Feather from "react-native-vector-icons/Feather";
 import { Header } from "react-native-elements";
 import ReminderScreen from "./ReminderScreen";
@@ -20,27 +19,7 @@ import MedicalHistory from "../screens/MedicalHistory";
 import PetMedication from "./PetMedication";
 import PetVaccination from "./PetVaccination";
 import PetProblemScreen from "./PetProblemsScreen";
-
-const MyCustomLeftComponent = ({ navigation }) => {
-  return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation?.goBack();
-      }}
-    >
-      <Feather
-        style={{
-          // position: "absolute",
-          color: "#476880",
-          right: 0,
-          bottom: 0,
-        }}
-        name={"arrow-left"}
-        size={25}
-      />
-    </TouchableOpacity>
-  );
-};
+import { useNavigation } from "@react-navigation/native";
 
 const ActiveStyle = () => (
   <View
@@ -83,17 +62,60 @@ const PetLobby = () => {
     setActive(value);
   };
 
+  const navigation = useNavigation();
+
+  const MyCustomLeftComponent = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation?.goBack();
+        }}
+      >
+        <Feather
+          name={"arrow-left"}
+          size={25}
+          color="#476880"
+          style={{
+            marginLeft: 10,
+            top: 5,
+          }}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const MyCustomRightComponent = () => {
+    return (
+      <Image
+        style={{
+          height: 40,
+          width: 40,
+          borderRadius: 50,
+          borderWidth: 2.5,
+          borderColor: "#FFFFFF",
+          marginRight: 10,
+          paddingRight: 20,
+        }}
+      />
+    );
+  };
+
   return (
     <>
       <Header
         leftComponent={<MyCustomLeftComponent />}
+        rightComponent={<MyCustomRightComponent />}
         centerComponent={{
           text: "Pet Lobby",
-          style: { color: "#476880", fontSize: 20, fontWeight: "700", top: 0 },
+          style: {
+            color: "#476880",
+            fontSize: 20,
+            fontWeight: "700",
+            top: 5,
+          },
         }}
         containerStyle={{
           backgroundColor: "#FFFFFF",
-          height: 80,
           elevation: 5,
           borderBottomStartRadius: 15,
           borderBottomEndRadius: 15,

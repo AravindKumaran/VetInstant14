@@ -35,14 +35,14 @@ const PetProfile = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Formik
         initialValues={{
           reminder: "",
         }}
       >
         <>
-          <View style={{ marginVertical: 20 }}>
+          <View style={{ marginVertical: 20, marginBottom: 80 }}>
             <Image
               style={{
                 height: 130,
