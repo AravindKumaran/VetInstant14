@@ -1,7 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-
 import AddPetScreen from "../screens/AddPetScreen";
 import AddReminderScreen from "../screens/AddReminderScreen";
 import CallVetScreen from "../screens/CallVetScreen";
@@ -12,7 +11,6 @@ import PetProfile from "../screens/PetProfile";
 import PetScreen from "../screens/PetScreen";
 import PetMedication from "../screens/PetMedication";
 import PetVaccination from "../screens/PetVaccination";
-
 import HomeScreen from "../screens/HomeScreen";
 import OnlineVetScreen from "../screens/OnlineVetScreen";
 import PetProblemScreen from "../screens/PetProblemsScreen";
@@ -24,7 +22,7 @@ import PetReminder from "../screens/PetReminder";
 import AddVet from "../screens/AddVet";
 import VetProfile from "../screens/VetProfile";
 import ServiceScreen from "../screens/ServiceScreen";
-
+import MenuScreen from "../screens/MenuScreen";
 import { Feather } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
@@ -35,6 +33,9 @@ const AppNavigator = ({ navigation }) => {
       screenOptions={{
         headerStyle: {
           backgroundColor: "#FFFFFF", //Set Header color
+          elevation: 5,
+          borderBottomStartRadius: 15,
+          borderBottomEndRadius: 15,
         },
         headerTitleAlign: "center",
       }}
@@ -138,6 +139,7 @@ const AppNavigator = ({ navigation }) => {
       <Stack.Screen name="AddVet" component={AddVet} />
       <Stack.Screen name="VetProfile" component={VetProfile} />
       <Stack.Screen name="ServiceScreen" component={ServiceScreen} />
+      <Stack.Screen name="MenuScreen" component={MenuScreen} />
       <Stack.Screen
         name="MedicalHistoryPets"
         component={MedicalHistoryPets}

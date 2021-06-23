@@ -210,6 +210,12 @@ const ChooseVetScreen = ({ navigation, route }) => {
                 txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
                 onPress={() => navigation.navigate("VetProfile")}
               />
+              <AppButton
+                title="MenuScreen"
+                btnStyle={{ padding: 16 }}
+                txtStyle={{ textTransform: "capitalize", textAlign: "center" }}
+                onPress={() => navigation.navigate("MenuScreen")}
+              />
             </>
           </Formik>
         </View>
