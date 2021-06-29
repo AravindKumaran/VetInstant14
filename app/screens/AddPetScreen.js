@@ -21,19 +21,21 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
   breed: Yup.string().required().label("Breed"),
-  years: Yup.number().required("*Required").min(0),
-  months: Yup.number()
-    .test("samefield", "*Required", function (value) {
-      if (value < 0 || value > 11) return false;
-      return true;
-    })
-    .required("*Required")
-    .min(0),
-  weight: Yup.number().required().min(1).label("Weight"),
+  // years: Yup.number().required("*Required").min(0),
+  // months: Yup.number()
+  //   .test("samefield", "*Required", function (value) {
+  //     if (value < 0 || value > 11) return false;
+  //     return true;
+  //   })
+  //   .required("*Required")
+  //   .min(0),
+  // weight: Yup.number().required().min(1).label("Weight"),
   gender: Yup.string().required("Please pick pet gender").nullable(),
   type: Yup.string().required("Please pick a species").nullable(),
   photo: Yup.string().required("Please select your pet image").nullable(),
-  images: Yup.array().label("Images"),
+  // images: Yup.array().label("Images"),
+  description: Yup.string().required().label("description"),
+  date: Yup.date().required().label("description"),
 });
 
 const petTypes = [
@@ -54,7 +56,7 @@ const AddPetScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   // console.log('AddRoutes', route?.params?.pet?.photo)
 
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState((route?.params?.editPet) ? new Date(route?.params?.pet?.dob):new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
@@ -80,13 +82,15 @@ const AddPetScreen = ({ navigation, route }) => {
   const editValues = {
     name: route?.params?.pet?.name,
     breed: route?.params?.pet?.breed,
-    years: String(route?.params?.pet?.years),
-    months: String(route?.params?.pet?.months),
-    weight: String(route?.params?.pet?.weight),
+    // years: String(route?.params?.pet?.years),
+    // months: String(route?.params?.pet?.months),
+    // weight: String(route?.params?.pet?.weight),
     photo: `${route?.params?.pet?.photo}`,
     gender: route?.params?.pet?.gender,
     type: route?.params?.pet?.type,
-    images: route?.params?.pet?.petHistoryImages,
+    // images: route?.params?.pet?.petHistoryImages,
+    description: route?.params?.pet?.description,
+    date: new Date(route?.params?.pet?.dob)
   };
 
   useEffect(() => {
@@ -106,15 +110,6 @@ const AddPetScreen = ({ navigation, route }) => {
           uri: values.photo,
         });
       }
-
-      // if (values.images.length > 0) {
-      //   values.images = values.images.map((img) => {
-      //     if (img.startsWith('http') || img.startsWith('https')) {
-      //       img = img.split('img/')[1]
-      //     }
-      //     return img
-      //   })
-      // }
     }
 
     if (!route?.params?.editPet) {
@@ -125,22 +120,24 @@ const AddPetScreen = ({ navigation, route }) => {
       });
     }
 
-    if (values.images && !route?.params?.editPet) {
-      values.images.forEach((image, index) => {
-        form.append("images", {
-          name: "image" + index,
-          type: "image/jpeg",
-          uri: image,
-        });
-      });
-    }
+    // if (values.images && !route?.params?.editPet) {
+    //   values.images.forEach((image, index) => {
+    //     form.append("images", {
+    //       name: "image" + index,
+    //       type: "image/jpeg",
+    //       uri: image,
+    //     });
+    //   });
+    // }
     form.append("name", values.name);
-    form.append("years", +values.years);
-    form.append("months", +values.months);
+    // form.append("years", +values.years);
+    // form.append("months", +values.months);
     form.append("breed", values.breed);
     form.append("gender", values.gender);
     form.append("type", values.type);
-    form.append("weight", +values.weight);
+    // form.append("weight", +values.weight);
+    form.append("description", values.description);
+    form.append("dob", date.toISOString());
     setLoading(true);
 
     let res;
@@ -174,13 +171,15 @@ const AddPetScreen = ({ navigation, route }) => {
                 : {
                     name: "",
                     breed: "",
-                    years: "",
-                    months: "",
-                    weight: "",
+                    // years: "",
+                    // months: "",
+                    // weight: "",
                     photo: null,
                     gender: null,
                     type: null,
-                    images: [],
+                    // images: [],
+                    description: "",
+                    date: date,
                   }
             }
             onSubmit={handleSubmit}
