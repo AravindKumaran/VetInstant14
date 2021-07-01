@@ -26,6 +26,7 @@ import hospitalsApi from "../api/hospitals";
 import RazorpayCheckout from "react-native-razorpay";
 import LoadingIndicator from "../components/LoadingIndicator";
 import AuthContext from "../context/authContext";
+import { useNavigation } from "@react-navigation/native";
 
 import * as Notifications from "expo-notifications";
 import {
@@ -34,7 +35,8 @@ import {
   removeValue,
 } from "../components/utils/reminderStorage";
 
-const CallPendingScreen = ({ navigation }) => {
+const CallPendingScreen = () => {
+  const navigation = useNavigation();
   const { user } = useContext(AuthContext);
   const [pendingCalls, setPendingCalls] = useState([]);
 
@@ -134,6 +136,8 @@ const CallPendingScreen = ({ navigation }) => {
         );
       }
     });
+
+    console.log('allCalls', allCalls);
 
     // setPendingCalls(pres.data.calls)
     setPendingCalls(allCalls);
@@ -294,7 +298,7 @@ const CallPendingScreen = ({ navigation }) => {
     }
 
     await sendPushToken(item.docMobToken, "Please Join, Video Call Started By");
-    navigation.navigate("VideoCall", {
+    navigation.navigate("Video", {
       docId: item.docId,
       userId: user._id,
       name: user.name,

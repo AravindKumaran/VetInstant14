@@ -29,11 +29,11 @@ import CheckList from "../components/forms/CheckList";
 
 import CheckboxList from "rn-checkbox-list";
 
-const pet = [
-  { label: "Bruno", value: "Bruno" },
-  { label: "Kit", value: "Kit" },
-  { label: "Drogon", value: "Drogon" },
-];
+// const pet = [
+//   { label: "Bruno", value: "Bruno" },
+//   { label: "Kit", value: "Kit" },
+//   { label: "Drogon", value: "Drogon" },
+// ];
 
 const Appetite = [
   { label: "Normal", value: "Normal" },
@@ -177,7 +177,7 @@ const validationSchema = Yup.object().shape({
   images: Yup.array().nullable().label("Image"),
   month: Yup.number().required().label("Month"),
   day: Yup.number().required().label("Day"),
-  comment: Yup.string().required("Please enter comment"),
+  //comment: Yup.string().required("Please enter comment"),
 
   feces_comment: Yup.string().nullable(),
   urine_comment: Yup.string().nullable(),
@@ -200,13 +200,18 @@ const validationSchema = Yup.object().shape({
 });
 
 const CallVetScreen = ({ navigation, route }) => {
-  // console.log('Route', route.params.doc)
+  //  console.log('Route', route.params)
+
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
   const [isSelected, setisSelected] = useState(false);
   const refRBSheet = useRef();
+
+  const pet = [
+    { label: route.params.pet.name , value: route.params.pet.name },
+  ];
 
   const sendPushToken = async (title, message) => {
     if (route?.params.doc?.user?.token) {
@@ -253,15 +258,18 @@ const CallVetScreen = ({ navigation, route }) => {
   // }
 
   const savePatientProblems = async (values) => {
+    console.log('savePatientProblems', values);
     const form = new FormData();
     if (values.images) {
+      const images_arr = [];
       values.images.forEach((image, index) => {
-        form.append("images", {
+        images_arr.push({
           name: "image" + index,
           type: "image/jpeg",
           uri: image,
         });
       });
+      form.append("images", images_arr);
     }
     form.append("docname", route?.params?.doc.user.name);
     form.append("pet", values.pet);
@@ -271,30 +279,39 @@ const CallVetScreen = ({ navigation, route }) => {
     form.append("Appetite", values.appetite);
     form.append("Behaviour", values.behaviour);
     form.append("Activity", values.activity);
+    const feces_arr = [];
     values.feces.forEach((fc) => {
-      form.append("Feces", fc);
+      feces_arr.push(fc.name)
     });
+    form.append("Feces", JSON.stringify(feces_arr));
     form.append("feces_comment", values.feces_comment);
+    const urine_arr = [];
     values.urine.forEach((ur) => {
-      form.append("Urine", ur);
+      urine_arr.push(ur.name)
     });
+    form.append("Urine", JSON.stringify(urine_arr));
     form.append("urine_comment", values.urine_comment);
     form.append("Eyes", values.eyes);
     form.append("Mucous", values.mucous);
+    const ears_arr = [];
     values.ears.forEach((er) => {
-      form.append("Ears", er);
+      ears_arr.push(er.name)
     });
+    form.append("Ears", JSON.stringify(ears_arr));
     form.append("Nose", values.nose);
+    const skin_arr = [];
     values.skin.forEach((sk) => {
-      form.append("Skin", sk);
+      skin_arr.push(sk.name)
     });
+    form.append("Skin", JSON.stringify(skin_arr));
     form.append("skin_comment", values.skin_comment);
     form.append("Gait", values.gait);
     form.append("general_comment", values.general_comment);
 
-    // console.log('Form', form.images)
+    console.log('Form',route?.params?.pet._id, form)
     setLoading(true);
     const res = await petsApi.savePetProblems(form, route?.params?.pet._id);
+    console.log('res', res);
     if (!res.ok) {
       setError(res.data?.msg);
       setLoading(false);
@@ -302,13 +319,14 @@ const CallVetScreen = ({ navigation, route }) => {
       return;
     }
     setError(null);
-    // console.log('Pet Res', res.data)
+    console.log('Pet Res', res.data)
     setLoading(false);
   };
 
   const handleSubmit = async (values) => {
     if (values.videoCall) {
-      sendPushToken();
+      // sendPushToken();
+
       // sendWebPushToken()
       // socket.emit('videoCall', {
       //   token: user.token,

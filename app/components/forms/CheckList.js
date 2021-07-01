@@ -8,16 +8,6 @@ const CheckList = ({ label, items, name, placeholder }) => {
 
   return (
     <>
-      {/* <CheckboxList
-        listItems={items}
-        onChange={(selectedListItems) => setFieldValue(name, selectedListItems)}
-        selectedListItems={values[name]}
-        theme="#41CE8A"
-        listItemStyle={{
-          color: "#47687F",
-          margin: -5,
-        }}
-      /> */}
       <CheckboxList
         listItems={items}
         //onChange={(selectedListItems) => setFieldValue(name, selectedListItems)}
