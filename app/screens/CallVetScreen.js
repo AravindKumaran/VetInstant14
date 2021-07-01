@@ -177,7 +177,6 @@ const validationSchema = Yup.object().shape({
   images: Yup.array().nullable().label("Image"),
   month: Yup.number().required().label("Month"),
   day: Yup.number().required().label("Day"),
-  //comment: Yup.string().required("Please enter comment"),
 
   feces_comment: Yup.string().nullable(),
   urine_comment: Yup.string().nullable(),
@@ -324,6 +323,7 @@ const CallVetScreen = ({ navigation, route }) => {
   };
 
   const handleSubmit = async (values) => {
+    console.log('handleSubmit call');
     if (values.videoCall) {
       // sendPushToken();
 
@@ -377,23 +377,7 @@ const CallVetScreen = ({ navigation, route }) => {
   return (
     <ScrollView nestedScrollEnabled={true} style={styles.container}>
       <LoadingIndicator visible={loading} />
-      <View style={styles.btnWrapper}>
-        {/* <AppButton
-          title="Pet History"
-          btnStyle={{ marginTop: 30 }}
-          onPress={() =>
-            navigation.navigate("PetProblems", { id: route?.params?.pet._id })
-          }
-        />
-        <AppButton
-          title="Previous Pet Prescription"
-          btnStyle={{ marginTop: 30 }}
-          onPress={() =>
-            navigation.navigate("PetPrescription", {
-              id: route?.params?.pet._id,
-            })
-          }
-        /> */}
+      <View style={styles.btnWrapper}>        
       </View>
 
       <View style={styles.container1}>
@@ -602,16 +586,6 @@ const CallVetScreen = ({ navigation, route }) => {
                   }}
                 />
               </View>
-              {/* <AppButton
-                  title='Make Payment'
-                  iconName='dollar-sign'
-                  btnStyle={{ width: '60%', marginRight: 5, alignSelf: 'center'}}
-                  txtStyle={{ textAlign: 'center', width: '-100%' }}
-                  onPress={(e) => {
-                    setFieldValue('videoCall', false)
-                    handleSubmit(e)
-                  }}
-                /> */}
             </>
           )}
         </Formik>
