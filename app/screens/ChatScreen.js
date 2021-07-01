@@ -67,11 +67,13 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
             _id: msg.userId,
             name: msg.userName,
           },
-          image: msg.chatFiles[0]?.mimetype?.includes("image") ? ('http://192.168.43.17:8000/'+msg.chatFiles[0]?.filename):null,
+          image: msg.chatFiles[0]?.mimetype?.includes("image")
+            ? "http://192.168.43.17:8000/" + msg.chatFiles[0]?.filename
+            : null,
         };
       });
 
-      console.log('MSg', newMessages)
+      console.log("MSg", newMessages);
       setMessages(newMessages);
       setLoading(false);
 
@@ -94,49 +96,33 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
       const results = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.allFiles],
       });
-<<<<<<< HEAD
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size
-      );
-      for (const res of results) {
-        console.log(res.uri, res.type, res.name, res.size);
-=======
-      if(results){
+      console.log("results", results);
+
+      if (results) {
         const form = new FormData();
 
-        const files_arr = [];
-        results.forEach((f, index) => {
-          console.log(  f  );
+        form.append("petId", room.petId);
+        form.append("roomName", room.name);
+        for (const res of results) {
+          form.append("chatFiles", {
+            name: res.name,
+            type: res.type,
+            uri: res.uri,
+            size: res.size,
+          });
+        }
+        form.append("userId", user._id);
+        form.append("userName", user.name);
 
-          files_arr.push({
-            name: f.name,
-            type: f.type,
-            uri: f.uri,
-            size: f.size
-          });     
-        }); 
+        console.log("form", form);
 
-        console.log('files_arr', files_arr);
-        
-        form.append("petId", room.petId);  
-        form.append("roomName", room.name);  
-        form.append("chatFiles", files_arr[0]);  
-        form.append("userId", user._id); 
-        form.append("userName", user.name); 
-
-        console.log('form', form);
-    
-        const ress = await chatsApi.createChat(form);   
-
+        const ress = await chatsApi.createChat(form);
+        console.log("ress", ress);
         if (!ress.ok) {
           console.log("ress", ress);
           setLoading(false);
           return;
         }
->>>>>>> 6853e86fb72cccc0bf61dc398c8d037edd48ace6
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -147,7 +133,7 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
   };
 
   const onSend = async (newMsg) => {
-    console.log('newMsg', newMsg);
+    console.log("newMsg", newMsg);
     newMsg[0].roomName = room.name;
     newMsg[0].petId = room.petId;
     newMsg[0].userId = user._id;
