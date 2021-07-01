@@ -20,10 +20,10 @@ import { IconButton } from "react-native-paper";
 import Video from "react-native-video";
 import DocumentPicker from "react-native-document-picker";
 
-const ChatScreen = ({ navigation, route, onChangeImage }) => {
+const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
   const { user } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState(currentRoom);
   const [loading, setLoading] = useState(false);
   const [handlePickImage, sethandlePickImage] = useState([]);
   const [fileName, setFileName] = useState(null);
@@ -31,24 +31,24 @@ const ChatScreen = ({ navigation, route, onChangeImage }) => {
   useEffect(() => {
     const newRoom = async () => {
       setLoading(false);
-      const res = await roomsApi.createRoom({
-        name: `${user._id}-${route.params?.doc?.user?._id}`,
-        senderName: user.name,
-        receiverId: route.params?.doc?.user?._id,
-        petId: route.params?.pet._id,
-      });
-      if (!res.ok) {
-        console.log(res);
-        setLoading(false);
-        return;
-      }
+      // const res = await roomsApi.createRoom({
+      //   name: `${user._id}-${route.params?.doc?.user?._id}`,
+      //   senderName: user.name,
+      //   receiverId: route.params?.doc?.user?._id,
+      //   petId: route.params?.pet._id
+      // });
+      // if (!res.ok) {
+      //   console.log(res);
+      //   setLoading(false);
+      //   return;
+      // }
 
       // console.log('Room Res', res)
-      setRoom(res.data.room);
+      // setRoom(res.data.room);
 
       const chatRes = await chatsApi.getRoomAllChat(
-        res.data.room.name,
-        res.data.room.petId
+        currentRoom.name,
+        currentRoom.petId
       );
       if (!chatRes.ok) {
         console.log("ChatRes", chatRes);
@@ -67,25 +67,26 @@ const ChatScreen = ({ navigation, route, onChangeImage }) => {
             _id: msg.userId,
             name: msg.userName,
           },
+          image: msg.chatFiles[0]?.mimetype?.includes("image") ? ('http://192.168.43.17:8000/'+msg.chatFiles[0]?.filename):null,
         };
       });
 
-      // console.log('MSg', newMessages)
+      console.log('MSg', newMessages)
       setMessages(newMessages);
       setLoading(false);
 
-      socket.emit("room", res.data.room.name);
+      socket.emit("room", currentRoom.name);
       socket.on("chat", (data) => {
         const sortedData = data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
         setMessages(sortedData);
       });
-      console.log("yes", route.params);
+      // console.log("yes", route.params);
     };
 
     newRoom();
-    navigation?.setOptions({ title: route.params?.doc?.user?.name });
+    // navigation?.setOptions({ title: route.params?.doc?.user?.name });
   }, []);
 
   const selectFile = async () => {
@@ -93,6 +94,7 @@ const ChatScreen = ({ navigation, route, onChangeImage }) => {
       const results = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.allFiles],
       });
+<<<<<<< HEAD
       console.log(
         res.uri,
         res.type, // mime type
@@ -101,6 +103,40 @@ const ChatScreen = ({ navigation, route, onChangeImage }) => {
       );
       for (const res of results) {
         console.log(res.uri, res.type, res.name, res.size);
+=======
+      if(results){
+        const form = new FormData();
+
+        const files_arr = [];
+        results.forEach((f, index) => {
+          console.log(  f  );
+
+          files_arr.push({
+            name: f.name,
+            type: f.type,
+            uri: f.uri,
+            size: f.size
+          });     
+        }); 
+
+        console.log('files_arr', files_arr);
+        
+        form.append("petId", room.petId);  
+        form.append("roomName", room.name);  
+        form.append("chatFiles", files_arr[0]);  
+        form.append("userId", user._id); 
+        form.append("userName", user.name); 
+
+        console.log('form', form);
+    
+        const ress = await chatsApi.createChat(form);   
+
+        if (!ress.ok) {
+          console.log("ress", ress);
+          setLoading(false);
+          return;
+        }
+>>>>>>> 6853e86fb72cccc0bf61dc398c8d037edd48ace6
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -111,13 +147,14 @@ const ChatScreen = ({ navigation, route, onChangeImage }) => {
   };
 
   const onSend = async (newMsg) => {
+    console.log('newMsg', newMsg);
     newMsg[0].roomName = room.name;
-    newMsg[0].petId = route.params?.pet._id;
+    newMsg[0].petId = room.petId;
     newMsg[0].userId = user._id;
     newMsg[0].userName = user.name;
     setLoading(true);
     const ress = await chatsApi.createChat({
-      petId: route.params?.pet._id,
+      petId: room.petId,
       roomName: room.name,
       text: newMsg[0].text,
       userId: user._id,
@@ -134,7 +171,7 @@ const ChatScreen = ({ navigation, route, onChangeImage }) => {
       room: room.name,
       msg: GiftedChat.append(messages, newMsg),
     });
-    console.log("yes", route.params);
+    // console.log("yes", route.params);
     setLoading(false);
   };
 
@@ -203,7 +240,7 @@ const ChatScreen = ({ navigation, route, onChangeImage }) => {
             width: 250,
             borderRadius: 20,
           }}
-          source={{ uri: "https://placeimg.com/140/140/any" }}
+          source={{ uri: props.currentMessage.image }}
         />
       </View>
     );
