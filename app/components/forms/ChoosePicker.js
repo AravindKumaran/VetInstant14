@@ -8,14 +8,19 @@ import AppText from "../AppText";
 
 import { StyleSheet, Text } from "react-native";
 
-const ChoosePicker = ({ label, items, name, placeholder }) => {
+const ChoosePicker = ({ label, items, name, placeholder, onChange }) => {
   const { errors, setFieldValue, touched, values } = useFormikContext();
 
   return (
     <>
       <RNPickerSelect
         useNativeAndroidPickerStyle={false}
-        onValueChange={(value) => setFieldValue(name, value)}
+        onValueChange={
+          (value) => {
+            setFieldValue(name, value);
+            onChange?onChange(value):null;
+          }
+        }
         style={pickerSelectStyles}
         items={items}
         value={values[name]}

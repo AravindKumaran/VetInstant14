@@ -322,7 +322,8 @@ const PetLobby = () => {
           }
           {active === "sharableassets" && 
             <MedicalHistory
-
+              user={user}
+              currentCall={currentCall}
             />
           }
         </View>
