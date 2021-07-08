@@ -19,6 +19,7 @@ import pendingsApi from "../api/callPending";
 import roomsApi from "../api/rooms";
 import AuthContext from "../context/authContext";
 import usersApi from "../api/users";
+import MedicalHistory from "./MedicalHistory";
 
 const ActiveStyle = () => (
   <View
@@ -331,7 +332,7 @@ const ChatRoom = () => {
             <ChatScreen currentCall={currentCall} currentRoom={currentRoom} />
           )}
           {active === "sharableassets" && (
-            <ChatScreen currentCall={currentCall} currentRoom={currentRoom} />
+            <MedicalHistory user={user} currentCall={currentCall} />
           )}
         </View>
       )}
