@@ -12,6 +12,7 @@ import AppButton from "../components/AppButton";
 import AuthContext from "../context/authContext";
 import hospitalsApi from "../api/hospitals";
 import doctorsApi from "../api/doctors";
+import petsApi from "../api/pets";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { useNavigation } from "@react-navigation/native";
 import ChooseVetPicker from "../components/forms/ChooseVetPicker";
@@ -32,77 +33,123 @@ const sdoctors = [
   },
 ];
 
-const ServiceScreen = () => {
+const ServiceScreen = ({ onClosePress }) => {
   const { user } = useContext(AuthContext);
 
   const { hospitalId, doctorId } = user;
 
   const navigation = useNavigation();
+  let [doctor, setDoctor] = useState([]);
 
-  const [docDetail, setDocDetail] = useState();
-  const [hospDetail, setHospDetail] = useState();
+  const [docDetailFromSameHospitals, setDocDetailFromSameHospitals] = useState(
+    {}
+  );
+  const [onlineAvailableVetDoctor, setOnlineAvailableVetDoctor] = useState();
   const [loading, setLoading] = useState(false);
+  let [selectedDoctor, setSelectedDoctor] = useState([]);
+  let [pets, setPets] = useState([]);
 
   const [active, setActive] = useState("stepone");
 
   const handleActive = (value) => {
     setActive(value);
   };
-
-  const getDoctorAndHospital = async (hospitalId, doctorId) => {
+  const getOnlineAvailableVetDoctors = async () => {
     setLoading(true);
-    const hospRes = await hospitalsApi.getSingleHospital(hospitalId);
+    const onlineAvailableVet = await doctorsApi.getOnlineDoctors();
 
-    if (!hospRes.ok) {
+    if (!onlineAvailableVet.ok) {
       setLoading(false);
-      console.log(hospRes);
+      console.log("response no ok");
       return;
     }
-
-    const docRes = await doctorsApi.getSingleDoctor(doctorId);
-    if (!docRes.ok) {
-      setLoading(false);
-      console.log(docRes);
-      return;
-    }
-
-    setDocDetail(docRes.data.doctor);
-    setHospDetail(hospRes.data.hospital);
+    const onlineVet = onlineAvailableVet?.data?.onlineDoctor.find(
+      (doc) => doc.firstAvailaibeVet
+    );
+    console.log("onlineVet", onlineVet);
+    setOnlineAvailableVetDoctor(onlineVet);
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (hospitalId) {
-      getDoctorAndHospital(hospitalId, doctorId);
+  const getDocFromSameHospitals = async (hospitalId, doctorId) => {
+    setLoading(true);
+    const otherDocsFromHospitals =
+      await hospitalsApi.getOtherDoctorsFromHospital(hospitalId, doctorId);
+    console.log(
+      "otherDocsFromHospitals",
+      otherDocsFromHospitals.data.onlineDoc
+    );
+    // const allDocSameHos = await hospitalsApi.getHospitalsDoctors(hospitalId);
+    if (!otherDocsFromHospitals.ok) {
+      setLoading(false);
+      console.log("response no ok");
+      return;
     }
-  }, [hospitalId, doctorId]);
+    setDocDetailFromSameHospitals(otherDocsFromHospitals.data.onlineDoc);
+  };
 
-  const doctors = [
-    {
-      src: require("../components/assets/images/doctor1.png"),
-      name: "Dr. Bottowski",
-      hospital: "PetCare Veteneriary Hospital",
-      amount: "₹200",
-    },
-    {
-      src: require("../components/assets/images/doctor2.png"),
-      name: "Dr. Bottowski",
-      hospital: "VetPlus Veteneriary Hospital",
-      amount: "₹300",
-    },
-    {
-      src: require("../components/assets/images/doctor1.png"),
-      name: "Dr. Bottowski",
-      hospital: "PetCare Veteneriary Hospital",
-      amount: "₹400",
-    },
-    {
-      src: require("../components/assets/images/doctor2.png"),
-      name: "Dr. Bottowski",
-      hospital: "VetPlus Veteneriary Hospital",
-      amount: "₹500",
-    },
-  ];
+  const getAllPets = async () => {
+    setLoading(true);
+    const allPets = await petsApi.getPets();
+    console.log("allPets", allPets.data.pets);
+    if (!allPets.ok) {
+      setLoading(false);
+      console.log("response no ok");
+      return;
+    }
+    setPets(allPets.data.pets);
+    setLoading(false);
+  };
+  useEffect(() => {
+    const getAllDoctors = async () => {
+      setLoading(true);
+      const allDoctors = await doctorsApi.getAllDoctors();
+
+      if (!allDoctors.ok) {
+        setLoading(false);
+        console.log("response no ok");
+        return;
+      }
+
+      setDoctor(allDoctors.data.doctors);
+      setLoading(false);
+    };
+    getAllDoctors();
+    getAllPets();
+    getOnlineAvailableVetDoctors();
+  }, []);
+
+  // useEffect(() => {
+  //   console.log("onlineAvailableDoctor", onlineAvailableDoctor);
+  // }, [onlineAvailableDoctor]);
+
+  // const getDoctorAndHospital = async (hospitalId, doctorId) => {
+  //   setLoading(true);
+  //   const hospRes = await hospitalsApi.getSingleHospital(hospitalId);
+
+  //   if (!hospRes.ok) {
+  //     setLoading(false);
+  //     console.log(hospRes);
+  //     return;
+  //   }
+
+  //   const docRes = await doctorsApi.getSingleDoctor(doctorId);
+  //   if (!docRes.ok) {
+  //     setLoading(false);
+  //     console.log(docRes);
+  //     return;
+  //   }
+
+  //   setDocDetail(docRes.data.doctor);
+  //   setHospDetail(hospRes.data.hospital);
+  //   setLoading(false);
+  // };
+
+  // useEffect(() => {
+  //   if (hospitalId) {
+  //     getDoctorAndHospital(hospitalId, doctorId);
+  //   }
+  // }, [hospitalId, doctorId]);
 
   return (
     <View style={styles.container}>
@@ -136,7 +183,7 @@ const ServiceScreen = () => {
                 >
                   <>
                     <ChooseVetPicker
-                      items={vet}
+                      items={""}
                       label="Choose your vet"
                       name="Vet"
                       placeholder="Choose your vet"
@@ -154,11 +201,14 @@ const ServiceScreen = () => {
                       My vets
                     </AppText>
                     <View style={{ paddingTop: 10, margin: 10 }}>
-                      {doctors.map((c, i) => (
+                      {doctor.map((c, i) => (
                         <>
-                          <View key={`${c.name}-${i}`} style={styles.catItem}>
+                          <View
+                            key={`${c?.user?.name}-${i}`}
+                            style={styles.catItem}
+                          >
                             <Image
-                              source={c.src}
+                              source={c?.user?.profile_image}
                               size={15}
                               style={{
                                 height: 50,
@@ -176,14 +226,26 @@ const ServiceScreen = () => {
                               }}
                             >
                               <TouchableOpacity
-                                onPress={() => handleActive("steptwo")}
+                                onPress={() => {
+                                  if (c?.user?.isOnline) {
+                                    handleActive("stepthree");
+                                  } else {
+                                    handleActive("steptwo");
+                                  }
+
+                                  setSelectedDoctor([...selectedDoctor, c]);
+                                }}
                               >
-                                <Text style={styles.text1}>{c.name}</Text>
-                                <Text style={styles.text2}>{c.hospital}</Text>
+                                <Text style={styles.text1}>
+                                  {c?.user?.name}
+                                </Text>
+                                <Text style={styles.text2}>
+                                  {c?.hospital?.name}
+                                </Text>
                               </TouchableOpacity>
                             </View>
                             <View style={styles.Rectangle}>
-                              <Text style={styles.text3}>{c.amount}</Text>
+                              <Text style={styles.text3}>{c.fee}</Text>
                             </View>
                           </View>
                           <View
@@ -218,11 +280,11 @@ const ServiceScreen = () => {
                 Choose your vet
               </AppText>
               <View style={{ marginTop: 30 }}>
-                {sdoctors.map((c, i) => (
+                {selectedDoctor.map((c, i) => (
                   <>
-                    <View key={`${c.name}-${i}`} style={styles.catItem1}>
+                    <View key={`${c?.user?.name}-${i}`} style={styles.catItem1}>
                       <Image
-                        source={c.src}
+                        source={c?.user?.profile_image}
                         size={15}
                         style={{
                           height: 50,
@@ -240,15 +302,17 @@ const ServiceScreen = () => {
                         }}
                       >
                         <TouchableOpacity
-                          onPress={() => handleActive("stepone")}
+                          onPress={() => {
+                            handleActive("stepone");
+                          }}
                         >
-                          <Text style={styles.text1}>{c.name}</Text>
-                          <Text style={styles.text2}>{c.hospital}</Text>
+                          <Text style={styles.text1}>{c?.user?.name}</Text>
+                          <Text style={styles.text2}>{c?.hospital?.name}</Text>
                         </TouchableOpacity>
                       </View>
 
                       <View style={styles.Rectangle}>
-                        <Text style={styles.text3}>{c.amount}</Text>
+                        <Text style={styles.text3}>{c.fee}</Text>
                       </View>
                     </View>
 
@@ -309,7 +373,15 @@ const ServiceScreen = () => {
                           How can we help you?
                         </Text>
                       </TouchableOpacity>
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          handleActive("stepfive");
+                          getDocFromSameHospitals(
+                            c?.hospital?._id,
+                            c?.user?._id
+                          );
+                        }}
+                      >
                         <Text
                           style={{
                             color: "#37CF86",
@@ -322,7 +394,11 @@ const ServiceScreen = () => {
                         </Text>
                       </TouchableOpacity>
 
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          handleActive("stepfour");
+                        }}
+                      >
                         <Text
                           style={{
                             color: "#37CF86",
@@ -352,7 +428,11 @@ const ServiceScreen = () => {
                         discounts for mandated visits)
                       </Text>
 
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate("Room");
+                        }}
+                      >
                         <Text>
                           <Text
                             style={{
@@ -393,11 +473,11 @@ const ServiceScreen = () => {
                 Choose a service
               </AppText>
               <View style={{ marginTop: 30 }}>
-                {sdoctors.map((c, i) => (
+                {selectedDoctor.map((c, i) => (
                   <>
-                    <View key={`${c.name}-${i}`} style={styles.catItem1}>
+                    <View key={`${c?.user?.name}-${i}`} style={styles.catItem1}>
                       <Image
-                        source={c.src}
+                        source={c?.user?.profile_image}
                         size={15}
                         style={{
                           height: 50,
@@ -417,13 +497,13 @@ const ServiceScreen = () => {
                         <TouchableOpacity
                           onPress={() => handleActive("stepone")}
                         >
-                          <Text style={styles.text1}>{c.name}</Text>
-                          <Text style={styles.text2}>{c.hospital}</Text>
+                          <Text style={styles.text1}>{c?.user?.name}</Text>
+                          <Text style={styles.text2}>{c?.hospital?.name}</Text>
                         </TouchableOpacity>
                       </View>
 
                       <View style={styles.Rectangle}>
-                        <Text style={styles.text3}>{c.amount}</Text>
+                        <Text style={styles.text3}>{c.fee}</Text>
                       </View>
                     </View>
 
@@ -475,7 +555,13 @@ const ServiceScreen = () => {
 
                       <AppButton
                         title="Next"
-                        onPress={() => handleActive("stepfour")}
+                        onPress={() => {
+                          onClosePress("close");
+                          navigation.navigate("CallVet", {
+                            doc: c,
+                            pet: pets,
+                          });
+                        }}
                       />
                       <Text
                         style={{
@@ -490,7 +576,11 @@ const ServiceScreen = () => {
                         discounts for mandated visits)
                       </Text>
 
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate("Room");
+                        }}
+                      >
                         <Text>
                           <Text
                             style={{
@@ -541,87 +631,100 @@ const ServiceScreen = () => {
                 We found a first available vet
               </Text>
               <View style={{ margin: 10 }}>
-                {sdoctors.map((c, i) => (
-                  <>
-                    <View key={`${c.name}-${i}`} style={styles.catItem2}>
-                      <Image
-                        source={c.src}
-                        size={15}
-                        style={{
-                          height: 50,
-                          width: 50,
-                          borderRadius: 30,
-                          borderWidth: 2.5,
-                          borderColor: "#FFFFFF",
-                          padding: 10,
-                        }}
-                      />
-                      <View
-                        style={{
-                          flexDirection: "column",
-                          marginLeft: 10,
-                        }}
-                      >
-                        <TouchableOpacity
-                          onPress={() => handleActive("stepone")}
-                        >
-                          <Text style={styles.text1}>{c.name}</Text>
-                          <Text style={styles.text2}>{c.hospital}</Text>
-                        </TouchableOpacity>
-                      </View>
-
-                      <View style={styles.Rectangle}>
-                        <Text style={styles.text3}>{c.amount}</Text>
-                      </View>
-                    </View>
-
+                <>
+                  <View
+                    key={onlineAvailableVetDoctor._id}
+                    style={styles.catItem2}
+                  >
+                    <Image
+                      source={onlineAvailableVetDoctor?.user?.profile_image}
+                      size={15}
+                      style={{
+                        height: 50,
+                        width: 50,
+                        borderRadius: 30,
+                        borderWidth: 2.5,
+                        borderColor: "#FFFFFF",
+                        padding: 10,
+                      }}
+                    />
                     <View
                       style={{
-                        alignItems: "center",
-                        marginVertical: 20,
+                        flexDirection: "column",
+                        marginLeft: 10,
                       }}
                     >
-                      <AppButton
-                        title="Next"
-                        onPress={() => handleActive("stepfive")}
-                      />
-                      <Text
-                        style={{
-                          color: "#839BAB",
-                          fontSize: 9,
-                          fontWeight: "700",
-                          margin: 10,
-                          textAlign: "center",
-                        }}
-                      >
-                        (Video calls applies consultation fees)
-                      </Text>
-
-                      <TouchableOpacity>
-                        <Text>
-                          <Text
-                            style={{
-                              color: "#839BAB",
-                              fontSize: 12,
-                              fontWeight: "400",
-                            }}
-                          >
-                            Or is it just a short enquiry?
-                          </Text>{" "}
-                          <Text
-                            style={{
-                              color: "#37CF86",
-                              fontSize: 12,
-                              fontWeight: "400",
-                            }}
-                          >
-                            Chat Now.
-                          </Text>
+                      <TouchableOpacity onPress={() => handleActive("stepone")}>
+                        <Text style={styles.text1}>
+                          {onlineAvailableVetDoctor?.user?.name}
+                        </Text>
+                        <Text style={styles.text2}>
+                          {onlineAvailableVetDoctor?.hospital?.name}
                         </Text>
                       </TouchableOpacity>
                     </View>
-                  </>
-                ))}
+
+                    <View style={styles.Rectangle}>
+                      <Text style={styles.text3}>100</Text>
+                    </View>
+                  </View>
+
+                  <View
+                    style={{
+                      alignItems: "center",
+                      marginVertical: 20,
+                    }}
+                  >
+                    <AppButton
+                      title="Next"
+                      onPress={() => {
+                        onClosePress("close");
+                        navigation.navigate("CallVet", {
+                          doc: onlineAvailableVetDoctor,
+                          pet: pets,
+                        });
+                      }}
+                    />
+                    <Text
+                      style={{
+                        color: "#839BAB",
+                        fontSize: 9,
+                        fontWeight: "700",
+                        margin: 10,
+                        textAlign: "center",
+                      }}
+                    >
+                      (Video calls applies consultation fees)
+                    </Text>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate("Room");
+                      }}
+                    >
+                      <Text>
+                        <Text
+                          style={{
+                            color: "#839BAB",
+                            fontSize: 12,
+                            fontWeight: "400",
+                          }}
+                        >
+                          Or is it just a short enquiry?
+                        </Text>{" "}
+                        <Text
+                          style={{
+                            color: "#37CF86",
+                            fontSize: 12,
+                            fontWeight: "400",
+                          }}
+                        >
+                          Chat Now.
+                        </Text>
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
               </View>
             </>
           )}
@@ -648,88 +751,100 @@ const ServiceScreen = () => {
                 We found a vet from the same hospital
               </Text>
               <View style={{ margin: 10 }}>
-                {sdoctors.map((c, i) => (
-                  <>
-                    <View key={`${c.name}-${i}`} style={styles.catItem2}>
-                      <Image
-                        source={c.src}
-                        size={15}
-                        style={{
-                          height: 50,
-                          width: 50,
-                          borderRadius: 30,
-                          borderWidth: 2.5,
-                          borderColor: "#FFFFFF",
-                          padding: 10,
-                        }}
-                      />
-                      <View
-                        style={{
-                          flexDirection: "column",
-                          marginLeft: 10,
-                        }}
-                      >
-                        <TouchableOpacity
-                          onPress={() => handleActive("stepone")}
-                        >
-                          <Text style={styles.text1}>{c.name}</Text>
-                          <Text style={styles.text2}>{c.hospital}</Text>
-                        </TouchableOpacity>
-                      </View>
-
-                      <View style={styles.Rectangle}>
-                        <Text style={styles.text3}>{c.amount}</Text>
-                      </View>
-                    </View>
-
+                <>
+                  <View style={styles.catItem2}>
+                    <Image
+                      source={docDetailFromSameHospitals?.user?.profile_image}
+                      size={15}
+                      style={{
+                        height: 50,
+                        width: 50,
+                        borderRadius: 30,
+                        borderWidth: 2.5,
+                        borderColor: "#FFFFFF",
+                        padding: 10,
+                      }}
+                    />
                     <View
                       style={{
-                        alignItems: "center",
-                        marginVertical: 20,
+                        flexDirection: "column",
+                        marginLeft: 10,
                       }}
                     >
-                      <AppButton
-                        title="Next"
-                        onPress={() => handleActive("stepsix")}
-                      />
-                      <Text
-                        style={{
-                          color: "#839BAB",
-                          fontSize: 9,
-                          fontWeight: "700",
-                          margin: 10,
-                          textAlign: "center",
-                        }}
-                      >
-                        (Video calls applies consultation fees along with
-                        discounts for mandated visits)
-                      </Text>
-
-                      <TouchableOpacity>
-                        <Text>
-                          <Text
-                            style={{
-                              color: "#839BAB",
-                              fontSize: 12,
-                              fontWeight: "400",
-                            }}
-                          >
-                            Or is it just a short enquiry?
-                          </Text>{" "}
-                          <Text
-                            style={{
-                              color: "#37CF86",
-                              fontSize: 12,
-                              fontWeight: "400",
-                            }}
-                          >
-                            Chat Now.
-                          </Text>
+                      <TouchableOpacity onPress={() => handleActive("stepone")}>
+                        <Text style={styles.text1}>
+                          {docDetailFromSameHospitals?.user?.name}
+                        </Text>
+                        <Text style={styles.text2}>
+                          {docDetailFromSameHospitals?.hospital?.name}
                         </Text>
                       </TouchableOpacity>
                     </View>
-                  </>
-                ))}
+
+                    <View style={styles.Rectangle}>
+                      <Text style={styles.text3}>
+                        {docDetailFromSameHospitals.fee}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View
+                    style={{
+                      alignItems: "center",
+                      marginVertical: 20,
+                    }}
+                  >
+                    <AppButton
+                      title="Next"
+                      onPress={() => {
+                        onClosePress("close");
+                        navigation.navigate("CallVet", {
+                          doc: docDetailFromSameHospitals,
+                          pet: pets,
+                        });
+                      }}
+                    />
+                    <Text
+                      style={{
+                        color: "#839BAB",
+                        fontSize: 9,
+                        fontWeight: "700",
+                        margin: 10,
+                        textAlign: "center",
+                      }}
+                    >
+                      (Video calls applies consultation fees along with
+                      discounts for mandated visits)
+                    </Text>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate("Room");
+                      }}
+                    >
+                      <Text>
+                        <Text
+                          style={{
+                            color: "#839BAB",
+                            fontSize: 12,
+                            fontWeight: "400",
+                          }}
+                        >
+                          Or is it just a short enquiry?
+                        </Text>{" "}
+                        <Text
+                          style={{
+                            color: "#37CF86",
+                            fontSize: 12,
+                            fontWeight: "400",
+                          }}
+                        >
+                          Chat Now.
+                        </Text>
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
               </View>
             </>
           )}

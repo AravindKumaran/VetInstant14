@@ -29,12 +29,6 @@ import CheckList from "../components/forms/CheckList";
 
 import CheckboxList from "rn-checkbox-list";
 
-// const pet = [
-//   { label: "Bruno", value: "Bruno" },
-//   { label: "Kit", value: "Kit" },
-//   { label: "Drogon", value: "Drogon" },
-// ];
-
 const Appetite = [
   { label: "Normal", value: "Normal" },
   { label: "Not Observed", value: "Not Observed" },
@@ -205,14 +199,29 @@ const CallVetScreen = ({ navigation, route }) => {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-
+  const [pets, setPets] = useState([]);
+  const [selectedPet, setSelectedPet] = useState({});
   const [isSelected, setisSelected] = useState(false);
   const refRBSheet = useRef();
 
-  const pet = [
-    { label: route.params.pet.name , value: route.params.pet.name },
-  ];
+  const pet = [];
+  useEffect(() => {
+    route?.params?.pet?.map((p) => {
+      pet.push({ label: p.name, value: p.name });
+    });
+    setPets(pet);
+  }, []);
 
+  const getPetDetails = (petName) => {
+    const petDetail = route?.params?.pet?.find((p) => p.name === petName);
+    // setSelectedPet(petDetail);
+    return petDetail;
+  };
+
+  // useEffect(() => {
+  //   const petDetail = getPetDetails("raju");
+  //   console.log("petDetail", petDetail);
+  // }, []);
   const sendPushToken = async (title, message) => {
     if (route?.params.doc?.user?.token) {
       setLoading(true);
@@ -257,8 +266,8 @@ const CallVetScreen = ({ navigation, route }) => {
   //   }
   // }
 
-  const savePatientProblems = async (values) => {
-    console.log('savePatientProblems', values);
+  const savePatientProblems = async (values, petDetail) => {
+    console.log("savePatientProblems", values);
     const form = new FormData();
     if (values.images) {
       const images_arr = [];
@@ -281,13 +290,13 @@ const CallVetScreen = ({ navigation, route }) => {
     form.append("Activity", values.activity);
     const feces_arr = [];
     values.feces.forEach((fc) => {
-      feces_arr.push(fc.name)
+      feces_arr.push(fc.name);
     });
     form.append("Feces", JSON.stringify(feces_arr));
     form.append("feces_comment", values.feces_comment);
     const urine_arr = [];
     values.urine.forEach((ur) => {
-      urine_arr.push(ur.name)
+      urine_arr.push(ur.name);
     });
     form.append("Urine", JSON.stringify(urine_arr));
     form.append("urine_comment", values.urine_comment);
@@ -295,35 +304,38 @@ const CallVetScreen = ({ navigation, route }) => {
     form.append("Mucous", values.mucous);
     const ears_arr = [];
     values.ears.forEach((er) => {
-      ears_arr.push(er.name)
+      ears_arr.push(er.name);
     });
     form.append("Ears", JSON.stringify(ears_arr));
     form.append("Nose", values.nose);
     const skin_arr = [];
     values.skin.forEach((sk) => {
-      skin_arr.push(sk.name)
+      skin_arr.push(sk.name);
     });
     form.append("Skin", JSON.stringify(skin_arr));
     form.append("skin_comment", values.skin_comment);
     form.append("Gait", values.gait);
     form.append("general_comment", values.general_comment);
 
-    console.log('Form',route?.params?.pet._id, form)
+    console.log("Form", petDetail?._id, form);
     setLoading(true);
-    const res = await petsApi.savePetProblems(form, route?.params?.pet._id);
-    console.log('res', res);
+    const res = await petsApi.savePetProblems(form, petDetail?._id);
+    console.log("res", res);
     if (!res.ok) {
       setError(res.data?.msg);
+      console.log("response not ok");
       setLoading(false);
       // console.log(res)
       return;
     }
     setError(null);
-    console.log('Pet Res', res.data)
+    console.log("Pet Res", res.data);
     setLoading(false);
   };
 
   const handleSubmit = async (values) => {
+    const petDetail = getPetDetails(values.pet);
+
     if (values.videoCall) {
       // sendPushToken();
 
@@ -339,21 +351,21 @@ const CallVetScreen = ({ navigation, route }) => {
         // webToken: route.params?.doc?.user?.webToken,
         docId: route.params?.doc?.user?._id,
         docName: route.params?.doc?.user?.name,
-        docFee: route?.params?.doc.fee * 1,
+        docFee: route?.params?.doc?.fee * 1,
         hospId:
           route?.params?.doc?.hospital?._id ||
           route?.params?.doc?.user?.hospitalId,
         paymentDone: false,
         userName: user.name,
         userId: user._id,
-        petId: route.params?.pet._id,
-        petName: route.params?.pet.name,
+        petId: petDetail?._id,
+        petName: petDetail?.name,
         status: "requested",
         docMobToken: route.params?.doc?.user?.token,
         userMobToken: user.token,
       };
       setLoading(true);
-      await savePatientProblems(values);
+      await savePatientProblems(values, petDetail);
       const penRes = await pendingsApi.saveCallPending(penData);
       if (!penRes.ok) {
         setLoading(false);
@@ -364,14 +376,15 @@ const CallVetScreen = ({ navigation, route }) => {
         "Notification Sent To Doctor. Please go to pending calls screen for further action"
       );
       navigation.navigate("Home");
-    } else if (!values.videoCall) {
-      sendPushToken("chat", "I have started the chat.Please join");
-      await savePatientProblems(values);
-      navigation.navigate("Chat", {
-        doc: route?.params?.doc,
-        pet: route?.params?.pet,
-      });
     }
+    // } else if (!values.videoCall) {
+    //   sendPushToken("chat", "I have started the chat.Please join");
+    //   await savePatientProblems(values, petDetail);
+    //   navigation.navigate("Chat", {
+    //     doc: route?.params?.doc,
+    //     pet: petDetail,
+    //   });
+    // }
   };
 
   return (
@@ -436,7 +449,7 @@ const CallVetScreen = ({ navigation, route }) => {
                   }}
                 >
                   <ChoosePicker
-                    items={pet}
+                    items={pets}
                     label="Choose your pet"
                     name="pet"
                     placeholder="Choose your pet"
@@ -582,22 +595,12 @@ const CallVetScreen = ({ navigation, route }) => {
 
               <View style={styles.btnContainer}>
                 <AppButton
-                  title="Request Call"
+                  title="Start a Video Call"
                   iconName="video"
-                  btnStyle={{ width: "50%", marginRight: 10 }}
+                  btnStyle={{ width: "100%", marginRight: 10 }}
                   txtStyle={{ textAlign: "center", width: "-100%" }}
                   onPress={(e) => {
                     setFieldValue("videoCall", true);
-                    handleSubmit(e);
-                  }}
-                />
-                <AppButton
-                  title="Chat"
-                  iconName="message-circle"
-                  btnStyle={{ width: "50%", marginRight: 5 }}
-                  txtStyle={{ textAlign: "center", width: "-100%" }}
-                  onPress={(e) => {
-                    setFieldValue("videoCall", false);
                     handleSubmit(e);
                   }}
                 />

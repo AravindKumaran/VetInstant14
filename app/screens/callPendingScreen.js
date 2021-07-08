@@ -137,7 +137,7 @@ const CallPendingScreen = () => {
       }
     });
 
-    console.log('allCalls', allCalls);
+    console.log("allCalls", allCalls);
 
     // setPendingCalls(pres.data.calls)
     setPendingCalls(allCalls);

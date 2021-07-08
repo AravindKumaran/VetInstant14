@@ -14,6 +14,8 @@ import {
 import Feather from "react-native-vector-icons/Feather";
 import AppNavigator from "./AppNavigator";
 import ChatScreen from "../screens/ChatScreen";
+import VetChoice from "../screens/VetChoice";
+import EmptyScreen from "../screens/EmptyScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +29,7 @@ const BottomTab = ({ navigation }) => {
   };
 
   const seeProfile = () => {
-    navigation.navigate("Room");
+    navigation.navigate("PetLobby");
   };
 
   useEffect(() => {
@@ -94,28 +96,29 @@ const BottomTab = ({ navigation }) => {
         }}
       />
       <Tab.Screen
-        name={"PetLobby"}
-        component={Room}
+        name={"EmptyScreen"}
+        component={EmptyScreen}
         options={{
-          tabBarIcon: ({ focused, color }) => (
-            <>
-              {!didKeyboardShow && (
-                <Image
-                  source={require("../components/assets/images/center.png")}
-                  style={{
-                    width: 60,
-                    height: 60,
-                    bottom: focused ? -20 : 20,
-                  }}
-                />
-              )}
-            </>
-          ),
-          tabBarVisible: false,
+          tabBarButton: () => <VetChoice />,
+          // tabBarIcon: ({ focused, color }) => (
+          //   <>
+          //     {!didKeyboardShow && (
+          //       <Image
+          //         source={require("../components/assets/images/center.png")}
+          //         style={{
+          //           width: 60,
+          //           height: 60,
+          //           bottom: focused ? -20 : 20,
+          //         }}
+          //       />
+          //     )}
+          //   </>
+          // ),
+          tabBarVisible: true,
         }}
       />
       <Tab.Screen
-        name={"Room"}
+        name={"PetLobby"}
         component={PetLobby}
         options={{
           tabBarIcon: ({ focused, tintColor }) => (

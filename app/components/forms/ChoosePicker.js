@@ -16,6 +16,7 @@ const ChoosePicker = ({ label, items, name, placeholder }) => {
       <RNPickerSelect
         useNativeAndroidPickerStyle={false}
         onValueChange={(value) => setFieldValue(name, value)}
+        // onValueChange={(value) => console.log("value", value)}
         style={pickerSelectStyles}
         items={items}
         value={values[name]}

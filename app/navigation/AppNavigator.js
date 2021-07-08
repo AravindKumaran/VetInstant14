@@ -24,6 +24,7 @@ import VetProfile from "../screens/VetProfile";
 import ServiceScreen from "../screens/ServiceScreen";
 import MenuScreen from "../screens/MenuScreen";
 import { Feather } from "@expo/vector-icons";
+import Room from "../screens/Room";
 
 const Stack = createStackNavigator();
 
@@ -129,6 +130,7 @@ const AppNavigator = ({ navigation }) => {
         }}
       />
       <Stack.Screen name="OnlineVet" component={OnlineVetScreen} />
+      <Stack.Screen name="Room" component={Room} />
       <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="Video" component={VideoCallScreen} />
       <Stack.Screen name="PetProfile" component={PetProfile} />

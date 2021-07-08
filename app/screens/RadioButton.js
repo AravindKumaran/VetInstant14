@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   Text,
   View,
@@ -13,6 +13,7 @@ import { Header } from "react-native-elements";
 import ChoosePicker from "../components/forms/ChoosePicker";
 import { Formik } from "formik";
 import RadioForm from "react-native-simple-radio-button";
+import AuthContext from "../context/authContext";
 import AppButton from "../components/AppButton";
 import AppImageListPicker from "../components/forms/AppImageListPicker";
 import CheckboxList from "rn-checkbox-list";
@@ -20,6 +21,95 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import VideoAuthentication from "../screens/VideoAuthentication";
 
 const MyCustomLeftComponent = ({ navigation }) => {
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    console.log("user", user);
+  });
+  // const handlePayment = async (item, str) => {
+  //   if (item.docFee === 0) {
+  //     const allPCalls = [...pendingCalls];
+  //     const pCall = allPCalls.find((p) => p._id === item._id);
+  //     if (pCall) {
+  //       pCall.status = str;
+  //       pCall.paymentDone = true;
+  //       if (str === "scheduledPayment") {
+  //         const d = new Date(item.extraInfo);
+  //         pCall.deleteAfter = new Date(d.getTime() + 72 * 60 * 60 * 1000);
+  //       } else {
+  //         const d = new Date();
+  //         pCall.deleteAfter = new Date(d.getTime() + 72 * 60 * 60 * 1000);
+  //       }
+  //     }
+  //     setLoading(true);
+  //     const pRes = await pendingsApi.updateCallPending(item._id, pCall);
+  //     if (!pRes.ok) {
+  //       console.log("Error", pRes);
+  //       setLoading(false);
+  //       return;
+  //     }
+  //     setLoading(false);
+  //     setPendingCalls(allPCalls);
+  //   } else {
+  //     const res = await usersApi.payDoctor({
+  //       amt: item.docFee * 1 + 100,
+  //     });
+  //     if (!res.ok) {
+  //       setLoading(false);
+  //       console.log("Error", res);
+  //     }
+  //     setLoading(false);
+  //     const options = {
+  //       description: "Payment For Doctor Consultation",
+  //       currency: "INR",
+  //       key: "rzp_test_GbpjxWePHidlJt",
+  //       amount: res.data.result.amount,
+  //       name: item.docName,
+  //       order_id: res.data.result.id,
+  //     };
+  //     RazorpayCheckout.open(options)
+  //       .then(async (data) => {
+  //         setLoading(true);
+  //         const verifyRes = await usersApi.verifyPayment({
+  //           id: res.data.result.id,
+  //           paid_id: data.razorpay_payment_id,
+  //           sign: data.razorpay_signature,
+  //         });
+  //         if (!verifyRes.ok) {
+  //           setLoading(false);
+  //           console.log(verifyRes);
+  //           return;
+  //         }
+  //         const allPCalls = [...pendingCalls];
+  //         const pCall = allPCalls.find((p) => p._id === item._id);
+  //         if (pCall) {
+  //           pCall.status = str;
+  //           pCall.paymentDone = true;
+  //           if (str === "scheduledPayment") {
+  //             const d = new Date(item.extraInfo);
+  //             pCall.deleteAfter = new Date(d.getTime() + 72 * 60 * 60 * 1000);
+  //           } else {
+  //             const d = new Date();
+  //             pCall.deleteAfter = new Date(d.getTime() + 72 * 60 * 60 * 1000);
+  //           }
+  //         }
+
+  //         const pRes = await pendingsApi.updateCallPending(item._id, pCall);
+  //         if (!pRes.ok) {
+  //           console.log("Error", pRes);
+  //           setLoading(false);
+  //           return;
+  //         }
+  //         await sendPushToken(pRes.data.calls.docMobToken, "Payment Done By");
+  //         setLoading(false);
+  //         setPendingCalls(allPCalls);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         setLoading(false);
+  //       });
+  //   }
+  // };
+
   return (
     <TouchableOpacity
       onPress={() => {

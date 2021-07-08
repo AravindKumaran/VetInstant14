@@ -35,7 +35,7 @@ const ActiveStyle = () => (
   ></View>
 );
 
-const PetLobby = () => {
+const ChatRoom = () => {
   const { user } = useContext(AuthContext);
   const [active, setActive] = useState("videocall");
   const [currentCall, setCurrentCall] = useState(null);
@@ -58,15 +58,15 @@ const PetLobby = () => {
       setRefreshing(false);
       return;
     }
-    console.log('Ress', pres.data);
+    console.log("Ress", pres.data);
     const currentCallDetails = pres.data.calls.filter(
       (call) => call.status === "paymentDone"
     );
 
-    console.log('currentCallDoctor', currentCallDetails[0].docId);
+    console.log("currentCallDoctor", currentCallDetails[0].docId);
 
-    setCurrentCall(currentCallDetails[0])
-    
+    setCurrentCall(currentCallDetails[0]);
+
     const crres = await roomsApi.getReceiverRoom(currentCallDetails[0].docId);
     if (!crres.ok) {
       console.log("Error", crres);
@@ -75,16 +75,15 @@ const PetLobby = () => {
       return;
     }
 
-    console.log('crres', crres.data.room[0]);
-    setCurrentRoom(crres.data.room[0])
-
+    console.log("crres", crres.data.room[0]);
+    setCurrentRoom(crres.data.room[0]);
   };
 
   useEffect(() => {
     getReceiverRoom();
   }, []);
 
-  const handleVideo = async () => {    
+  const handleVideo = async () => {
     const tokenRes = await usersApi.getVideoToken({
       userName: user.name,
       roomName: currentRoom.name,
@@ -96,7 +95,10 @@ const PetLobby = () => {
     }
     setLoading(false);
 
-    await sendPushToken(currentCall.docMobToken, "Please Join, Video Call Started By");
+    await sendPushToken(
+      currentCall.docMobToken,
+      "Please Join, Video Call Started By"
+    );
     navigation.navigate("Video", {
       docId: currentCall.docId,
       userId: user._id,
@@ -128,54 +130,59 @@ const PetLobby = () => {
     }
   };
 
-  const MyCustomLeftComponent = () => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation?.goBack();
-        }}
-      >
-        <Feather
-          name={"arrow-left"}
-          size={25}
-          color="#476880"
-          style={{
-            marginLeft: 10,
-            top: 5,
-          }}
-        />
-      </TouchableOpacity>
-    );
-  };
+  // const MyCustomLeftComponent = () => {
+  //   return (
+  //     <TouchableOpacity
+  //       onPress={() => {
+  //         navigation?.goBack();
+  //       }}
+  //     >
+  //       <Feather
+  //         name={"arrow-left"}
+  //         size={25}
+  //         color="#476880"
+  //         style={{
+  //           marginLeft: 10,
+  //           top: 5,
+  //         }}
+  //       />
+  //     </TouchableOpacity>
+  //   );
+  // };
 
-  const MyCustomRightComponent = () => {
-    return (
-      <Image
-        style={{
-          height: 40,
-          width: 40,
-          borderRadius: 50,
-          borderWidth: 2.5,
-          borderColor: "#FFFFFF",
-          marginRight: 10,
-          paddingRight: 20,
-        }}
-      />
-    );
-  };
+  // const MyCustomRightComponent = () => {
+  //   return (
+  //     <Image
+  //       style={{
+  //         height: 40,
+  //         width: 40,
+  //         borderRadius: 50,
+  //         borderWidth: 2.5,
+  //         borderColor: "#FFFFFF",
+  //         marginRight: 10,
+  //         paddingRight: 20,
+  //       }}
+  //     />
+  //   );
+  // };
 
   return (
     <View style={styles.container}>
-      {!currentRoom ?(
+      {!currentRoom ? (
         <Text>No Room Available</Text>
-      ):(
+      ) : (
         <View style={styles.container}>
-          <Header
-            leftComponent={<MyCustomLeftComponent />}
-            rightComponent={<MyCustomRightComponent />}
+          {/* <Header
+            // leftComponent={<MyCustomLeftComponent />}
+            // rightComponent={<MyCustomRightComponent />}
             centerComponent={{
               text: "Room",
-              style: { color: "#476880", fontSize: 20, fontWeight: "700", top: 5 },
+              style: {
+                color: "#476880",
+                fontSize: 20,
+                fontWeight: "700",
+                top: 5,
+              },
             }}
             containerStyle={{
               backgroundColor: "white",
@@ -183,7 +190,7 @@ const PetLobby = () => {
               borderBottomStartRadius: 15,
               borderBottomEndRadius: 15,
             }}
-          />
+          /> */}
           <View>
             <View style={styles.catItem2}>
               <Image
@@ -211,10 +218,14 @@ const PetLobby = () => {
                 }}
               />
               <View styles={{ flexDirection: "column" }}>
-                <Text style={{ fontSize: 14, color: "#47687F", fontWeight: "700" }}>
+                <Text
+                  style={{ fontSize: 14, color: "#47687F", fontWeight: "700" }}
+                >
                   Dr. {currentCall.docName} & {currentCall.petName} ‘s room
                 </Text>
-                <Text style={{ fontSize: 12, color: "#A3B1BF", fontWeight: "400" }}>
+                <Text
+                  style={{ fontSize: 12, color: "#A3B1BF", fontWeight: "400" }}
+                >
                   Room ID : {currentRoom.name}
                 </Text>
               </View>
@@ -223,7 +234,9 @@ const PetLobby = () => {
           <View style={styles.choose}>
             <View>
               {active === "videocall" ? <ActiveStyle /> : <View />}
-              <TouchableWithoutFeedback onPress={() => handleActive("videocall")}>
+              <TouchableWithoutFeedback
+                onPress={() => handleActive("videocall")}
+              >
                 <Text
                   style={[
                     styles.text1,
@@ -256,7 +269,8 @@ const PetLobby = () => {
                   style={[
                     styles.text1,
                     {
-                      color: active === "sharableassets" ? "#41CE8A" : "#476880",
+                      color:
+                        active === "sharableassets" ? "#41CE8A" : "#476880",
                     },
                   ]}
                 >
@@ -313,25 +327,19 @@ const PetLobby = () => {
               />
             </View>
           )}
-          {active === "chat" && 
-            <ChatScreen  
-              currentCall={currentCall}
-              currentRoom={currentRoom}
-            />
-          }
-          {active === "sharableassets" && 
-            <ChatScreen  
-              currentCall={currentCall}
-              currentRoom={currentRoom}
-            />
-          }
+          {active === "chat" && (
+            <ChatScreen currentCall={currentCall} currentRoom={currentRoom} />
+          )}
+          {active === "sharableassets" && (
+            <ChatScreen currentCall={currentCall} currentRoom={currentRoom} />
+          )}
         </View>
       )}
-    </View>    
+    </View>
   );
 };
 
-export default PetLobby;
+export default ChatRoom;
 
 const styles = StyleSheet.create({
   container: {
