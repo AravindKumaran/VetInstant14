@@ -226,26 +226,7 @@ const ServiceScreen = ({ onClosePress }) => {
                     <View style={{ marginHorizontal: 10, marginBottom: 0 }}>
                       {doctor.map((c, i) => (
                         <>
-<<<<<<< HEAD
-                          <View
-                            key={`${c?.user?.name}-${i}`}
-                            style={styles.catItem}
-                          >
-                            <Image
-                              source={{ uri: c?.user?.profile_image }}
-                              size={15}
-                              style={{
-                                height: 50,
-                                width: 50,
-                                borderRadius: 30,
-                                borderWidth: 2.5,
-                                borderColor: "#FFFFFF",
-                                padding: 10,
-                              }}
-                            />
-=======
                           <View key={`${c.name}-${i}`} style={styles.catItemm}>
->>>>>>> 0e1e10e27a5aac0c17f5d76ef97a6b88000e078a
                             <View
                               style={{
                                 backgroundColor: "#FFFFFF",
