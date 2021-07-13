@@ -266,7 +266,7 @@ const CallPendingScreen = () => {
   };
 
   const handleVideo = async (item) => {
-    // console.log('Vudfdsg', item)
+    console.log("Vudfdsg", item);
     const roomRes = await roomsApi.createRoom({
       name: `${item.userId}-${item.docId}`,
       senderName: item.userName,
@@ -278,33 +278,37 @@ const CallPendingScreen = () => {
       setLoading(false);
       return;
     }
-    const tokenRes = await usersApi.getVideoToken({
-      userName: user.name,
-      roomName: roomRes.data.room.name,
+    navigation.navigate("Room", {
+      item: item,
+      video: true,
     });
-    console.log("Video Token", tokenRes);
-    if (!tokenRes.ok) {
-      setLoading(false);
-      console.log("Error", tokenRes);
-    }
-    setLoading(false);
-    const d = new Date(item.extraInfo);
-    const rmr = await getObjectData(
-      `${d.toLocaleDateString()}-${d.toLocaleTimeString()}`
-    );
-    if (rmr) {
-      // await Notifications.cancelScheduledNotificationAsync(rmr.identifier)
-      await removeValue(`${d.toLocaleDateString()}-${d.toLocaleTimeString()}`);
-    }
+    // const tokenRes = await usersApi.getVideoToken({
+    //   userName: user.name,
+    //   roomName: roomRes.data.room.name,
+    // });
+    // console.log("Video Token", tokenRes);
+    // if (!tokenRes.ok) {
+    //   setLoading(false);
+    //   console.log("Error", tokenRes);
+    // }
+    // setLoading(false);
+    // const d = new Date(item.extraInfo);
+    // const rmr = await getObjectData(
+    //   `${d.toLocaleDateString()}-${d.toLocaleTimeString()}`
+    // );
+    // if (rmr) {
+    //   // await Notifications.cancelScheduledNotificationAsync(rmr.identifier)
+    //   await removeValue(`${d.toLocaleDateString()}-${d.toLocaleTimeString()}`);
+    // }
 
-    await sendPushToken(item.docMobToken, "Please Join, Video Call Started By");
-    navigation.navigate("Video", {
-      docId: item.docId,
-      userId: user._id,
-      name: user.name,
-      token: tokenRes.data,
-      item,
-    });
+    // await sendPushToken(item.docMobToken, "Please Join, Video Call Started By");
+    // navigation.navigate("Video", {
+    //   docId: item.docId,
+    //   userId: user._id,
+    //   name: user.name,
+    //   token: tokenRes.data,
+    //   item,
+    // });
   };
 
   const checkOtherVetPresence = async (item) => {

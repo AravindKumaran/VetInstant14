@@ -14,9 +14,11 @@ import { Header } from "react-native-elements";
 import ChatScreen from "./ChatScreen";
 import VideoCallScreen from "./VideoCallScreen";
 import AppButton from "../components/AppButton";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import pendingsApi from "../api/callPending";
 import roomsApi from "../api/rooms";
+import doctorsApi from "../api/doctors";
+import petsApi from "../api/pets";
 import AuthContext from "../context/authContext";
 import usersApi from "../api/users";
 import MedicalHistory from "./MedicalHistory";
@@ -43,45 +45,89 @@ const ChatRoom = () => {
   const [currentRoom, setCurrentRoom] = useState(null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [pet, setPet] = useState(null);
+  const [doctor, setDoctor] = useState(null);
 
   const handleActive = (value) => {
     setActive(value);
   };
 
   const navigation = useNavigation();
+  const route = useRoute();
 
   const getReceiverRoom = async () => {
-    setLoading(true);
-    const pres = await pendingsApi.getCallPendingByUser(user._id);
-    if (!pres.ok) {
-      console.log("Error", pres);
+    if (!route.params.video) {
+      setLoading(true);
+      setCurrentCall({
+        ...route?.params?.docDetails,
+        ...route?.params?.petDetails,
+      });
+      const crres = await roomsApi.getReceiverRoom(
+        route?.params?.docDetails?._id
+      );
+      if (!crres.ok) {
+        console.log("Error", crres);
+        setLoading(false);
+        setRefreshing(false);
+        return;
+      }
+      console.log("crres", crres.data.room);
+      const requiredRoom = crres.data.room.find(
+        (room) => room.petId === route?.params?.petDetails?._id
+      );
+      console.log("requiredRoom", requiredRoom);
+
+      setCurrentRoom(requiredRoom);
+    } else {
+      setLoading(true);
+      const pres = await pendingsApi.getCallPendingByUser(user._id);
+      if (!pres.ok) {
+        console.log("Error", pres);
+        setLoading(false);
+        setRefreshing(false);
+        return;
+      }
+
+      const currentCallDetails = pres.data.calls.filter(
+        (call) => call.status === "paymentDone"
+      );
+
+      console.log("item", route?.params?.item);
+      const currentCallDoctor = currentCallDetails.find(
+        (doc) => doc.docName === route?.params?.item?.docName
+      );
+      console.log("currentCallDoctor", currentCallDoctor);
+      const petDetails = await petsApi.getSinglePet(route?.params?.item?.petId);
+      console.log("petDetails", petDetails.data.exPet);
+      setPet(petDetails.data.exPet);
+      const docDetails = await doctorsApi.getSingleDoctor(
+        route?.params?.item?.docId
+      );
+
+      setDoctor(docDetails?.data?.doctor);
+
+      setCurrentCall(currentCallDoctor);
+
+      const crres = await roomsApi.getReceiverRoom(currentCallDoctor.docId);
+      if (!crres.ok) {
+        console.log("Error", crres);
+        setLoading(false);
+        setRefreshing(false);
+        return;
+      }
+      const requiredRoom = crres.data.room.find(
+        (room) => room.petId === route?.params?.item?.petId
+      );
+      setCurrentRoom(requiredRoom);
       setLoading(false);
-      setRefreshing(false);
-      return;
     }
-    console.log("Ress", pres.data);
-    const currentCallDetails = pres.data.calls.filter(
-      (call) => call.status === "paymentDone"
-    );
-
-    console.log("currentCallDoctor", currentCallDetails[0].docId);
-
-    setCurrentCall(currentCallDetails[0]);
-
-    const crres = await roomsApi.getReceiverRoom(currentCallDetails[0].docId);
-    if (!crres.ok) {
-      console.log("Error", crres);
-      setLoading(false);
-      setRefreshing(false);
-      return;
-    }
-
-    console.log("crres", crres.data.room[0]);
-    setCurrentRoom(crres.data.room[0]);
   };
 
   useEffect(() => {
     getReceiverRoom();
+    console.log("currentCall", currentCall);
+    console.log("currentRoom", currentRoom);
+    console.log("petDetails", route?.params?.petDetails);
   }, []);
 
   const handleVideo = async () => {
@@ -192,46 +238,105 @@ const ChatRoom = () => {
               borderBottomEndRadius: 15,
             }}
           /> */}
-          <View>
-            <View style={styles.catItem2}>
-              <Image
-                source={require("../components/assets/images/doctor1.png")}
-                size={15}
-                style={{
-                  height: 80,
-                  width: 80,
-                  borderRadius: 50,
-                  borderWidth: 5,
-                  borderColor: "#FFFFFF",
-                  padding: 10,
-                }}
-              />
-              <Image
-                source={require("../components/assets/images/doctor2.png")}
-                size={15}
-                style={{
-                  height: 80,
-                  width: 80,
-                  borderRadius: 50,
-                  borderWidth: 5,
-                  borderColor: "#FFFFFF",
-                  padding: 10,
-                }}
-              />
-              <View styles={{ flexDirection: "column" }}>
-                <Text
-                  style={{ fontSize: 14, color: "#47687F", fontWeight: "700" }}
-                >
-                  Dr. {currentCall.docName} & {currentCall.petName} ‘s room
-                </Text>
-                <Text
-                  style={{ fontSize: 12, color: "#A3B1BF", fontWeight: "400" }}
-                >
-                  Room ID : {currentRoom.name}
-                </Text>
+          {route?.params?.video ? (
+            <View>
+              <View style={styles.catItem2}>
+                <Image
+                  source={{ uri: doctor?.user?.profile_image }}
+                  size={15}
+                  style={{
+                    height: 80,
+                    width: 80,
+                    borderRadius: 50,
+                    borderWidth: 5,
+                    borderColor: "#FFFFFF",
+                    padding: 10,
+                  }}
+                />
+                <Image
+                  source={{ uri: pet.photo }}
+                  size={15}
+                  style={{
+                    height: 80,
+                    width: 80,
+                    borderRadius: 50,
+                    borderWidth: 5,
+                    borderColor: "#FFFFFF",
+                    padding: 10,
+                  }}
+                />
+                <View styles={{ flexDirection: "column" }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "#47687F",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Dr. {currentCall?.docName} & {currentCall?.petName} ‘s room
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: "#A3B1BF",
+                      fontWeight: "400",
+                    }}
+                  >
+                    Room ID : {currentRoom.name}
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
+          ) : (
+            <View>
+              <View style={styles.catItem2}>
+                <Image
+                  source={{ uri: currentCall?.user?.profile_image }}
+                  size={15}
+                  style={{
+                    height: 80,
+                    width: 80,
+                    borderRadius: 50,
+                    borderWidth: 5,
+                    borderColor: "#FFFFFF",
+                    padding: 10,
+                  }}
+                />
+                <Image
+                  source={{ uri: currentCall?.photo }}
+                  size={15}
+                  style={{
+                    height: 80,
+                    width: 80,
+                    borderRadius: 50,
+                    borderWidth: 5,
+                    borderColor: "#FFFFFF",
+                    padding: 10,
+                  }}
+                />
+                <View styles={{ flexDirection: "column" }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "#47687F",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Dr. {currentCall?.user?.name} & {currentCall.name} ‘s room
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: "#A3B1BF",
+                      fontWeight: "400",
+                    }}
+                  >
+                    Room ID : {currentRoom.name}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          )}
           <View style={styles.choose}>
             <View>
               {active === "videocall" ? <ActiveStyle /> : <View />}
@@ -302,30 +407,36 @@ const ChatRoom = () => {
                   11th April 07:00 pm
                 </Text>
               </Text> */}
-              <Image
-                source={require("../components/assets/images/doctor1.png")}
-                size={15}
-                style={{
-                  height: 100,
-                  width: 100,
-                  borderRadius: 50,
-                  borderWidth: 5,
-                  borderColor: "#FFFFFF",
-                  padding: 10,
-                  margin: 10,
-                }}
-              />
-              <Text
-                style={{
-                  margin: 10,
-                }}
-              >
-                Dr.{currentCall.docName} has joined the call
-              </Text>
-              <AppButton
-                title="Join Video Call"
-                onPress={() => handleVideo()}
-              />
+              {!route.params.video ? (
+                <Text>This Service is not applicable for You</Text>
+              ) : (
+                <View>
+                  <Image
+                    source={require("../components/assets/images/doctor1.png")}
+                    size={15}
+                    style={{
+                      height: 100,
+                      width: 100,
+                      borderRadius: 50,
+                      borderWidth: 5,
+                      borderColor: "#FFFFFF",
+                      padding: 10,
+                      margin: 10,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      margin: 10,
+                    }}
+                  >
+                    Dr.{currentCall.docName} has joined the call
+                  </Text>
+                  <AppButton
+                    title="Join Video Call"
+                    onPress={() => handleVideo()}
+                  />
+                </View>
+              )}
             </View>
           )}
           {active === "chat" && (
