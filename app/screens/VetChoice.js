@@ -33,7 +33,7 @@ export default function VetChoice() {
       </TouchableWithoutFeedback>
       <RBSheet
         ref={refRBSheet}
-        closeOnDragDown={false}
+        dragFromTopOnly={true}
         closeOnPressMask={true}
         height={Dimensions.get("window").height - 200}
         animationType="slide"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, Text } from "react-native";
 import {
   GiftedChat,
   Bubble,
@@ -30,7 +30,7 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
 
   useEffect(() => {
     const newRoom = async () => {
-      setLoading(false);
+      setLoading(true);
       // const res = await roomsApi.createRoom({
       //   name: `${user._id}-${route.params?.doc?.user?._id}`,
       //   senderName: user.name,
@@ -55,7 +55,7 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
         setLoading(false);
         return;
       }
-      // console.log('Chat Res', chatRes)
+      // console.log("Chat Res", chatRes);
       const sortedChat = chatRes.data.chats.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
@@ -84,10 +84,12 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
         );
         setMessages(sortedData);
       });
+
       // console.log("yes", route.params);
     };
 
     newRoom();
+    setLoading(false);
     // navigation?.setOptions({ title: route.params?.doc?.user?.name });
   }, []);
 
@@ -186,9 +188,11 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
         wrapperStyle={{
           left: {
             backgroundColor: "#F1F1F1",
+            bottom: 50,
           },
           right: {
             backgroundColor: "#41CE8A",
+            bottom: 50,
           },
         }}
         textStyle={{
@@ -264,7 +268,6 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
   return (
     <View style={styles.container}>
       <LoadingIndicator visible={loading} />
-
       <GiftedChat
         messages={messages}
         onSend={(message) => onSend(message)}
@@ -285,6 +288,7 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
           height: 45,
           paddingLeft: 10,
           paddingRight: 50,
+          bottom: 50,
         }}
         minComposerHeight={40}
         minInputToolbarHeight={40}
@@ -302,6 +306,7 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
               flexDirection: "row",
               alignItems: "center",
               height: 40,
+              bottom: 60,
             }}
           >
             <Actions
@@ -317,7 +322,7 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
                   style={{
                     left: 0,
                     width: 35,
-                    bottom: 10,
+
                     borderRadius: 30,
                     backgroundColor: "#FFFFFF",
                     elevation: 10,
@@ -328,6 +333,7 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
                 GiftedChat.append(messages);
               }}
             />
+
             <Send {...props}>
               <IconButton
                 icon="send-circle"
@@ -336,6 +342,7 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
                 style={{
                   top: 5,
                   right: 0,
+
                   elevation: 50,
                   backgroundColor: "transparent",
                 }}

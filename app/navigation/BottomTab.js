@@ -59,6 +59,7 @@ const BottomTab = ({ navigation }) => {
           bottom: 10,
           borderTopStartRadius: 15,
           borderTopEndRadius: 15,
+          zIndex: 8,
         },
         inactiveTintColor: "#FFFFFF",
         activeTintColor: "#21FFFC",
@@ -114,7 +115,7 @@ const BottomTab = ({ navigation }) => {
           //     )}
           //   </>
           // ),
-          tabBarVisible: true,
+          tabBarVisible: false,
         }}
       />
       <Tab.Screen

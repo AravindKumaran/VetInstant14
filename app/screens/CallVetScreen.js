@@ -350,7 +350,8 @@ const CallVetScreen = ({ navigation, route }) => {
         // webToken: route.params?.doc?.user?.webToken,
         docId: route.params?.doc?.user?._id,
         docName: route.params?.doc?.user?.name,
-        docFee: route?.params?.doc?.fee * 1,
+
+        docFee: route?.params?.vetFee || route?.params?.doc?.fee * 1,
         hospId:
           route?.params?.doc?.hospital?._id ||
           route?.params?.doc?.user?.hospitalId,

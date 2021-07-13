@@ -13,6 +13,7 @@ import AuthContext from "../context/authContext";
 import hospitalsApi from "../api/hospitals";
 import doctorsApi from "../api/doctors";
 import petsApi from "../api/pets";
+import roomsApi from "../api/rooms";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { useNavigation } from "@react-navigation/native";
 import ChooseVetPicker from "../components/forms/ChooseVetPicker";
@@ -117,7 +118,28 @@ const ServiceScreen = ({ onClosePress }) => {
     getAllDoctors();
     getAllPets();
     getOnlineAvailableVetDoctors();
+    console.log("user", user);
+    console.log("selectedDoctor", selectedDoctor);
   }, []);
+  const createRoomForChat = async (docDetails, petDetails) => {
+    const roomRes = await roomsApi.createRoom({
+      name: `${user._id}-${docDetails._id}`,
+      senderName: user.name,
+      receiverId: docDetails._id,
+      petId: petDetails._id,
+    });
+    if (!roomRes.ok) {
+      console.log(roomRes);
+      setLoading(false);
+      return;
+    } else {
+      navigation.navigate("Room", {
+        docDetails: docDetails,
+        petDetails: petDetails,
+        video: false,
+      });
+    }
+  };
 
   // useEffect(() => {
   //   console.log("onlineAvailableDoctor", onlineAvailableDoctor);
@@ -208,7 +230,7 @@ const ServiceScreen = ({ onClosePress }) => {
                             style={styles.catItem}
                           >
                             <Image
-                              source={c?.user?.profile_image}
+                              source={{ uri: c?.user?.profile_image }}
                               size={15}
                               style={{
                                 height: 50,
@@ -284,7 +306,7 @@ const ServiceScreen = ({ onClosePress }) => {
                   <>
                     <View key={`${c?.user?.name}-${i}`} style={styles.catItem1}>
                       <Image
-                        source={c?.user?.profile_image}
+                        source={{ uri: c?.user?.profile_image }}
                         size={15}
                         style={{
                           height: 50,
@@ -430,7 +452,8 @@ const ServiceScreen = ({ onClosePress }) => {
 
                       <TouchableOpacity
                         onPress={() => {
-                          navigation.navigate("Room");
+                          onClosePress("close");
+                          createRoomForChat(selectedDoctor[0], pets[0]);
                         }}
                       >
                         <Text>
@@ -477,7 +500,7 @@ const ServiceScreen = ({ onClosePress }) => {
                   <>
                     <View key={`${c?.user?.name}-${i}`} style={styles.catItem1}>
                       <Image
-                        source={c?.user?.profile_image}
+                        source={{ uri: c?.user?.profile_image }}
                         size={15}
                         style={{
                           height: 50,
@@ -578,7 +601,7 @@ const ServiceScreen = ({ onClosePress }) => {
 
                       <TouchableOpacity
                         onPress={() => {
-                          navigation.navigate("Room");
+                          createRoomForChat(selectedDoctor[0], pets[0]);
                         }}
                       >
                         <Text>
@@ -637,7 +660,9 @@ const ServiceScreen = ({ onClosePress }) => {
                     style={styles.catItem2}
                   >
                     <Image
-                      source={onlineAvailableVetDoctor?.user?.profile_image}
+                      source={{
+                        uri: onlineAvailableVetDoctor?.user?.profile_image,
+                      }}
                       size={15}
                       style={{
                         height: 50,
@@ -682,6 +707,7 @@ const ServiceScreen = ({ onClosePress }) => {
                         navigation.navigate("CallVet", {
                           doc: onlineAvailableVetDoctor,
                           pet: pets,
+                          vetFee: 100,
                         });
                       }}
                     />
@@ -699,7 +725,7 @@ const ServiceScreen = ({ onClosePress }) => {
 
                     <TouchableOpacity
                       onPress={() => {
-                        navigation.navigate("Room");
+                        createRoomForChat(onlineAvailableVetDoctor, pets[0]);
                       }}
                     >
                       <Text>
@@ -754,7 +780,9 @@ const ServiceScreen = ({ onClosePress }) => {
                 <>
                   <View style={styles.catItem2}>
                     <Image
-                      source={docDetailFromSameHospitals?.user?.profile_image}
+                      source={{
+                        uri: docDetailFromSameHospitals?.user?.profile_image,
+                      }}
                       size={15}
                       style={{
                         height: 50,
@@ -819,7 +847,7 @@ const ServiceScreen = ({ onClosePress }) => {
 
                     <TouchableOpacity
                       onPress={() => {
-                        navigation.navigate("Room");
+                        createRoomForChat(docDetailFromSameHospitals, pets[0]);
                       }}
                     >
                       <Text>
