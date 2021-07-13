@@ -33,7 +33,11 @@ const AddPetButton = ({ title, onPress, name, img }) => {
         )}
       </TouchableOpacity>
 
-      {name && <AppText>{name}</AppText>}
+      {name && (
+        <AppText style={{ fontSize: 18, fontWeight: "700", marginTop: 15 }}>
+          {name}
+        </AppText>
+      )}
     </View>
   );
 };
@@ -64,8 +68,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#FFFFFF",
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 16,
+    fontWeight: "700",
   },
 });
 

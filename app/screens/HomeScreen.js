@@ -227,19 +227,29 @@ const HomeScreen = ({ route }) => {
   const doctors = [
     {
       src: require("../components/assets/images/doctor1.png"),
-      name: "Video call from Dr. Kumar has been scheduled at 07:00pm today.",
+      message1: "Video call from",
+      name: "Dr. Kumar",
+      message2: "has been scheduled at",
+      time: "07:00pm today.",
     },
     {
       src: require("../components/assets/images/doctor2.png"),
-      name: "Your chat with Dr. R. Vijayashanthini has ended.",
+      message1: "Your chat with",
+      name: "Dr. R. Vijayashanthini",
+      message2: "has ended.",
     },
     {
       src: require("../components/assets/images/doctor1.png"),
-      name: "Video call from Dr. Kumar has been scheduled at 07:00pm today.",
+      message1: "Video call from",
+      name: "Dr. Kumar",
+      message2: "has been scheduled at",
+      time: "07:00pm today.",
     },
     {
       src: require("../components/assets/images/doctor2.png"),
-      name: "Your chat with Dr. R. Vijayashanthini has ended.",
+      message1: "Your chat with",
+      name: "Dr. R. Vijayashanthini",
+      message2: "has ended.",
     },
   ];
 
@@ -504,7 +514,10 @@ const HomeScreen = ({ route }) => {
                         }}
                       />
                       <Text style={[styles.catItemText, { marginTop: -10 }]}>
-                        {c.name}
+                        <Text>{c.message1}</Text>{" "}
+                        <Text style={{ fontWeight: "700" }}>{c.name}</Text>{" "}
+                        <Text>{c.message2}</Text>{" "}
+                        <Text style={{ fontWeight: "700" }}>{c.time}</Text>{" "}
                       </Text>
                       <View style={styles.Rectangle}>
                         <TouchableOpacity>
