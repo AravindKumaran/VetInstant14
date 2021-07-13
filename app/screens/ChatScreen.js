@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+} from "react-native";
 import {
   GiftedChat,
   Bubble,
@@ -27,6 +34,37 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
   const [loading, setLoading] = useState(false);
   const [handlePickImage, sethandlePickImage] = useState([]);
   const [fileName, setFileName] = useState(null);
+
+  const [touched, setTouched] = useState(false);
+
+  const { keyboardHidesTabBars } = useState(true);
+  const [didKeyboardShow, setKeyboardShow] = useState(false);
+
+  const toggleTouched = () => {
+    setTouched(!touched);
+  };
+
+  const seeProfile = () => {
+    navigation.navigate("PetLobby");
+  };
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+    Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+    };
+  }, []);
+
+  const _keyboardDidShow = () => {
+    setKeyboardShow(true);
+  };
+
+  const _keyboardDidHide = () => {
+    setKeyboardShow(false);
+  };
 
   useEffect(() => {
     const newRoom = async () => {
@@ -261,6 +299,51 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
     );
   };
 
+  const renderInputToolbar = (props) => {
+    return (
+      <View
+        style={{
+          flexDirection: "column",
+          bottom: didKeyboardShow ? -10 : 70,
+          alignItems: "center",
+          alignContent: "center",
+          alignSelf: "center",
+          justifyContent: "center",
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            position: "absolute",
+            right: 70,
+            zIndex: 1,
+          }}
+          onPress={selectFile}
+        >
+          <IconButton icon="plus" size={45} color="#51DA98" />
+        </TouchableOpacity>
+        <TextInput
+          style={{
+            width: "70%",
+            borderColor: "#B9C4CF",
+            borderWidth: 1.5,
+            borderRadius: 30,
+            alignSelf: "center",
+            position: "absolute",
+            paddingLeft: 50,
+            paddingRight: 50,
+          }}
+          multiline={true}
+        />
+        <TouchableOpacity
+          style={{ position: "absolute", left: 70 }}
+          onPress={onSend}
+        >
+          <IconButton icon="send-circle" size={45} color="#51DA98" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <LoadingIndicator visible={loading} />
@@ -290,12 +373,15 @@ const ChatScreen = ({ navigation, route, currentCall, currentRoom }) => {
         minInputToolbarHeight={40}
         // renderSend={renderSend}
         // renderActions={renderActions}
-        // renderInputToolbar={renderInputToolbar}
+        renderInputToolbar={renderInputToolbar}
         renderMessageVideo={renderMessageVideo}
         renderMessageImage={renderMessageImage}
-        renderInputToolbar={(props) => (
-          <InputToolbar {...props} containerStyle={{ borderTopWidth: 0 }} />
-        )}
+        // renderInputToolbar={(props) => (
+        //   <InputToolbar
+        //     {...props}
+        //     containerStyle={{ borderTopWidth: 0, bottom: 100 }}
+        //   />
+        // )}
         renderSend={(props) => (
           <View
             style={{

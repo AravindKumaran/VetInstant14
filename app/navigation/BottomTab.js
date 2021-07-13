@@ -49,6 +49,18 @@ const BottomTab = ({ navigation }) => {
   const _keyboardDidHide = () => {
     setKeyboardShow(false);
   };
+
+  const getTabBarVisibility = (route) => {
+    const routeName = route.state
+      ? route.state.routes[route.state.index].name
+      : "";
+
+    if (routeName === "Rooms") {
+      return false;
+    }
+    return true;
+  };
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -80,7 +92,7 @@ const BottomTab = ({ navigation }) => {
       <Tab.Screen
         name={"Bottom1"}
         component={AppNavigator}
-        options={{
+        options={({ route }) => ({
           tabBarIcon: ({ focused, color }) => (
             <>
               <Feather
@@ -93,9 +105,10 @@ const BottomTab = ({ navigation }) => {
               />
             </>
           ),
-        }}
+          tabBarVisible: getTabBarVisibility(route),
+        })}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name={"EmptyScreen"}
         component={EmptyScreen}
         options={{
@@ -116,6 +129,27 @@ const BottomTab = ({ navigation }) => {
           // ),
           tabBarVisible: true,
         }}
+      /> */}
+      <Tab.Screen
+        name={"EmptyScreen"}
+        component={EmptyScreen}
+        options={({ route }) => ({
+          tabBarButton: () => <VetChoice />,
+          // tabBarIcon: ({ focused, tintColor }) => (
+          //   <>
+          //     {!didKeyboardShow && (
+          //       <Image
+          //         source={require("../components/assets/images/center.png")}
+          //         style={{
+          //           width: 60,
+          //           height: 60,
+          //           bottom: routeName === "Room" ? -20 : 20,
+          //         }}
+          //       />
+          //     )}
+          //   </>
+          // ),
+        })}
       />
       <Tab.Screen
         name={"PetLobby"}

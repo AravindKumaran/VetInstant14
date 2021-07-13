@@ -30,12 +30,12 @@ const validationSchema = Yup.object().shape({
   //   .required("*Required")
   //   .min(0),
   // weight: Yup.number().required().min(1).label("Weight"),
-  gender: Yup.string().required("Please pick pet gender").nullable(),
+  gender: Yup.string().nullable("Please pick pet gender"),
   type: Yup.string().required("Please pick a species").nullable(),
   photo: Yup.string().required("Please select your pet image").nullable(),
   // images: Yup.array().label("Images"),
   description: Yup.string().required().label("description"),
-  date: Yup.date().required().label("description"),
+  date: Yup.date().nullable().label("dob"),
 });
 
 const petTypes = [
