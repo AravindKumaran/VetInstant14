@@ -196,6 +196,7 @@ const ServiceScreen = ({ onClosePress }) => {
                   borderColor: "#B9C4CF",
                   borderRadius: 25,
                   marginBottom: 100,
+                  width: "100%",
                 }}
               >
                 <Formik
@@ -222,9 +223,10 @@ const ServiceScreen = ({ onClosePress }) => {
                     >
                       My vets
                     </AppText>
-                    <View style={{ paddingTop: 10, margin: 10 }}>
+                    <View style={{ marginHorizontal: 10, marginBottom: 0 }}>
                       {doctor.map((c, i) => (
                         <>
+<<<<<<< HEAD
                           <View
                             key={`${c?.user?.name}-${i}`}
                             style={styles.catItem}
@@ -241,44 +243,55 @@ const ServiceScreen = ({ onClosePress }) => {
                                 padding: 10,
                               }}
                             />
+=======
+                          <View key={`${c.name}-${i}`} style={styles.catItemm}>
+>>>>>>> 0e1e10e27a5aac0c17f5d76ef97a6b88000e078a
                             <View
                               style={{
-                                flexDirection: "column",
-                                marginLeft: 10,
+                                backgroundColor: "#FFFFFF",
+                                borderRadius: 50,
                               }}
                             >
-                              <TouchableOpacity
-                                onPress={() => {
-                                  if (c?.user?.isOnline) {
-                                    handleActive("stepthree");
-                                  } else {
-                                    handleActive("steptwo");
-                                  }
+                              <Image
+                                source={c?.user?.profile_image}
+                                style={styles.image1}
+                              />
+                            </View>
+                            <TouchableOpacity
+                              onPress={() => {
+                                if (c?.user?.isOnline) {
+                                  handleActive("stepthree");
+                                } else {
+                                  handleActive("steptwo");
+                                }
 
-                                  setSelectedDoctor([...selectedDoctor, c]);
-                                }}
-                              >
-                                <Text style={styles.text1}>
+                                setSelectedDoctor([...selectedDoctor, c]);
+                              }}
+                            >
+                              <View style={{ flexDirection: "column" }}>
+                                <Text style={styles.text5}>
                                   {c?.user?.name}
                                 </Text>
-                                <Text style={styles.text2}>
+                                <Text style={styles.text6}>
                                   {c?.hospital?.name}
                                 </Text>
-                              </TouchableOpacity>
-                            </View>
-                            <View style={styles.Rectangle}>
-                              <Text style={styles.text3}>{c.fee}</Text>
+                              </View>
+                            </TouchableOpacity>
+                            <View
+                              style={{
+                                flex: 1,
+                                alignItems: "flex-end",
+                                marginHorizontal: 10,
+                              }}
+                            >
+                              <Text style={styles.text7}>₹{c.fee}</Text>
                             </View>
                           </View>
                           <View
                             style={{
-                              height: 1,
-                              width: "95%",
-                              borderWidth: 0.6,
-                              borderColor: "#DCE1E7",
-                              alignSelf: "center",
-                              marginVertical: 15,
-                              bottom: 20,
+                              borderWidth: 0.75,
+                              borderColor: "#EDEDED",
+                              marginVertical: 0,
                             }}
                           />
                         </>
@@ -333,8 +346,14 @@ const ServiceScreen = ({ onClosePress }) => {
                         </TouchableOpacity>
                       </View>
 
-                      <View style={styles.Rectangle}>
-                        <Text style={styles.text3}>{c.fee}</Text>
+                      <View
+                        style={{
+                          flex: 1,
+                          alignItems: "flex-end",
+                          marginHorizontal: 10,
+                        }}
+                      >
+                        <Text style={styles.text7}>₹{c.fee}</Text>
                       </View>
                     </View>
 
@@ -524,9 +543,14 @@ const ServiceScreen = ({ onClosePress }) => {
                           <Text style={styles.text2}>{c?.hospital?.name}</Text>
                         </TouchableOpacity>
                       </View>
-
-                      <View style={styles.Rectangle}>
-                        <Text style={styles.text3}>{c.fee}</Text>
+                      <View
+                        style={{
+                          flex: 1,
+                          alignItems: "flex-end",
+                          marginHorizontal: 10,
+                        }}
+                      >
+                        <Text style={styles.text7}>₹{c.fee}</Text>
                       </View>
                     </View>
 
@@ -1040,6 +1064,42 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#47687F",
     marginLeft: 60,
+  },
+
+  catItemm: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 15,
+  },
+  image1: {
+    height: 45,
+    width: 45,
+    borderRadius: 100,
+    borderWidth: 5,
+    borderColor: "#FFFFFF",
+    elevation: 10,
+    backgroundColor: "#FFFFFF",
+  },
+  text5: {
+    color: "#47687F",
+    fontWeight: "700",
+    fontFamily: "Proxima Nova",
+    paddingLeft: 10,
+    fontSize: 12,
+  },
+  text6: {
+    color: "#47687F",
+    fontWeight: "400",
+    fontFamily: "Proxima Nova",
+    paddingLeft: 10,
+    fontSize: 12,
+  },
+  text7: {
+    color: "#47687F",
+    fontWeight: "700",
+    fontFamily: "Proxima Nova",
+    paddingLeft: 10,
+    fontSize: 20,
   },
 });
 

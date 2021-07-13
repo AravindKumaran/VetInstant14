@@ -1,10 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   View,
   Text,
   Dimensions,
   TouchableWithoutFeedback,
   Image,
+  Keyboard,
 } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import ServiceScreen from "./ServiceScreen";
@@ -19,15 +20,52 @@ export default function VetChoice() {
       refRBSheet?.current?.close();
     }
   };
+  const [routeName, setrouteName] = useState(false);
+  const [touched, setTouched] = useState(false);
+
+  const { keyboardHidesTabBars } = useState(true);
+  const [didKeyboardShow, setKeyboardShow] = useState(false);
+
+  const toggleTouched = () => {
+    setTouched(!touched);
+  };
+
+  const seeProfile = () => {
+    navigation.navigate("PetLobby");
+  };
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+    Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+    };
+  }, []);
+
+  const _keyboardDidShow = () => {
+    setKeyboardShow(true);
+  };
+
+  const _keyboardDidHide = () => {
+    setKeyboardShow(false);
+  };
+
   return (
     <>
-      <TouchableWithoutFeedback onPress={onAddButtonPress}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          onAddButtonPress();
+          setTouched(!touched);
+        }}
+      >
         <Image
           source={require("../components/assets/images/center.png")}
           style={{
             width: 60,
             height: 60,
-            bottom: 35,
+            bottom: didKeyboardShow ? 5 : 35,
           }}
         />
       </TouchableWithoutFeedback>

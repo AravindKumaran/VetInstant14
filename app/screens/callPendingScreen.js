@@ -461,9 +461,9 @@ const CallPendingScreen = () => {
           style={{
             position: "absolute",
             right: -13,
-            top: 55,
+            // top: 55,
             flexDirection: "row",
-            alignItems: "center",
+            // alignItems: "center",
           }}
         >
           <Image
@@ -476,10 +476,11 @@ const CallPendingScreen = () => {
               borderWidth: 2.5,
               borderColor: "#FFFFFF",
               padding: 10,
+              left: 5,
             }}
           />
           <Image
-            source={require("../components/assets/images/doctor2.png")}
+            source={require("../components/assets/images/dogimage.png")}
             size={15}
             style={{
               height: 50,
@@ -488,6 +489,7 @@ const CallPendingScreen = () => {
               borderWidth: 2.5,
               borderColor: "#FFFFFF",
               padding: 10,
+              right: 5,
             }}
           />
         </View>

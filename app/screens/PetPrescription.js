@@ -43,7 +43,7 @@ const times = [
 const doctors = [
   {
     src: require("../components/assets/images/doctor1.png"),
-    srcc: require("../components/assets/images/doctor2.png"),
+    srcc: require("../components/assets/images/dogimage.png"),
     name: "Dr. Bottowski",
     time: "11th April 07:00 pm",
     hospital: "PetCare Veteneriary Hospital",
@@ -185,6 +185,7 @@ const PetPrescriptionScreen = ({ route }) => {
                           borderWidth: 2.5,
                           borderColor: "#FFFFFF",
                           padding: 10,
+                          left: 5,
                         }}
                       />
                       <Image
@@ -197,6 +198,7 @@ const PetPrescriptionScreen = ({ route }) => {
                           borderWidth: 2.5,
                           borderColor: "#FFFFFF",
                           padding: 10,
+                          right: 5,
                         }}
                       />
                       <View

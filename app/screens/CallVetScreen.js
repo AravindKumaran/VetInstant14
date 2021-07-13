@@ -128,18 +128,7 @@ const Gait = [
   { label: "Different from Normal", value: "Different from Normal" },
 ];
 
-const Months = [
-  { label: "1", value: "1" },
-  { label: "2", value: "2" },
-  { label: "3", value: "3" },
-  { label: "4", value: "4" },
-  { label: "5", value: "5" },
-  { label: "6", value: "6" },
-  { label: "7", value: "7" },
-  { label: "8", value: "8" },
-  { label: "9", value: "9" },
-  { label: "10", value: "10" },
-];
+const Months = [{ label: "0", value: "0" }];
 
 const Days = [
   { label: "1", value: "1" },
@@ -169,8 +158,8 @@ const validationSchema = Yup.object().shape({
   problems: Yup.string().max(100).required().label("Problems"),
   photo: Yup.string().nullable(),
   images: Yup.array().nullable().label("Image"),
-  month: Yup.number().required().label("Month"),
-  day: Yup.number().required().label("Day"),
+  month: Yup.number().nullable().label("Month"),
+  day: Yup.number().nullable().label("Day"),
 
   feces_comment: Yup.string().nullable(),
   urine_comment: Yup.string().nullable(),
@@ -530,7 +519,7 @@ const CallVetScreen = ({ navigation, route }) => {
                 <RadioButtons items={Eyes} label="Eyes" name="eyes" />
 
                 <Text style={styles.text1}>Mucous Membrane of the Eye</Text>
-                <Text style={styles.text3}>
+                <Text style={[styles.text3, { textAlign: "center" }]}>
                   Gently pull down a lower eyellabel with a finger and note its
                   colour. Choose the most appropriate colour description below.
                 </Text>
