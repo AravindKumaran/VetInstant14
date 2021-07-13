@@ -1,7 +1,4 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-<<<<<<< HEAD
-import { StyleSheet, View, Image, Text } from "react-native";
-=======
 import {
   StyleSheet,
   View,
@@ -10,7 +7,6 @@ import {
   TouchableOpacity,
   Keyboard,
 } from "react-native";
->>>>>>> 0e1e10e27a5aac0c17f5d76ef97a6b88000e078a
 import {
   GiftedChat,
   Bubble,
